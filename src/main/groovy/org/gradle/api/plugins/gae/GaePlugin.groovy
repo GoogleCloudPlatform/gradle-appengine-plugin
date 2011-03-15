@@ -89,6 +89,8 @@ class GaePlugin implements Plugin<Project> {
     private void configureGaeRun(final Project project, GaePluginConvention gaePluginConvention) {
         project.tasks.withType(GaeRunTask.class).whenTaskAdded { GaeRunTask gaeRunTask ->
             gaeRunTask.conventionMapping.map("httpPort") { gaePluginConvention.httpPort }
+            gaeRunTask.conventionMapping.map("stopPort") { gaePluginConvention.stopPort }
+            gaeRunTask.conventionMapping.map("stopKey") { gaePluginConvention.stopKey }
         }
 
         GaeRunTask gaeRunTask = project.tasks.add(GAE_RUN, GaeRunTask.class)
@@ -106,7 +108,7 @@ class GaePlugin implements Plugin<Project> {
 
     private void configureGaeEnhance(final Project project) {
         project.tasks.withType(GaeEnhanceTask.class).whenTaskAdded { GaeEnhanceTask gaeEnhanceTask ->
-            gaeEnhanceTask.conventionMapping.map("sourceDirectories") { project.sourceSets.main.allSource.sourceTrees.srcDirs.flatten() as Set }
+            gaeEnhanceTask.conventionMapping.map("classesDirectory") { project.tasks.compileJava.destinationDir }
         }
 
         GaeEnhanceTask gaeEnhanceTask = project.tasks.add(GAE_ENHANCE, GaeEnhanceTask.class)

@@ -17,6 +17,7 @@ package org.gradle.api.plugins.gae.task
 
 import com.google.appengine.tools.KickStart
 import org.gradle.api.GradleException
+import org.gradle.api.plugins.gae.task.internal.ShutdownMonitor
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -29,6 +30,8 @@ import org.slf4j.LoggerFactory
 class GaeRunTask extends GaeWebAppDirTask {
     static final Logger logger = LoggerFactory.getLogger(GaeRunTask.class)
     private Integer httpPort
+    private Integer stopPort
+    private String stopKey
 
     @Override
     void executeTask() {
@@ -38,6 +41,9 @@ class GaeRunTask extends GaeWebAppDirTask {
     void startLocalDevelopmentServer() {
         try {
             logger.info "Starting local development server..."
+
+            Thread shutdownMonitor = new ShutdownMonitor(getStopPort(), getStopKey())
+            shutdownMonitor.start()
 
             String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getWebAppSourceDirectory().getCanonicalPath()] as String[]
             KickStart.main(params)
@@ -56,6 +62,22 @@ class GaeRunTask extends GaeWebAppDirTask {
 
     public void setHttpPort(Integer httpPort) {
         this.httpPort = httpPort
+    }
+
+    public Integer getStopPort() {
+        stopPort
+    }
+
+    public void setStopPort(Integer stopPort) {
+        this.stopPort = stopPort
+    }
+
+    public String getStopKey() {
+        stopKey
+    }
+
+    public void setStopKey(String stopKey) {
+        this.stopKey = stopKey
     }
 }
 
