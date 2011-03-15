@@ -21,6 +21,11 @@ import org.gradle.api.tasks.TaskAction
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
+/**
+ * Abstract Google App Engine task taking care of general setup.
+ *
+ * @author Benjamin Muschko
+ */
 abstract class AbstractGaeTask extends ConventionTask {
     static final Logger LOGGER = LoggerFactory.getLogger(AbstractGaeTask.class)
     final String APPENGINE_HOME_ENV_PROP_KEY = "APPENGINE_HOME"
