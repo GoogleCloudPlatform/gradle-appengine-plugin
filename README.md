@@ -62,7 +62,7 @@ The GAE plugin defines the following convention properties in the `gae` closure:
 * `stopPort`: The TCP port which Tomcat should listen for admin requests on (defaults to 8081).
 * `stopKey`: The key to pass to Tomcat when requesting it to stop (defaults to null).
 
-Within the `gae` you can define optional properties in a closure named `appcfg`:
+Within `gae` you can define optional properties in a closure named `appcfg`:
 
 * `email`: The email address of the Google account of an administrator for the application, for actions that require signing in.
 If omitted and no cookie is stored from a previous use of the command, the command will prompt for this value.
@@ -73,7 +73,7 @@ If omitted and no cookie is stored from a previous use of the command, the comma
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.
 
-The task `gaeLogs` requires you to at least define the file to write the logs to. Define the tasks properties in the
+The task `gaeLogs` requires you to at least define the file to write the logs to. Define the tasks' properties in the
 closure `logs`:
 
 * `numDays`: The number of days of log data to retrieve, ending on the current date at midnight UTC. A value of 0 retrieves
