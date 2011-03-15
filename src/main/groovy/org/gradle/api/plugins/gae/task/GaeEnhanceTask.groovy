@@ -18,8 +18,10 @@ package org.gradle.api.plugins.gae.task
 import com.google.appengine.tools.enhancer.EnhancerTask
 import org.apache.tools.ant.Project
 import org.apache.tools.ant.types.FileSet
+import org.apache.tools.ant.types.selectors.AndSelector
+import org.apache.tools.ant.types.selectors.FilenameSelector
 import org.gradle.api.GradleException
-import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.InputDirectory
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -31,7 +33,7 @@ import org.slf4j.LoggerFactory
  */
 class GaeEnhanceTask extends GaeWebAppDirTask {
     static final Logger logger = LoggerFactory.getLogger(GaeEnhanceTask.class)
-    private Set<File> sourceDirectories
+    private File classesDirectory
 
     @Override
     void executeTask() {
@@ -43,19 +45,23 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
             logger.info "Enhancing DataNucleus classes..."
 
             def enhancerTask = new EnhancerTask()
+            enhancerTask.setVerbose(true)
             enhancerTask.setEnhancerName "Gradle GAE plugin enhancer"
             enhancerTask.setProject createProject()
 
-            getSourceDirectories().each { sourceDir ->
-                if(sourceDir.exists()) {
-                    logger.info "Adding source dir '$sourceDir' for enhancement process."
-                    def fileSet = new FileSet()
-                    fileSet.setDir(sourceDir)
-                    enhancerTask.addFileSet(fileSet)
-                }
-                else {
-                    logger.debug "Available source directory '$sourceDir' does not exist. It will not be used for the enhancement process."
-                }
+            if(getClassesDirectory().exists()) {
+                logger.info "Using classes dir '${getClassesDirectory()}' for enhancement process."
+                def fileSet = new FileSet()
+                fileSet.setDir(getClassesDirectory())
+                AndSelector andSelector = new AndSelector()
+                FilenameSelector filenameSelector = new FilenameSelector()
+                filenameSelector.setName("**/*")
+                andSelector.add(filenameSelector)
+                fileSet.addAnd(andSelector)
+                enhancerTask.addFileSet(fileSet)
+            }
+            else {
+                logger.debug "Classes directory '${getClassesDirectory()}' does not exist."
             }
 
             enhancerTask.execute()
@@ -79,12 +85,12 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
         project
     }
 
-    @InputFiles
-    public Set<File> getSourceDirectories() {
-        sourceDirectories
+    @InputDirectory
+    public File getClassesDirectory() {
+        classesDirectory
     }
 
-    public void setSourceDirectories(Set<File> sourceDirectories) {
-        this.sourceDirectories = sourceDirectories
+    public void setClassesDirectory(File classesDirectory) {
+        this.classesDirectory = classesDirectory
     }
 }
