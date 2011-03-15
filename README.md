@@ -101,3 +101,20 @@ the plugin will overwrite the log output file.
             }
         }
     }
+
+## FAQ
+
+**Can I use the plugin with a [Gaelyk](http://gaelyk.appspot.com/) project?**
+
+Yes, you just have to configure the WAR plugin to point to the correct web application (by default `war`) and source code
+(by default `src`) directory. If you want to stick to the default source directory simply create the subdirectory `src/main/groovy`.
+
+    sourceSets {
+        main {
+            groovy {
+                srcDirs = ["src"]
+            }
+        }
+    }
+
+    webAppDirName = new File("war")
