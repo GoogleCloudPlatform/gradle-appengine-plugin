@@ -58,9 +58,9 @@ The GAE plugin uses the same layout as the War plugin.
 
 The GAE plugin defines the following convention properties in the `gae` closure:
 
-* `httpPort`: The TCP port which Tomcat should listen for HTTP requests on (defaults to 8080).
-* `stopPort`: The TCP port which Tomcat should listen for admin requests on (defaults to 8081).
-* `stopKey`: The key to pass to Tomcat when requesting it to stop (defaults to null).
+* `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
+* `stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).
+* `stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).
 
 Within `gae` you can define optional properties in a closure named `appcfg`:
 
