@@ -15,6 +15,8 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg
 
+import org.gradle.api.InvalidUserDataException
+
 /**
  * Google App Engine task downloading application logs from the server.
  *
@@ -23,6 +25,22 @@ package org.gradle.api.plugins.gae.task.appcfg
  */
 class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
     final String COMMAND = "request_logs"
+    private Integer numDays
+    private Integer severity
+    private Boolean append
+    private File outputFile
+
+    @Override
+    void validateConfiguration(){
+        super.validateConfiguration()
+
+        if(getSeverity() && (getSeverity() < 0 || getSeverity() > 4)) {
+            throw new InvalidUserDataException("Invalid log level: ${getSeverity()}. Valid values are 4 for CRITICAL, 3 for ERROR, 2 for WARNING, 1 for INFO, 0 for DEBUG.")
+        }
+        else {
+            logger.info "Pulling messages with minimum log level = ${getSeverity()}"
+        }
+    }
 
     @Override
     String startLogMessage() {
@@ -41,6 +59,55 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath(), "somefile.txt"]
+        def params = []
+
+        if(getNumDays()) {
+            params << "--num_days=${getNumDays()}"
+        }
+
+        if(getSeverity()) {
+            params << "--severity=${getSeverity()}"
+        }
+
+        if(getAppend()) {
+            params << "--append"
+        }
+
+        params << COMMAND
+        params << getWebAppSourceDirectory().getCanonicalPath()
+        params << getOutputFile().getCanonicalFile()
+        params
+    }
+
+    public Integer getNumDays() {
+        numDays
+    }
+
+    public void setNumDays(Integer numDays) {
+        this.numDays = numDays
+    }
+
+    public Integer getSeverity() {
+        severity
+    }
+
+    public void setSeverity(Integer severity) {
+        this.severity = severity
+    }
+
+    public Boolean getAppend() {
+        append
+    }
+
+    public void setAppend(Boolean append) {
+        this.append = append
+    }
+
+    public File getOutputFile() {
+        outputFile
+    }
+
+    public void setOutputFile(File outputFile) {
+        this.outputFile = outputFile
     }
 }

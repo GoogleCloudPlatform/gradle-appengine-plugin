@@ -31,7 +31,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     private String email
     private String server
     private String host
-    private boolean passIn
+    private Boolean passIn
     private String httpProxy
     private String httpsProxy
 
@@ -56,7 +56,6 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     }
 
     private void addCommonParams(params) {
-        LOGGER.info "PASS IN : ${getPassIn()}"
         if(getEmail()) {
             params << "--email=${getEmail()}"
         }
@@ -106,11 +105,11 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
         this.host = host
     }
 
-    public boolean getPassIn() {
+    public Boolean getPassIn() {
         passIn
     }
 
-    public void setPassIn(boolean passIn) {
+    public void setPassIn(Boolean passIn) {
         this.passIn = passIn
     }
 

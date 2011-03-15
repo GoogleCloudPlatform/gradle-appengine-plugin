@@ -15,6 +15,8 @@
  */
 package org.gradle.api.plugins.gae
 
+import org.gradle.api.plugins.gae.task.appcfg.GaeAppConfigConvention
+
 /**
  * Defines App Engine plugin convention.
  *
@@ -22,15 +24,24 @@ package org.gradle.api.plugins.gae
  */
 class GaePluginConvention {
     Integer httpPort = 8080
-    String email
-    String server
-    String host
-    boolean passIn
-    String httpProxy
-    String httpsProxy
+    Integer stopPort = 8081
+    String stopKey
+    GaeAppConfigConvention appCfg = new GaeAppConfigConvention()
 
     def gae(Closure closure) {
         closure.delegate = this
+        closure()
+    }
+
+    def appcfg(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = appCfg
+        closure()
+    }
+
+    def logs(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = appCfg.logs
         closure()
     }
 }
