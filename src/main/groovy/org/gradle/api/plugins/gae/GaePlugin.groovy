@@ -31,7 +31,7 @@ import org.gradle.api.plugins.gae.task.appcfg.*
  * @author Benjamin Muschko
  */
 class GaePlugin implements Plugin<Project> {
-    static final String GAE_GROUP = "Google App Engine";
+    static final String GAE_GROUP = "Google App Engine"
     static final String GAE_RUN = "gaeRun"
     static final String GAE_STOP = "gaeStop"
     static final String GAE_ENHANCE = "gaeEnhance"
