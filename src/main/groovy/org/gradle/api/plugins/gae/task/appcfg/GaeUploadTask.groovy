@@ -41,6 +41,6 @@ class GaeUploadTask extends GaeAppConfigTaskTemplate {
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getExplodedWarDirectory().getCanonicalPath()]
     }
 }

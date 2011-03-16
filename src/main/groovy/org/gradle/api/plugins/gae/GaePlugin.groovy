@@ -19,10 +19,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.WarPlugin
 import org.gradle.api.plugins.WarPluginConvention
-import org.gradle.api.plugins.gae.task.GaeEnhanceTask
-import org.gradle.api.plugins.gae.task.GaeRunTask
-import org.gradle.api.plugins.gae.task.GaeStopTask
-import org.gradle.api.plugins.gae.task.GaeWebAppDirTask
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.gradle.api.plugins.gae.task.*
 import org.gradle.api.plugins.gae.task.appcfg.*
 
 /**
@@ -31,6 +30,7 @@ import org.gradle.api.plugins.gae.task.appcfg.*
  * @author Benjamin Muschko
  */
 class GaePlugin implements Plugin<Project> {
+    static final Logger LOGGER = LoggerFactory.getLogger(GaePlugin.class)
     static final String GAE_GROUP = "Google App Engine"
     static final String GAE_RUN = "gaeRun"
     static final String GAE_STOP = "gaeStop"
@@ -53,6 +53,7 @@ class GaePlugin implements Plugin<Project> {
         project.convention.plugins.gae = gaePluginConvention
 
         configureWebAppDir(project)
+        configureExplodedWarDir(project)
         configureAppConfig(project, gaePluginConvention)
         configureGaeRun(project, gaePluginConvention)
         configureGaeStop(project, gaePluginConvention)
@@ -75,6 +76,12 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
+    private void configureExplodedWarDir(final Project project) {
+        project.tasks.withType(GaeExplodedWarTask.class).whenTaskAdded { GaeExplodedWarTask gaeExplodedWarTask ->
+            gaeExplodedWarTask.conventionMapping.map("explodedWarDirectory") { new File("${project.buildDir}/expoded-war") }
+        }
+    }
+
     private void configureAppConfig(final Project project, final GaePluginConvention gaePluginConvention) {
         project.tasks.withType(GaeAppConfigTaskTemplate.class).whenTaskAdded { GaeAppConfigTaskTemplate gaeAppConfigTaskTemplate ->
             gaeAppConfigTaskTemplate.conventionMapping.map("email") { gaePluginConvention.appCfg.email }
@@ -86,7 +93,7 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeRun(final Project project, GaePluginConvention gaePluginConvention) {
+    private void configureGaeRun(final Project project, final GaePluginConvention gaePluginConvention) {
         project.tasks.withType(GaeRunTask.class).whenTaskAdded { GaeRunTask gaeRunTask ->
             gaeRunTask.conventionMapping.map("httpPort") { gaePluginConvention.httpPort }
             gaeRunTask.conventionMapping.map("stopPort") { gaePluginConvention.stopPort }
@@ -114,9 +121,21 @@ class GaePlugin implements Plugin<Project> {
         GaeEnhanceTask gaeEnhanceTask = project.tasks.add(GAE_ENHANCE, GaeEnhanceTask.class)
         gaeEnhanceTask.description = "Enhances DataNucleus classes."
         gaeEnhanceTask.group = GAE_GROUP
+
+        if(project.plugins.hasPlugin('groovy')) {
+            project.tasks.getByName(GAE_ENHANCE).dependsOn project.compileGroovy
+        }
+        else {
+            project.tasks.getByName(GAE_ENHANCE).dependsOn project.compileJava
+        }
     }
 
     private void configureGaeUpload(final Project project) {
+        project.tasks.withType(GaeUploadTask.class).whenTaskAdded { GaeUploadTask gaeUploadTask ->
+            gaeUploadTask.dependsOn project.war
+            explodeWar(gaeUploadTask)
+        }
+
         GaeUploadTask gaeUploadTask = project.tasks.add(GAE_UPLOAD, GaeUploadTask.class)
         gaeUploadTask.description = "Uploads your application to App Engine."
         gaeUploadTask.group = GAE_GROUP
@@ -178,6 +197,13 @@ class GaePlugin implements Plugin<Project> {
         GaeVersionTask gaeVersionTask = project.tasks.add(GAE_VERSION, GaeVersionTask.class)
         gaeVersionTask.description = "Prints detailed version information about the SDK, Java and the operating system."
         gaeVersionTask.group = GAE_GROUP
+    }
+
+    private void explodeWar(final GaeExplodedWarTask task) {
+        task.doFirst {
+            ant.delete(dir: task.getExplodedWarDirectory())
+            ant.unzip(src: project.war.archivePath, dest: task.getExplodedWarDirectory())
+        }
     }
 
     private WarPluginConvention getWarConvention(Project project) {
