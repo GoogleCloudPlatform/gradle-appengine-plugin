@@ -88,7 +88,7 @@ abstract class AbstractGaeTask extends ConventionTask {
             System.setProperty JAVA_CLASSPATH_SYS_PROP_KEY, "${javaClasspath}${pathSeparator}${appEngineToolsApiJar}"
         }
 
-        LOGGER.info "Java classpath = ${System.getProperty('java.class.path')}"
+        LOGGER.info "Java classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
     }
 
     abstract void executeTask()
