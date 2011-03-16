@@ -15,11 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import com.google.appengine.tools.enhancer.EnhancerTask
-import org.apache.tools.ant.Project
-import org.apache.tools.ant.types.FileSet
-import org.apache.tools.ant.types.selectors.AndSelector
-import org.apache.tools.ant.types.selectors.FilenameSelector
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.InputDirectory
 import org.slf4j.Logger
@@ -44,27 +39,15 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
         try {
             logger.info "Enhancing DataNucleus classes..."
 
-            def enhancerTask = new EnhancerTask()
-            enhancerTask.setVerbose(true)
-            enhancerTask.setEnhancerName "Gradle GAE plugin enhancer"
-            enhancerTask.setProject createProject()
-
-            if(getClassesDirectory().exists()) {
-                logger.info "Using classes dir '${getClassesDirectory()}' for enhancement process."
-                def fileSet = new FileSet()
-                fileSet.setDir(getClassesDirectory())
-                AndSelector andSelector = new AndSelector()
-                FilenameSelector filenameSelector = new FilenameSelector()
-                filenameSelector.setName("**/*")
-                andSelector.add(filenameSelector)
-                fileSet.addAnd(andSelector)
-                enhancerTask.addFileSet(fileSet)
+            ant.taskdef(name: 'enhance', classpath: System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY), classname: 'com.google.appengine.tools.enhancer.EnhancerTask')
+            ant.enhance(failonerror: true, verbose: true) {
+                classpath {
+                    pathelement(path: System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY))
+                    pathelement(path: getClassesDirectory().getCanonicalPath())
+                    fileset(dir: "${getWebAppSourceDirectory().getCanonicalPath()}/WEB-INF/lib", includes: '*.jar')
+                }
+                fileset(dir: getClassesDirectory().getCanonicalPath(), includes: '**/*.class')
             }
-            else {
-                logger.debug "Classes directory '${getClassesDirectory()}' does not exist."
-            }
-
-            enhancerTask.execute()
         }
         catch(Exception e) {
             throw new GradleException("An error occurred enhancing DataNucleus classes.", e)
@@ -72,17 +55,6 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
         finally {
             logger.info "Finished enhancing DataNucleus classes."
         }
-    }
-
-    private Project createProject() {
-        def project = new Project()
-
-        project.with {
-            setName "GAE project"
-            init()
-        }
-
-        project
     }
 
     @InputDirectory
