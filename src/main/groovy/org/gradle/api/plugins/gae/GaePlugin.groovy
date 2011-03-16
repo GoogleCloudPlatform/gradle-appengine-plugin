@@ -98,6 +98,7 @@ class GaePlugin implements Plugin<Project> {
             gaeRunTask.conventionMapping.map("httpPort") { gaePluginConvention.httpPort }
             gaeRunTask.conventionMapping.map("stopPort") { gaePluginConvention.stopPort }
             gaeRunTask.conventionMapping.map("stopKey") { gaePluginConvention.stopKey }
+            gaeRunTask.conventionMapping.map("classpath") { project.tasks.getByName(WarPlugin.WAR_TASK_NAME).classpath }
         }
 
         GaeRunTask gaeRunTask = project.tasks.add(GAE_RUN, GaeRunTask.class)

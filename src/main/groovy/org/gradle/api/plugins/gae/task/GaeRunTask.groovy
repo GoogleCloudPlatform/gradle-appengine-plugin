@@ -17,7 +17,9 @@ package org.gradle.api.plugins.gae.task
 
 import com.google.appengine.tools.KickStart
 import org.gradle.api.GradleException
+import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.gae.task.internal.ShutdownMonitor
+import org.gradle.api.tasks.InputFiles
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -32,13 +34,22 @@ class GaeRunTask extends GaeWebAppDirTask {
     private Integer httpPort
     private Integer stopPort
     private String stopKey
+    private FileCollection classpath
 
     @Override
     void executeTask() {
+        setWebAppClasspath()
         startLocalDevelopmentServer()
     }
 
-    void startLocalDevelopmentServer() {
+    private void setWebAppClasspath() {
+        def pathSeparator = File.pathSeparator
+        def javaClasspath = System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)
+        System.setProperty JAVA_CLASSPATH_SYS_PROP_KEY, "${javaClasspath}${pathSeparator}${getClasspath().asPath}"
+        LOGGER.info "Web application classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
+    }
+
+    private void startLocalDevelopmentServer() {
         try {
             logger.info "Starting local development server..."
 
@@ -79,6 +90,15 @@ class GaeRunTask extends GaeWebAppDirTask {
 
     public void setStopKey(String stopKey) {
         this.stopKey = stopKey
+    }
+
+    @InputFiles
+    public FileCollection getClasspath() {
+        classpath
+    }
+
+    public void setClasspath(FileCollection classpath) {
+        this.classpath = classpath
     }
 }
 
