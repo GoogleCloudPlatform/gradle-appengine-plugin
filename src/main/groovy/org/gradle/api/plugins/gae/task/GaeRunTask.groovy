@@ -46,6 +46,7 @@ class GaeRunTask extends GaeWebAppDirTask {
             shutdownMonitor.start()
 
             String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getWebAppSourceDirectory().getCanonicalPath()] as String[]
+            logger.info "Using params = $params"
             KickStart.main(params)
         }
         catch(Exception e) {
