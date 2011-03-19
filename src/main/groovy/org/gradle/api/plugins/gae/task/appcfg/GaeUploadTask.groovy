@@ -15,14 +15,18 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg
 
+import org.gradle.api.plugins.gae.task.Explodable
+import org.gradle.api.tasks.InputDirectory
+
 /**
  * Google App Engine task uploading your application to the server.
  *
  * @see <a href="http://code.google.com/appengine/docs/java/tools/uploadinganapp.html#Uploading_the_App">Documentation</a>
  * @author Benjamin Muschko
  */
-class GaeUploadTask extends GaeAppConfigTaskTemplate {
+class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
     final String COMMAND = "update"
+    private File explodedWarDirectory
 
     @Override
     String startLogMessage() {
@@ -42,5 +46,16 @@ class GaeUploadTask extends GaeAppConfigTaskTemplate {
     @Override
     List getParams() {
         [COMMAND, getExplodedWarDirectory().getCanonicalPath()]
+    }
+
+    @Override
+    @InputDirectory
+    public File getExplodedWarDirectory() {
+        explodedWarDirectory
+    }
+
+    @Override
+    public void setExplodedWarDirectory(File explodedWarDirectory) {
+        this.explodedWarDirectory = explodedWarDirectory
     }
 }

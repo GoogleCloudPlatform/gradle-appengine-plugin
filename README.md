@@ -24,7 +24,7 @@ shows an example:
 
 	    dependencies {
 		    classpath 'com.google.appengine:appengine-tools-sdk:1.4.2'
-            classpath ':gradle-gae-plugin:0.1'
+            classpath ':gradle-gae-plugin:0.2'
         }
     }
 
@@ -38,10 +38,13 @@ The GAE plugin defines the following tasks:
 
 * `gaeCronInfo`: Verifies and prints the scheduled task (cron) configuration.
 * `gaeEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
+* `gaeExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
 * `gaeLogs`: Retrieves log data for the application running on App Engine.
 * `gaeRollback`: Undoes a partially completed update for the given application.
-* `gaeRun`: Starts a local development server running your project code.
-* `gaeStop`: Stops the local development server.
+* `gaeRun`: Starts a local development server running your project code. By default the WAR file is created, exploded and used as
+web application directory each time you run this task. This behavior can be changed by setting the convention property
+`warDir`.
+ * `gaeStop`: Stops the local development server.
 * `gaeUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
 * `gaeUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
 * `gaeUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
@@ -61,6 +64,7 @@ The GAE plugin defines the following convention properties in the `gae` closure:
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
 * `stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).
 * `stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).
+* `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
 
 Within `gae` you can define optional properties in a closure named `appcfg`:
 
@@ -118,3 +122,10 @@ Yes, you just have to configure the WAR plugin to point to the correct web appli
     }
 
     webAppDirName = new File("war")
+
+When editing a Groovlets/Groovy templates in Gaelyk the server automatically deploys the change and you see it take effect almost instantly.
+The plugin provides support for that. Simply set the `warDir` convention property and leave the server running.
+
+    gae {
+       warDir = new File("war")
+    }

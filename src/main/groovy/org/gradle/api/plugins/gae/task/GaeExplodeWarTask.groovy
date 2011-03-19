@@ -15,41 +15,40 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import org.gradle.api.InvalidUserDataException
-import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.internal.ConventionTask
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.TaskAction
 
 /**
- * Abstract Google App Engine task that requires exploded WAR dir.
+ * Google App Engine task that explodes the WAR archive into a given directory.
  *
  * @author Benjamin Muschko
  */
-abstract class GaeExplodedWarTask extends GaeWebAppDirTask {
+class GaeExplodeWarTask extends ConventionTask implements Explodable {
+    private File warArchive
     private File explodedWarDirectory
 
-    @Override
-    void validateConfiguration(){
-        super.validateConfiguration()
-
-        try {
-            if(!getExplodedWarDirectory() || !getExplodedWarDirectory().exists()) {
-                throw new InvalidUserDataException("Exploded WAR directory "
-                        + (getExplodedWarDirectory() == null ? "null" : getExplodedWarDirectory().getCanonicalPath())
-                        + " does not exist")
-            }
-            else {
-                logger.info "Exploded WAR directory = ${getExplodedWarDirectory().getCanonicalPath()}"
-            }
-        }
-        catch(IOException e) {
-            throw new InvalidUserDataException("Exploded WAR directory does not exist", e)
-        }
+    @TaskAction
+    protected void start() {
+        ant.delete(dir: getExplodedWarDirectory())
+        ant.unzip(src: getWarArchive(), dest: getExplodedWarDirectory())
     }
 
-    @InputDirectory
+    @InputFile
+    public File getWarArchive() {
+        warArchive
+    }
+
+    public void setWarArchive(File warArchive) {
+        this.warArchive = warArchive
+    }
+
+    @Override
     public File getExplodedWarDirectory() {
         explodedWarDirectory
     }
 
+    @Override
     public void setExplodedWarDirectory(File explodedWarDirectory) {
         this.explodedWarDirectory = explodedWarDirectory
     }

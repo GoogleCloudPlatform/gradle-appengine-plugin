@@ -45,6 +45,7 @@ class GaePlugin implements Plugin<Project> {
     static final String GAE_CRON_INFO = "gaeCronInfo"
     static final String GAE_LOGS = "gaeLogs"
     static final String GAE_VERSION = "gaeVersion"
+    static final String GAE_EXPLODE_WAR = "gaeExplodeWar"
 
     @Override
     public void apply(Project project) {
@@ -52,13 +53,14 @@ class GaePlugin implements Plugin<Project> {
         GaePluginConvention gaePluginConvention = new GaePluginConvention()
         project.convention.plugins.gae = gaePluginConvention
 
+        File explodedWarDirectory = getExplodedWarDirectory(project)
         configureWebAppDir(project)
-        configureExplodedWarDir(project)
         configureAppConfig(project, gaePluginConvention)
-        configureGaeRun(project, gaePluginConvention)
+        configureGaeExplodeWarTask(project, explodedWarDirectory)
+        configureGaeRun(project, gaePluginConvention, explodedWarDirectory)
         configureGaeStop(project, gaePluginConvention)
         configureGaeEnhance(project)
-        configureGaeUpload(project)
+        configureGaeUpload(project, explodedWarDirectory)
         configureGaeRollback(project)
         configureGaeUpdateIndexes(project)
         configureGaeVacuumIndexes(project)
@@ -70,15 +72,17 @@ class GaePlugin implements Plugin<Project> {
         configureGaeVersion(project)
     }
 
+    private File getExplodedWarDirectory(final Project project) {
+        def explodedWarDirName = new StringBuilder()
+        explodedWarDirName <<= project.buildDir
+        explodedWarDirName <<= System.getProperty("file.separator")
+        explodedWarDirName <<= "exploded-war"
+        new File(explodedWarDirName.toString())
+    }
+
     private void configureWebAppDir(final Project project) {
         project.tasks.withType(GaeWebAppDirTask.class).whenTaskAdded { GaeWebAppDirTask gaeWebAppDirTask ->
             gaeWebAppDirTask.conventionMapping.map("webAppSourceDirectory") { getWarConvention(project).webAppDir }
-        }
-    }
-
-    private void configureExplodedWarDir(final Project project) {
-        project.tasks.withType(GaeExplodedWarTask.class).whenTaskAdded { GaeExplodedWarTask gaeExplodedWarTask ->
-            gaeExplodedWarTask.conventionMapping.map("explodedWarDirectory") { new File("${project.buildDir}/expoded-war") }
         }
     }
 
@@ -93,17 +97,37 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeRun(final Project project, final GaePluginConvention gaePluginConvention) {
+    private void configureGaeExplodeWarTask(final Project project, final File explodedWarDirectory) {
+        project.tasks.withType(GaeExplodeWarTask.class).whenTaskAdded { GaeExplodeWarTask gaeExplodeWarTask ->
+            gaeExplodeWarTask.conventionMapping.map("warArchive") { project.war.archivePath }
+            gaeExplodeWarTask.conventionMapping.map("explodedWarDirectory") { explodedWarDirectory }
+        }
+
+        GaeExplodeWarTask gaeExplodeWarTask = project.tasks.add(GAE_EXPLODE_WAR, GaeExplodeWarTask.class)
+        gaeExplodeWarTask.description = "Explodes WAR archive into directory."
+        gaeExplodeWarTask.group = GAE_GROUP
+        gaeExplodeWarTask.dependsOn project.war
+    }
+
+
+    private void configureGaeRun(final Project project, final GaePluginConvention gaePluginConvention, final File explodedWarDirectory) {
         project.tasks.withType(GaeRunTask.class).whenTaskAdded { GaeRunTask gaeRunTask ->
             gaeRunTask.conventionMapping.map("httpPort") { gaePluginConvention.httpPort }
             gaeRunTask.conventionMapping.map("stopPort") { gaePluginConvention.stopPort }
             gaeRunTask.conventionMapping.map("stopKey") { gaePluginConvention.stopKey }
-            gaeRunTask.conventionMapping.map("classpath") { project.tasks.getByName(WarPlugin.WAR_TASK_NAME).classpath }
+            gaeRunTask.conventionMapping.map("explodedWarDirectory") { gaePluginConvention.warDir ? gaePluginConvention.warDir : explodedWarDirectory }
         }
 
         GaeRunTask gaeRunTask = project.tasks.add(GAE_RUN, GaeRunTask.class)
         gaeRunTask.description = "Starts up a local App Engine development server."
         gaeRunTask.group = GAE_GROUP
+
+        project.afterEvaluate {
+            // If WAR directory gets set we assume we have a fully functional web application, WAR creation/exlosion is skipped
+            if(!gaePluginConvention.warDir) {
+                gaeRunTask.dependsOn project.gaeExplodeWar
+            }
+        }
     }
 
     private void configureGaeStop(final Project project, final GaePluginConvention gaePluginConvention) {
@@ -131,15 +155,15 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeUpload(final Project project) {
+    private void configureGaeUpload(final Project project, final File explodedWarDirectory) {
         project.tasks.withType(GaeUploadTask.class).whenTaskAdded { GaeUploadTask gaeUploadTask ->
-            gaeUploadTask.dependsOn project.war
-            explodeWar(gaeUploadTask)
+            gaeUploadTask.conventionMapping.map("explodedWarDirectory") { explodedWarDirectory }
         }
 
         GaeUploadTask gaeUploadTask = project.tasks.add(GAE_UPLOAD, GaeUploadTask.class)
         gaeUploadTask.description = "Uploads your application to App Engine."
         gaeUploadTask.group = GAE_GROUP
+        gaeUploadTask.dependsOn project.gaeExplodeWar
     }
 
     private void configureGaeRollback(final Project project) {
@@ -198,13 +222,6 @@ class GaePlugin implements Plugin<Project> {
         GaeVersionTask gaeVersionTask = project.tasks.add(GAE_VERSION, GaeVersionTask.class)
         gaeVersionTask.description = "Prints detailed version information about the SDK, Java and the operating system."
         gaeVersionTask.group = GAE_GROUP
-    }
-
-    private void explodeWar(final GaeExplodedWarTask task) {
-        task.doFirst {
-            ant.delete(dir: task.getExplodedWarDirectory())
-            ant.unzip(src: project.war.archivePath, dest: task.getExplodedWarDirectory())
-        }
     }
 
     private WarPluginConvention getWarConvention(Project project) {

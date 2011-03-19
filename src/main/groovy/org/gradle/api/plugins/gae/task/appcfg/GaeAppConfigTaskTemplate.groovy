@@ -17,7 +17,7 @@ package org.gradle.api.plugins.gae.task.appcfg
 
 import com.google.appengine.tools.admin.AppCfg
 import org.gradle.api.GradleException
-import org.gradle.api.plugins.gae.task.GaeExplodedWarTask
+import org.gradle.api.plugins.gae.task.GaeWebAppDirTask
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Benjamin Muschko
  */
-abstract class GaeAppConfigTaskTemplate extends GaeExplodedWarTask {
+abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     static final Logger LOGGER = LoggerFactory.getLogger(GaeAppConfigTaskTemplate.class)
     private String email
     private String server

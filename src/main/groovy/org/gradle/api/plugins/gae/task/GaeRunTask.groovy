@@ -17,9 +17,7 @@ package org.gradle.api.plugins.gae.task
 
 import com.google.appengine.tools.KickStart
 import org.gradle.api.GradleException
-import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.gae.task.internal.ShutdownMonitor
-import org.gradle.api.tasks.InputFiles
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -29,24 +27,16 @@ import org.slf4j.LoggerFactory
  * @see <a href="http://code.google.com/appengine/docs/java/tools/devserver.html#Running_the_Development_Web_Server">Documentation</a>
  * @author Benjamin Muschko
  */
-class GaeRunTask extends GaeWebAppDirTask {
+class GaeRunTask extends AbstractGaeTask implements Explodable {
     static final Logger logger = LoggerFactory.getLogger(GaeRunTask.class)
     private Integer httpPort
     private Integer stopPort
     private String stopKey
-    private FileCollection classpath
+    private File explodedWarDirectory
 
     @Override
     void executeTask() {
-        setWebAppClasspath()
         startLocalDevelopmentServer()
-    }
-
-    private void setWebAppClasspath() {
-        def pathSeparator = File.pathSeparator
-        def javaClasspath = System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)
-        System.setProperty JAVA_CLASSPATH_SYS_PROP_KEY, "${javaClasspath}${pathSeparator}${getClasspath().asPath}"
-        LOGGER.info "Web application classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
     }
 
     private void startLocalDevelopmentServer() {
@@ -56,7 +46,7 @@ class GaeRunTask extends GaeWebAppDirTask {
             Thread shutdownMonitor = new ShutdownMonitor(getStopPort(), getStopKey())
             shutdownMonitor.start()
 
-            String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getWebAppSourceDirectory().getCanonicalPath()] as String[]
+            String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getExplodedWarDirectory().getCanonicalPath()] as String[]
             logger.info "Using params = $params"
             KickStart.main(params)
         }
@@ -92,13 +82,14 @@ class GaeRunTask extends GaeWebAppDirTask {
         this.stopKey = stopKey
     }
 
-    @InputFiles
-    public FileCollection getClasspath() {
-        classpath
+    @Override
+    public File getExplodedWarDirectory() {
+        explodedWarDirectory
     }
 
-    public void setClasspath(FileCollection classpath) {
-        this.classpath = classpath
+    @Override
+    public void setExplodedWarDirectory(File explodedWarDirectory) {
+        this.explodedWarDirectory = explodedWarDirectory
     }
 }
 

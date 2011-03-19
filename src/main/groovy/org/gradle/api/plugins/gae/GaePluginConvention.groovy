@@ -26,6 +26,7 @@ class GaePluginConvention {
     Integer httpPort = 8080
     Integer stopPort = 8081
     String stopKey
+    File warDir
     GaeAppConfigConvention appCfg = new GaeAppConfigConvention()
 
     def gae(Closure closure) {
