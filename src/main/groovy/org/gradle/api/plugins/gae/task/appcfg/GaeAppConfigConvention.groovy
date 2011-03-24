@@ -25,6 +25,7 @@ class GaeAppConfigConvention {
     String server
     String host
     Boolean passIn
+    String password
     String httpProxy
     String httpsProxy
     GaeDownloadLogsConvention logs = new GaeDownloadLogsConvention()

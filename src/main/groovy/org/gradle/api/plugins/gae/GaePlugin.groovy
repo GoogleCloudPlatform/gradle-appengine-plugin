@@ -60,7 +60,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeRun(project, gaePluginConvention, explodedWarDirectory)
         configureGaeStop(project, gaePluginConvention)
         configureGaeEnhance(project)
-        configureGaeUpload(project, explodedWarDirectory)
+        configureGaeUpload(project, gaePluginConvention, explodedWarDirectory)
         configureGaeRollback(project)
         configureGaeUpdateIndexes(project)
         configureGaeVacuumIndexes(project)
@@ -155,9 +155,10 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeUpload(final Project project, final File explodedWarDirectory) {
+    private void configureGaeUpload(final Project project, final GaePluginConvention gaePluginConvention, final File explodedWarDirectory) {
         project.tasks.withType(GaeUploadTask.class).whenTaskAdded { GaeUploadTask gaeUploadTask ->
             gaeUploadTask.conventionMapping.map("explodedWarDirectory") { explodedWarDirectory }
+            gaeUploadTask.conventionMapping.map("password") { gaePluginConvention.appCfg.password }
         }
 
         GaeUploadTask gaeUploadTask = project.tasks.add(GAE_UPLOAD, GaeUploadTask.class)
