@@ -43,7 +43,7 @@ The GAE plugin defines the following tasks:
 * `gaeRollback`: Undoes a partially completed update for the given application.
 * `gaeRun`: Starts a local development server running your project code. By default the WAR file is created, exploded and used as
 web application directory each time you run this task. This behavior can be changed by setting the convention property
-`warDir`. You can automate the whole process by providing the `email` and `password` convention properties.
+`warDir`.
  * `gaeStop`: Stops the local development server.
 * `gaeUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
 * `gaeUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
@@ -73,7 +73,7 @@ If omitted and no cookie is stored from a previous use of the command, the comma
 * `server`: The App Engine server hostname (defaults to appengine.google.com).
 * `host`: The hostname of the local machine for use with remote procedure calls.
 * `passIn`: Do not store the administrator sign-in credentials as a cookie; prompt for a password every time.
-* `password`: The password to be used whenever a task requires one.
+* `password`: The password to be used whenever a task requires one. The password is only applied if the `email` convention property was provided also.
 * `httpProxy`: Use the given HTTP proxy to contact App Engine.
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.

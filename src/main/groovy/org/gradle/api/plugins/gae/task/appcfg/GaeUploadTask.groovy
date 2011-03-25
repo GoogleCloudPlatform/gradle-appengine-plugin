@@ -17,8 +17,6 @@ package org.gradle.api.plugins.gae.task.appcfg
 
 import org.gradle.api.plugins.gae.task.Explodable
 import org.gradle.api.tasks.InputDirectory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Google App Engine task uploading your application to the server.
@@ -27,10 +25,8 @@ import org.slf4j.LoggerFactory
  * @author Benjamin Muschko
  */
 class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaeUploadTask.class)
     final String COMMAND = "update"
     private File explodedWarDirectory
-    private String password
 
     @Override
     String startLogMessage() {
@@ -48,20 +44,6 @@ class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
     }
 
     @Override
-    void executeTask() {
-        // User has to enter credentials
-        if(requiresUserInput()) {
-            uploadApplication()
-        }
-        // All credentials were provided
-        else {
-            Thread appConfigThread = new Thread(new AppConfigRunnable())
-            appConfigThread.start()
-            appConfigThread.join()
-        }
-    }
-
-    @Override
     List getParams() {
         [COMMAND, getExplodedWarDirectory().getCanonicalPath()]
     }
@@ -75,79 +57,5 @@ class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
     @Override
     public void setExplodedWarDirectory(File explodedWarDirectory) {
         this.explodedWarDirectory = explodedWarDirectory
-    }
-
-    public String getPassword() {
-        password
-    }
-
-    public void setPassword() {
-        this.password = password
-    }
-
-    private boolean requiresUserInput() {
-        !(getEmail() && getPassword())
-    }
-
-    void uploadApplication() {
-        super.executeTask()
-    }
-
-    private class AppConfigRunnable implements Runnable {
-        final Logger LOGGER = LoggerFactory.getLogger(AppConfigRunnable.class)
-
-        @Override
-        public void run() {
-            PrintStream systemOutOriginal = System.out
-            InputStream systemInOriginal = System.in
-            PipedInputStream inputStreamReplacement = new PipedInputStream()
-            OutputStream stdin = new PipedOutputStream(inputStreamReplacement)
-
-            try {
-                System.setIn(inputStreamReplacement)
-                BufferedWriter stdinWriter = new BufferedWriter(new OutputStreamWriter(stdin))
-                PrintStream printStream = new PrintStream(new PasswordOutputStream(stdinWriter, systemOutOriginal), true)
-                System.setOut(printStream)
-
-                GaeUploadTask.this.uploadApplication()
-            }
-            finally {
-                System.setOut(systemOutOriginal)
-                System.setIn(systemInOriginal)
-            }
-        }
-    }
-
-    private class PasswordWriterRunnable implements Runnable {
-        private final BufferedWriter stdinWriter
-
-        public PasswordWriterRunnable(BufferedWriter stdinWriter) {
-            this.stdinWriter = stdinWriter
-        }
-
-        @Override
-        void run() {
-            stdinWriter.write(GaeUploadTask.this.getPassword())
-            stdinWriter.newLine()
-            stdinWriter.flush()
-        }
-    }
-
-    private class PasswordOutputStream extends OutputStream {
-        private final BufferedWriter stdinWriter
-        private final PrintStream out
-
-        public PasswordOutputStream(BufferedWriter stdinWriter, PrintStream out) {
-            this.stdinWriter = stdinWriter
-            this.out = out
-        }
-
-        @Override
-        public void write(int b) throws IOException {
-            Thread passwordWriterThread = new Thread(new PasswordWriterRunnable(stdinWriter))
-            passwordWriterThread.setDaemon(true)
-            passwordWriterThread.start()
-            out.write(b)
-        }
     }
 }

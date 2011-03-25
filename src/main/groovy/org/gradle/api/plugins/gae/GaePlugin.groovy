@@ -60,7 +60,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeRun(project, gaePluginConvention, explodedWarDirectory)
         configureGaeStop(project, gaePluginConvention)
         configureGaeEnhance(project)
-        configureGaeUpload(project, gaePluginConvention, explodedWarDirectory)
+        configureGaeUpload(project, explodedWarDirectory)
         configureGaeRollback(project)
         configureGaeUpdateIndexes(project)
         configureGaeVacuumIndexes(project)
@@ -92,6 +92,7 @@ class GaePlugin implements Plugin<Project> {
             gaeAppConfigTaskTemplate.conventionMapping.map("server") { gaePluginConvention.appCfg.server }
             gaeAppConfigTaskTemplate.conventionMapping.map("host") { gaePluginConvention.appCfg.host }
             gaeAppConfigTaskTemplate.conventionMapping.map("passIn") { gaePluginConvention.appCfg.passIn }
+            gaeAppConfigTaskTemplate.conventionMapping.map("password") { gaePluginConvention.appCfg.password }
             gaeAppConfigTaskTemplate.conventionMapping.map("httpProxy") { gaePluginConvention.appCfg.httpProxy }
             gaeAppConfigTaskTemplate.conventionMapping.map("httpsProxy") { gaePluginConvention.appCfg.httpsProxy }
         }
@@ -155,10 +156,9 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeUpload(final Project project, final GaePluginConvention gaePluginConvention, final File explodedWarDirectory) {
+    private void configureGaeUpload(final Project project, final File explodedWarDirectory) {
         project.tasks.withType(GaeUploadTask.class).whenTaskAdded { GaeUploadTask gaeUploadTask ->
             gaeUploadTask.conventionMapping.map("explodedWarDirectory") { explodedWarDirectory }
-            gaeUploadTask.conventionMapping.map("password") { gaePluginConvention.appCfg.password }
         }
 
         GaeUploadTask gaeUploadTask = project.tasks.add(GAE_UPLOAD, GaeUploadTask.class)

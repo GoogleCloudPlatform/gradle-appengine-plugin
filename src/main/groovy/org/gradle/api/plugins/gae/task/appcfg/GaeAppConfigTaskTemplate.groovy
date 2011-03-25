@@ -32,12 +32,30 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     private String server
     private String host
     private Boolean passIn
+    private String password
     private String httpProxy
     private String httpsProxy
 
     @Override
     void executeTask() {
-         try {
+        // User has to enter credentials
+        if(requiresUserInput()) {
+            runAppConfig()
+        }
+        // All credentials were provided
+        else {
+            Thread appConfigThread = new Thread(new AppConfigRunnable())
+            appConfigThread.start()
+            appConfigThread.join()
+        }
+    }
+
+    private boolean requiresUserInput() {
+        !(getEmail() && getPassword())
+    }
+
+    void runAppConfig() {
+        try {
             LOGGER.info startLogMessage()
 
             def params = []
@@ -127,6 +145,72 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
 
     public void setHttpsProxy(String httpsProxy) {
         this.httpsProxy = httpsProxy
+    }
+
+    public String getPassword() {
+        password
+    }
+
+    public void setPassword() {
+        this.password = password
+    }
+
+    private class AppConfigRunnable implements Runnable {
+        final Logger LOGGER = LoggerFactory.getLogger(AppConfigRunnable.class)
+
+        @Override
+        public void run() {
+            PrintStream systemOutOriginal = System.out
+            InputStream systemInOriginal = System.in
+            PipedInputStream inputStreamReplacement = new PipedInputStream()
+            OutputStream stdin = new PipedOutputStream(inputStreamReplacement)
+
+            try {
+                System.setIn(inputStreamReplacement)
+                BufferedWriter stdinWriter = new BufferedWriter(new OutputStreamWriter(stdin))
+                PrintStream printStream = new PrintStream(new PasswordOutputStream(stdinWriter, systemOutOriginal), true)
+                System.setOut(printStream)
+
+                GaeAppConfigTaskTemplate.this.runAppConfig()
+            }
+            finally {
+                System.setOut(systemOutOriginal)
+                System.setIn(systemInOriginal)
+            }
+        }
+    }
+
+    private class PasswordWriterRunnable implements Runnable {
+        private final BufferedWriter stdinWriter
+
+        public PasswordWriterRunnable(BufferedWriter stdinWriter) {
+            this.stdinWriter = stdinWriter
+        }
+
+        @Override
+        void run() {
+            stdinWriter.write(GaeAppConfigTaskTemplate.this.getPassword())
+            stdinWriter.newLine()
+            stdinWriter.flush()
+        }
+    }
+
+    private class PasswordOutputStream extends OutputStream {
+        private final BufferedWriter stdinWriter
+        private final PrintStream out
+
+        public PasswordOutputStream(BufferedWriter stdinWriter, PrintStream out) {
+            this.stdinWriter = stdinWriter
+            this.out = out
+        }
+
+        @Override
+        public void write(int b) throws IOException {
+            Thread passwordWriterThread = new Thread(new PasswordWriterRunnable(stdinWriter))
+            passwordWriterThread.setDaemon(true)
+            passwordWriterThread.start()
+            out.write(b)
+        }
     }
 
     abstract String startLogMessage()
