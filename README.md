@@ -75,7 +75,7 @@ If omitted and no cookie is stored from a previous use of the command, the comma
 * `passIn`: Do not store the administrator sign-in credentials as a cookie; prompt for a password every time.
 * `password`: The password in plain text to be used whenever a task requires one. The password is only applied if the `email`
 convention property was provided also. Alternatively, you can put the password into your `gradle.properties`. The password
-in `gradle.properties` takes precedence over the one set in this convention properties.
+in `gradle.properties` takes precedence over the one set in this convention property.
 * `httpProxy`: Use the given HTTP proxy to contact App Engine.
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.
