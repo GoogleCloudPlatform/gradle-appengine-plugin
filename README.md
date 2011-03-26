@@ -84,7 +84,7 @@ The task `gaeLogs` requires you to at least define the file to write the logs to
 closure `logs`:
 
 * `numDays`: The number of days of log data to retrieve, ending on the current date at midnight UTC. A value of 0 retrieves
-all available logs. If --append is given, then the default is 0, otherwise the default is 1.
+all available logs. If `append` is given, then the default is 0, otherwise the default is 1.
 * `severity`: The minimum log level for the log messages to retrieve. The value is a number corresponding to the log
 level: 4 for CRITICAL, 3 for ERROR, 2 for WARNING, 1 for INFO, 0 for DEBUG. All messages at the given log level and above
 will be retrieved (defaults to 1 (INFO)).
