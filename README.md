@@ -73,7 +73,9 @@ If omitted and no cookie is stored from a previous use of the command, the comma
 * `server`: The App Engine server hostname (defaults to appengine.google.com).
 * `host`: The hostname of the local machine for use with remote procedure calls.
 * `passIn`: Do not store the administrator sign-in credentials as a cookie; prompt for a password every time.
-* `password`: The password to be used whenever a task requires one. The password is only applied if the `email` convention property was provided also.
+* `password`: The password in plain text to be used whenever a task requires one. The password is only applied if the `email`
+convention property was provided also. Alternatively, you can put the password into your `gradle.properties`. The password
+in `gradle.properties` takes precedence over the one set in this convention properties.
 * `httpProxy`: Use the given HTTP proxy to contact App Engine.
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.

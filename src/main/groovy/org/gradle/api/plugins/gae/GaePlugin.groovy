@@ -46,6 +46,7 @@ class GaePlugin implements Plugin<Project> {
     static final String GAE_LOGS = "gaeLogs"
     static final String GAE_VERSION = "gaeVersion"
     static final String GAE_EXPLODE_WAR = "gaeExplodeWar"
+    static final String GRADLE_USER_PROP_PASSWORD = "gaePassword"
 
     @Override
     public void apply(Project project) {
@@ -92,7 +93,10 @@ class GaePlugin implements Plugin<Project> {
             gaeAppConfigTaskTemplate.conventionMapping.map("server") { gaePluginConvention.appCfg.server }
             gaeAppConfigTaskTemplate.conventionMapping.map("host") { gaePluginConvention.appCfg.host }
             gaeAppConfigTaskTemplate.conventionMapping.map("passIn") { gaePluginConvention.appCfg.passIn }
-            gaeAppConfigTaskTemplate.conventionMapping.map("password") { gaePluginConvention.appCfg.password }
+            gaeAppConfigTaskTemplate.conventionMapping.map("password") {
+                // Password from gradle.properties takes precedence
+                project.hasProperty(GRADLE_USER_PROP_PASSWORD) ? project.getProperties()[GRADLE_USER_PROP_PASSWORD] : gaePluginConvention.appCfg.password
+            }
             gaeAppConfigTaskTemplate.conventionMapping.map("httpProxy") { gaePluginConvention.appCfg.httpProxy }
             gaeAppConfigTaskTemplate.conventionMapping.map("httpsProxy") { gaePluginConvention.appCfg.httpsProxy }
         }
