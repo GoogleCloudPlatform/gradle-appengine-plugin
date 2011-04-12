@@ -17,7 +17,10 @@ package org.gradle.api.plugins.gae.task
 
 import com.google.appengine.tools.KickStart
 import org.gradle.api.GradleException
+import org.gradle.api.plugins.gae.task.internal.CommandLineStreamConsumer
+import org.gradle.api.plugins.gae.task.internal.KickStartSynchronizer
 import org.gradle.api.plugins.gae.task.internal.ShutdownMonitor
+import org.gradle.api.plugins.gae.task.internal.StreamOutputHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -33,6 +36,8 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     private Integer stopPort
     private String stopKey
     private File explodedWarDirectory
+    private Boolean daemon
+    private final KickStartSynchronizer kickStartSynchronizer = new KickStartSynchronizer()
 
     @Override
     void executeTask() {
@@ -46,15 +51,88 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
             Thread shutdownMonitor = new ShutdownMonitor(getStopPort(), getStopKey())
             shutdownMonitor.start()
 
-            String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getExplodedWarDirectory().getCanonicalPath()] as String[]
-            logger.info "Using params = $params"
-            KickStart.main(params)
+            if(!getDaemon()) {
+                runKickStart()
+            }
+            else {
+                startKickStartThread()
+            }
         }
         catch(Exception e) {
             throw new GradleException("An error occurred starting the local development server.", e)
         }
         finally {
-            logger.info "Local development server exiting."
+            if(!getDaemon()) {
+                logger.info "Local development server exiting."
+            }
+        }
+    }
+
+    private void runKickStart() {
+        String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getExplodedWarDirectory().getCanonicalPath()] as String[]
+        logger.info "Using params = $params"
+        KickStart.main(params)
+    }
+
+    private void startKickStartThread() {
+        Thread kickStartThread = new Thread(new KickStartRunnable())
+        kickStartThread.start()
+
+        // Pause current thread until local development server is fully started
+        kickStartSynchronizer.getGate().await()
+    }
+
+    private class KickStartRunnable implements Runnable {
+        final Logger logger = LoggerFactory.getLogger(KickStartRunnable.class)
+
+        @Override
+        void run() {
+            InputStream systemInOriginal = System.in
+            PrintStream systemOutOriginal = System.out
+            PrintStream systemErrOriginal = System.err
+            PipedOutputStream pipeOut = new PipedOutputStream()
+            PipedInputStream pipeIn = new PipedInputStream(pipeOut)
+            PrintStream out = new PrintStream(pipeOut, true)
+            System.setIn(pipeIn)
+            System.setOut(out)
+            System.setErr(out)
+
+            Thread outputCommandLineConsumer = new CommandLineStreamConsumer(pipeIn, new OutStreamHandler(), GaeRunTask.this.getKickStartSynchronizer())
+            outputCommandLineConsumer.start()
+
+            try {
+                runKickStart()
+            }
+            catch(Exception e) {
+                throw new GradleException("An error occurred starting the local development server.", e)
+            }
+            finally {
+                System.setIn(systemInOriginal)
+                System.setOut(systemOutOriginal)
+                System.setErr(systemErrOriginal)
+            }
+        }
+
+        private class OutStreamHandler implements StreamOutputHandler {
+            @Override
+            void handleLine(String line) {
+                logger.info line
+                checkServerStartupProgress(line)
+            }
+        }
+
+        private class ErrStreamHandler implements StreamOutputHandler {
+            @Override
+            void handleLine(String line) {
+                logger.error line
+                checkServerStartupProgress(line)
+            }
+        }
+
+        private void checkServerStartupProgress(final String line) {
+            if(line.contains("The server is running")) {
+                GaeRunTask.this.getKickStartSynchronizer().getGate().countDown()
+            }
         }
     }
 
@@ -90,6 +168,18 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     @Override
     public void setExplodedWarDirectory(File explodedWarDirectory) {
         this.explodedWarDirectory = explodedWarDirectory
+    }
+
+    public Boolean getDaemon() {
+        daemon
+    }
+
+    public void setDaemon(Boolean daemon) {
+        this.daemon = daemon
+    }
+
+    public KickStartSynchronizer getKickStartSynchronizer() {
+        kickStartSynchronizer
     }
 }
 

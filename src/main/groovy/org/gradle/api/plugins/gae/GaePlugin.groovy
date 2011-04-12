@@ -120,6 +120,7 @@ class GaePlugin implements Plugin<Project> {
             gaeRunTask.conventionMapping.map("httpPort") { gaePluginConvention.httpPort }
             gaeRunTask.conventionMapping.map("stopPort") { gaePluginConvention.stopPort }
             gaeRunTask.conventionMapping.map("stopKey") { gaePluginConvention.stopKey }
+            gaeRunTask.conventionMapping.map("daemon") { gaePluginConvention.daemon }
             gaeRunTask.conventionMapping.map("explodedWarDirectory") { gaePluginConvention.warDir ? gaePluginConvention.warDir : explodedWarDirectory }
         }
 
