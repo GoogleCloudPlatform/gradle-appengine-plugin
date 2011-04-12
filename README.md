@@ -24,7 +24,7 @@ shows an example:
 
 	    dependencies {
 		    classpath 'com.google.appengine:appengine-tools-sdk:1.4.2'
-            classpath ':gradle-gae-plugin:0.2'
+            classpath ':gradle-gae-plugin:0.3'
         }
     }
 
@@ -64,6 +64,8 @@ The GAE plugin defines the following convention properties in the `gae` closure:
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
 * `stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).
 * `stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).
+* `daemon`: Specifies whether the local development server should run in the background. When true, this task completes as
+soon as the server has started. When false, this task blocks until the local development server is stopped (defaults to false).
 * `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
 
 Within `gae` you can define optional properties in a closure named `appcfg`:
@@ -115,6 +117,8 @@ the plugin will overwrite the log output file.
 
 Yes, you just have to configure the WAR plugin to point to the correct web application (by default `war`) and source code
 (by default `src`) directory. If you want to stick to the default source directory simply create the subdirectory `src/main/groovy`.
+
+    apply plugin: 'groovy'
 
     sourceSets {
         main {
