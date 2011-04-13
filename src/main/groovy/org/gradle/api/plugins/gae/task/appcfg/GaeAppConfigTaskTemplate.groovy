@@ -86,7 +86,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
             params << "--host=${getHost()}"
         }
 
-        if(getPassIn()) {
+        if(getPassIn() || getPassword()) {
             params << "--passin"
         }
 
