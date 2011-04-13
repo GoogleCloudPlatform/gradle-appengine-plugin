@@ -129,7 +129,7 @@ class GaePlugin implements Plugin<Project> {
         gaeRunTask.group = GAE_GROUP
 
         project.afterEvaluate {
-            // If WAR directory gets set we assume we have a fully functional web application, WAR creation/exlosion is skipped
+            // If WAR directory gets set we assume we have a fully functional web application, WAR creation/explosion is skipped
             if(!gaePluginConvention.warDir) {
                 gaeRunTask.dependsOn project.gaeExplodeWar
             }
