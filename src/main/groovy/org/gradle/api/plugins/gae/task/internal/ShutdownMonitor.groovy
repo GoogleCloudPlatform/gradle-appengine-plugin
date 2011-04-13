@@ -27,15 +27,17 @@ class ShutdownMonitor extends Thread {
     static final Logger logger = LoggerFactory.getLogger(ShutdownMonitor.class)
     final int port
     final String key
+    final ShutdownCallback shutdownCallback
     ServerSocket serverSocket
 
-    public ShutdownMonitor(int port, String key) {
+    public ShutdownMonitor(int port, String key, ShutdownCallback shutdownCallback) {
         if(port <= 0) {
             throw new IllegalStateException("Bad stop port")
         }
 
         this.port = port
         this.key = key
+        this.shutdownCallback = shutdownCallback
 
         setName("GaePluginShutdownMonitor");
         serverSocket = new ServerSocket(port, 1, InetAddress.getByName("127.0.0.1"))
@@ -76,7 +78,7 @@ class ShutdownMonitor extends Thread {
                     }
 
                     serverSocket = null
-                    System.exit(0)
+                    shutdownCallback.onShutdown()
                 }
             }
             catch(Exception e) {

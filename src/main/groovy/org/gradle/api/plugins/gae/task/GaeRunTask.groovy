@@ -17,12 +17,9 @@ package org.gradle.api.plugins.gae.task
 
 import com.google.appengine.tools.KickStart
 import org.gradle.api.GradleException
-import org.gradle.api.plugins.gae.task.internal.CommandLineStreamConsumer
-import org.gradle.api.plugins.gae.task.internal.KickStartSynchronizer
-import org.gradle.api.plugins.gae.task.internal.ShutdownMonitor
-import org.gradle.api.plugins.gae.task.internal.StreamOutputHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.gradle.api.plugins.gae.task.internal.*
 
 /**
  * Google App Engine task starting up a local development server.
@@ -48,14 +45,17 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         try {
             logger.info "Starting local development server..."
 
-            Thread shutdownMonitor = new ShutdownMonitor(getStopPort(), getStopKey())
-            shutdownMonitor.start()
-
             if(!getDaemon()) {
+                startShutdownMonitor(new SystemExitShutdownCallback())
                 runKickStart()
             }
             else {
-                startKickStartThread()
+                Thread kickStartThread = new Thread(new KickStartRunnable())
+                startShutdownMonitor(new ThreadShutdownCallback(kickStartThread))
+                kickStartThread.start()
+
+                // Pause current thread until local development server is fully started
+                kickStartSynchronizer.getGate().await()
             }
         }
         catch(Exception e) {
@@ -68,18 +68,15 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         }
     }
 
+    private void startShutdownMonitor(ShutdownCallback shutdownCallback) {
+        Thread shutdownMonitor = new ShutdownMonitor(getStopPort(), getStopKey(), shutdownCallback)
+        shutdownMonitor.start()
+    }
+
     private void runKickStart() {
         String[] params = ["com.google.appengine.tools.development.DevAppServerMain", "--port=" + getHttpPort(), getExplodedWarDirectory().getCanonicalPath()] as String[]
         logger.info "Using params = $params"
         KickStart.main(params)
-    }
-
-    private void startKickStartThread() {
-        Thread kickStartThread = new Thread(new KickStartRunnable())
-        kickStartThread.start()
-
-        // Pause current thread until local development server is fully started
-        kickStartSynchronizer.getGate().await()
     }
 
     private class KickStartRunnable implements Runnable {
