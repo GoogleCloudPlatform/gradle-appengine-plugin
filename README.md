@@ -24,7 +24,7 @@ shows an example:
 
 	    dependencies {
 		    classpath 'com.google.appengine:appengine-tools-sdk:1.4.2'
-            classpath ':gradle-gae-plugin:0.3'
+            classpath ':gradle-gae-plugin:0.4'
         }
     }
 
@@ -74,7 +74,8 @@ Within `gae` you can define optional properties in a closure named `appcfg`:
 If omitted and no cookie is stored from a previous use of the command, the command will prompt for this value.
 * `server`: The App Engine server hostname (defaults to appengine.google.com).
 * `host`: The hostname of the local machine for use with remote procedure calls.
-* `passIn`: Do not store the administrator sign-in credentials as a cookie; prompt for a password every time.
+* `passIn`: Do not store the administrator sign-in credentials as a cookie; prompt for a password every time. If the property
+`password` was provided then this value will always be true.
 * `password`: The password in plain text to be used whenever a task requires one. The password is only applied if the `email`
 convention property was provided also. Alternatively, you can set the password in your `gradle.properties` via the property
 `gaePassword`. The password in `gradle.properties` takes precedence over the one set in this convention property.
