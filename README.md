@@ -44,7 +44,7 @@ The GAE plugin defines the following tasks:
 * `gaeRun`: Starts a local development server running your project code. By default the WAR file is created, exploded and used as
 web application directory each time you run this task. This behavior can be changed by setting the convention property
 `warDir`.
- * `gaeStop`: Stops the local development server.
+* `gaeStop`: Stops the local development server.
 * `gaeUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
 * `gaeUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
 * `gaeUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
