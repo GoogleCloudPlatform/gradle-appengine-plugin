@@ -48,7 +48,7 @@ class CommandLineStreamConsumer extends Thread {
         finally {
             bReader.close()
             done = true
-            kickStartSynchronizer.gate.countDown()
+            kickStartSynchronizer.resume()
         }
     }
 }

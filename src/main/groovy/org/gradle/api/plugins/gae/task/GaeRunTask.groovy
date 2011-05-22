@@ -58,7 +58,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
                 kickStartThread.start()
 
                 // Pause current thread until local development server is fully started
-                kickStartSynchronizer.gate.await()
+                kickStartSynchronizer.pause()
             }
         }
         catch(Exception e) {
@@ -141,7 +141,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
 
         private void checkServerStartupProgress(final String line) {
             if(line.contains('The server is running')) {
-                GaeRunTask.this.kickStartSynchronizer.gate.countDown()
+                GaeRunTask.this.kickStartSynchronizer.resume()
             }
         }
     }

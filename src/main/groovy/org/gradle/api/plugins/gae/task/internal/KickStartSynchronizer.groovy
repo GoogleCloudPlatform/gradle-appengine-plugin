@@ -25,7 +25,11 @@ import java.util.concurrent.CountDownLatch
 class KickStartSynchronizer {
     final CountDownLatch gate = new CountDownLatch(1)
 
-    CountDownLatch getGate() {
-        gate
+    void pause() {
+        gate.await()
+    }
+
+    void resume() {
+        gate.countDown()
     }
 }
