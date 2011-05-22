@@ -21,10 +21,10 @@ package org.gradle.api.plugins.gae.task.internal
  * @author Benjamin Muschko
  */
 class CommandLineStreamConsumer extends Thread {
-    private BufferedReader bReader
-    private StreamOutputHandler streamHandler
-    private KickStartSynchronizer kickStartSynchronizer
-    private boolean done
+    final BufferedReader bReader
+    final StreamOutputHandler streamHandler
+    final KickStartSynchronizer kickStartSynchronizer
+    boolean done
 
     CommandLineStreamConsumer(InputStream stdin, StreamOutputHandler streamHandler, KickStartSynchronizer kickStartSynchronizer) {
         this.bReader = new BufferedReader(new InputStreamReader(stdin, 'UTF-8'))
