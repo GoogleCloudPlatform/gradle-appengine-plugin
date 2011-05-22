@@ -22,25 +22,25 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeCronInfoTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "cron_info"
+    static final String COMMAND = 'cron_info'
 
     @Override
     String startLogMessage() {
-        "Starting getting cron information..."
+        'Starting getting cron information...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred getting cron information."
+        'An error occurred getting cron information.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished getting cron information."
+        'Finished getting cron information.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }

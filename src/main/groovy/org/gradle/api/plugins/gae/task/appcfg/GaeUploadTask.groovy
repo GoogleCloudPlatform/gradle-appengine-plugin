@@ -25,37 +25,37 @@ import org.gradle.api.tasks.InputDirectory
  * @author Benjamin Muschko
  */
 class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
-    final String COMMAND = "update"
+    static final String COMMAND = 'update'
     private File explodedWarDirectory
 
     @Override
     String startLogMessage() {
-        "Starting upload process..."
+        'Starting upload process...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred uploading the application to App Engine."
+        'An error occurred uploading the application to App Engine.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished uploading process."
+        'Finished uploading process.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getExplodedWarDirectory().getCanonicalPath()]
+        [COMMAND, getExplodedWarDirectory().canonicalPath]
     }
 
     @Override
     @InputDirectory
-    public File getExplodedWarDirectory() {
+    File getExplodedWarDirectory() {
         explodedWarDirectory
     }
 
     @Override
-    public void setExplodedWarDirectory(File explodedWarDirectory) {
+    void setExplodedWarDirectory(File explodedWarDirectory) {
         this.explodedWarDirectory = explodedWarDirectory
     }
 }

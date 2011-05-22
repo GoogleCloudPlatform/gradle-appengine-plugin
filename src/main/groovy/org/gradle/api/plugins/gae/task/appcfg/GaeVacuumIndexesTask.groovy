@@ -22,25 +22,25 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeVacuumIndexesTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "vacuum_indexes"
+    static final String COMMAND = 'vacuum_indexes'
 
     @Override
     String startLogMessage() {
-        "Starting deleting unused indexes..."
+        'Starting deleting unused indexes...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred deleting unused indexes."
+        'An error occurred deleting unused indexes.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished deleting unused indexes."
+        'Finished deleting unused indexes.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }

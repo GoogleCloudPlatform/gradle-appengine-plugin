@@ -27,8 +27,8 @@ import org.slf4j.LoggerFactory
  * @author Benjamin Muschko
  */
 class GaeEnhanceTask extends GaeWebAppDirTask {
-    static final Logger logger = LoggerFactory.getLogger(GaeEnhanceTask.class)
-    private File classesDirectory
+    static final Logger LOGGER = LoggerFactory.getLogger(GaeEnhanceTask.class)
+    File classesDirectory
 
     @Override
     void executeTask() {
@@ -37,32 +37,28 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
 
     private void enhanceClasses() {
         try {
-            logger.info "Enhancing DataNucleus classes..."
+            LOGGER.info 'Enhancing DataNucleus classes...'
 
             ant.taskdef(name: 'enhance', classpath: System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY), classname: 'com.google.appengine.tools.enhancer.EnhancerTask')
             ant.enhance(failonerror: true, verbose: true) {
                 classpath {
                     pathelement(path: System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY))
-                    pathelement(path: getClassesDirectory().getCanonicalPath())
-                    fileset(dir: "${getWebAppSourceDirectory().getCanonicalPath()}/WEB-INF/lib", includes: '*.jar')
+                    pathelement(path: getClassesDirectory().canonicalPath)
+                    fileset(dir: "${getWebAppSourceDirectory().canonicalPath}/WEB-INF/lib", includes: '*.jar')
                 }
-                fileset(dir: getClassesDirectory().getCanonicalPath(), includes: '**/*.class')
+                fileset(dir: getClassesDirectory().canonicalPath, includes: '**/*.class')
             }
         }
         catch(Exception e) {
-            throw new GradleException("An error occurred enhancing DataNucleus classes.", e)
+            throw new GradleException('An error occurred enhancing DataNucleus classes.', e)
         }
         finally {
-            logger.info "Finished enhancing DataNucleus classes."
+            LOGGER.info 'Finished enhancing DataNucleus classes.'
         }
     }
 
     @InputDirectory
-    public File getClassesDirectory() {
+    File getClassesDirectory() {
         classesDirectory
-    }
-
-    public void setClassesDirectory(File classesDirectory) {
-        this.classesDirectory = classesDirectory
     }
 }

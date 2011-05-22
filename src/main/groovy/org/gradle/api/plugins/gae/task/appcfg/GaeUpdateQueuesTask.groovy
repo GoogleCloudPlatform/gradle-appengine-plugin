@@ -22,26 +22,26 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeUpdateQueuesTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "update_queues"
+    static final String COMMAND = 'update_queues'
 
     @Override
     String startLogMessage() {
-        "Starting updating task queues..."
+        'Starting updating task queues...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred updating task queues."
+        'An error occurred updating task queues.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished updating task queues."
+        'Finished updating task queues.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }
 

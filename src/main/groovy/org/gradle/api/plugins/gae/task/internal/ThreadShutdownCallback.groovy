@@ -21,7 +21,7 @@ package org.gradle.api.plugins.gae.task.internal
  * @author Benjamin Muschko
  */
 class ThreadShutdownCallback implements ShutdownCallback {
-    private final Thread thread
+    final Thread thread
 
     public ThreadShutdownCallback(Thread thread) {
         this.thread = thread

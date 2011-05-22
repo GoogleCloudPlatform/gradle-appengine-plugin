@@ -22,25 +22,25 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeUpdateDoSTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "update_cron"
+    static final String COMMAND = 'update_cron'
 
     @Override
     String startLogMessage() {
-        "Starting updating DoS protection configuration..."
+        'Starting updating DoS protection configuration...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred updating DoS protection configuration."
+        'An error occurred updating DoS protection configuration.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished updating DoS protection configuration."
+        'Finished updating DoS protection configuration.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }

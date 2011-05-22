@@ -27,55 +27,39 @@ import org.slf4j.LoggerFactory
  * @author Benjamin Muschko
  */
 class GaeStopTask extends ConventionTask {
-    static final Logger logger = LoggerFactory.getLogger(GaeStopTask.class)
-    private Integer stopPort
-    private String stopKey
+    static final Logger LOGGER = LoggerFactory.getLogger(GaeStopTask.class)
+    Integer stopPort
+    String stopKey
 
     @TaskAction
-    public void stop() {
+    void stop() {
         if(!getStopPort()) {
-            throw new InvalidUserDataException("Please specify a valid port")
+            throw new InvalidUserDataException('Please specify a valid port')
         }
         if(!getStopKey()) {
-            throw new InvalidUserDataException("Please specify a valid stopKey")
+            throw new InvalidUserDataException('Please specify a valid stopKey')
         }
 
         Socket socket
 
         try {
-            socket = new Socket(InetAddress.getByName("127.0.0.1"), getStopPort())
+            socket = new Socket(InetAddress.getByName('127.0.0.1'), getStopPort())
             socket.setSoLinger(false, 0)
 
-            OutputStream out = socket.getOutputStream()
-            out.write((getStopKey() + "\r\nstop\r\n").getBytes())
+            OutputStream out = socket.outputStream
+            out.write((getStopKey() + '\r\nstop\r\n').bytes)
             out.flush()
         }
         catch(ConnectException e) {
-            logger.info "Local App Engine server not running!"
+            LOGGER.info 'Local App Engine server not running!'
         }
         catch(Exception e) {
-            logger.error "Exception during stopping", e
+            LOGGER.error 'Exception during stopping', e
         }
         finally {
             if(socket && !socket.isClosed()) {
                 socket.close()
             }
         }
-    }
-
-    public Integer getStopPort() {
-        stopPort
-    }
-
-    public void setStopPort(Integer stopPort) {
-        this.stopPort = stopPort
-    }
-
-    public String getStopKey() {
-        stopKey
-    }
-
-    public void setStopKey(String stopKey) {
-        this.stopKey = stopKey
     }
 }

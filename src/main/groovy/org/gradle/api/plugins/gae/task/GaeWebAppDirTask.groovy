@@ -26,8 +26,8 @@ import org.slf4j.LoggerFactory
  * @author Benjamin Muschko
  */
 abstract class GaeWebAppDirTask extends AbstractGaeTask {
-    static final Logger logger = LoggerFactory.getLogger(GaeWebAppDirTask.class)
-    private File webAppSourceDirectory
+    static final Logger LOGGER = LoggerFactory.getLogger(GaeWebAppDirTask.class)
+    File webAppSourceDirectory
 
     @Override
     void validateConfiguration(){
@@ -35,25 +35,21 @@ abstract class GaeWebAppDirTask extends AbstractGaeTask {
 
         try {
             if(!getWebAppSourceDirectory() || !getWebAppSourceDirectory().exists()) {
-                throw new InvalidUserDataException("Webapp source directory "
-                        + (getWebAppSourceDirectory() == null ? "null" : getWebAppSourceDirectory().getCanonicalPath())
-                        + " does not exist")
+                throw new InvalidUserDataException('Webapp source directory '
+                        + (!getWebAppSourceDirectory() ? 'null' : getWebAppSourceDirectory().canonicalPath)
+                        + ' does not exist')
             }
             else {
-                logger.info "Webapp source directory = ${getWebAppSourceDirectory().getCanonicalPath()}"
+                LOGGER.info "Webapp source directory = ${getWebAppSourceDirectory().canonicalPath}"
             }
         }
         catch(IOException e) {
-            throw new InvalidUserDataException("Webapp source directory does not exist", e)
+            throw new InvalidUserDataException('Webapp source directory does not exist', e)
         }
     }
 
     @InputDirectory
-    public File getWebAppSourceDirectory() {
+    File getWebAppSourceDirectory() {
         webAppSourceDirectory
-    }
-
-    public void setWebAppSourceDirectory(File webAppSourceDirectory) {
-        this.webAppSourceDirectory = webAppSourceDirectory
     }
 }

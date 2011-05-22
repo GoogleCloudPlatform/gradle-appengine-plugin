@@ -21,25 +21,25 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeRollbackTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "rollback"
+    static final String COMMAND = 'rollback'
 
     @Override
     String startLogMessage() {
-        "Starting to rollback update..."
+        'Starting to rollback update...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred rolling back update."
+        'An error occurred rolling back update.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished rolling back update."
+        'Finished rolling back update.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }

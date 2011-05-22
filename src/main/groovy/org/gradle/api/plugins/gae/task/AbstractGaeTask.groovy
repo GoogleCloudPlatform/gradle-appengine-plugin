@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory
  */
 abstract class AbstractGaeTask extends ConventionTask {
     static final Logger LOGGER = LoggerFactory.getLogger(AbstractGaeTask.class)
-    final String APPENGINE_HOME_ENV_PROP_KEY = "APPENGINE_HOME"
-    final String APPENGINE_SDK_ROOT_SYS_PROP_KEY = "appengine.sdk.root"
-    final String JAVA_CLASSPATH_SYS_PROP_KEY = "java.class.path"
+    static final String APPENGINE_HOME_ENV_PROP_KEY = 'APPENGINE_HOME'
+    static final String APPENGINE_SDK_ROOT_SYS_PROP_KEY = 'appengine.sdk.root'
+    static final String JAVA_CLASSPATH_SYS_PROP_KEY = 'java.class.path'
 
     @TaskAction
     protected void start() {
@@ -38,7 +38,6 @@ abstract class AbstractGaeTask extends ConventionTask {
         executeTask()
     }
 
-    @Override
     void validateConfiguration() {
         validateAppEngineSdkRoot()
         validateAppEngineToolsApiJar()
@@ -74,7 +73,7 @@ abstract class AbstractGaeTask extends ConventionTask {
     }
 
     private void validateAppEngineToolsApiJar() {
-        def fileSeparator = System.getProperty("file.separator")
+        def fileSeparator = System.getProperty('file.separator')
         def pathSeparator = File.pathSeparator
         def appEngineSdkRoot = System.getProperty(APPENGINE_SDK_ROOT_SYS_PROP_KEY)
         def javaClasspath = System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)

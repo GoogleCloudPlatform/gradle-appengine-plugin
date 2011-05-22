@@ -22,25 +22,25 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeUpdateIndexesTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "update_indexes"
+    static final String COMMAND = 'update_indexes'
 
     @Override
     String startLogMessage() {
-        "Starting updating indexes..."
+        'Starting updating indexes...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred updating indexes."
+        'An error occurred updating indexes.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished updating indexes."
+        'Finished updating indexes.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }

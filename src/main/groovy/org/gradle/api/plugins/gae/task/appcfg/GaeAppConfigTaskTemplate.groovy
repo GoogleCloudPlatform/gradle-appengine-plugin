@@ -28,13 +28,13 @@ import org.slf4j.LoggerFactory
  */
 abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     static final Logger LOGGER = LoggerFactory.getLogger(GaeAppConfigTaskTemplate.class)
-    private String email
-    private String server
-    private String host
-    private Boolean passIn
-    private String password
-    private String httpProxy
-    private String httpsProxy
+    String email
+    String server
+    String host
+    Boolean passIn
+    String password
+    String httpProxy
+    String httpsProxy
 
     @Override
     void executeTask() {
@@ -87,7 +87,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
         }
 
         if(getPassIn() || getPassword()) {
-            params << "--passin"
+            params << '--passin'
         }
 
         if(getHttpProxy()) {
@@ -99,67 +99,11 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
         }
     }
 
-    public String getEmail() {
-        email
-    }
-
-    public void setEmail(String email) {
-        this.email = email
-    }
-
-    public String getServer() {
-        server
-    }
-
-    public void setServer(String server) {
-        this.server = server
-    }
-
-    public String getHost() {
-        host
-    }
-
-    public void setHost(String host) {
-        this.host = host
-    }
-
-    public Boolean getPassIn() {
-        passIn
-    }
-
-    public void setPassIn(Boolean passIn) {
-        this.passIn = passIn
-    }
-
-    public String getHttpProxy() {
-        httpProxy
-    }
-
-    public void setHttpProxy(String httpProxy) {
-        this.httpProxy = httpProxy
-    }
-
-    public String getHttpsProxy() {
-        httpsProxy
-    }
-
-    public void setHttpsProxy(String httpsProxy) {
-        this.httpsProxy = httpsProxy
-    }
-
-    public String getPassword() {
-        password
-    }
-
-    public void setPassword() {
-        this.password = password
-    }
-
     private class AppConfigRunnable implements Runnable {
         final Logger LOGGER = LoggerFactory.getLogger(AppConfigRunnable.class)
 
         @Override
-        public void run() {
+        void run() {
             PrintStream systemOutOriginal = System.out
             InputStream systemInOriginal = System.in
             PipedInputStream inputStreamReplacement = new PipedInputStream()
@@ -181,7 +125,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     }
 
     private class PasswordWriterRunnable implements Runnable {
-        private final BufferedWriter stdinWriter
+        final BufferedWriter stdinWriter
 
         public PasswordWriterRunnable(BufferedWriter stdinWriter) {
             this.stdinWriter = stdinWriter
@@ -189,15 +133,15 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
 
         @Override
         void run() {
-            stdinWriter.write(GaeAppConfigTaskTemplate.this.getPassword())
+            stdinWriter.write(GaeAppConfigTaskTemplate.this.password)
             stdinWriter.newLine()
             stdinWriter.flush()
         }
     }
 
     private class PasswordOutputStream extends OutputStream {
-        private final BufferedWriter stdinWriter
-        private final PrintStream out
+        final BufferedWriter stdinWriter
+        final PrintStream out
 
         public PasswordOutputStream(BufferedWriter stdinWriter, PrintStream out) {
             this.stdinWriter = stdinWriter
@@ -205,7 +149,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
         }
 
         @Override
-        public void write(int b) throws IOException {
+        void write(int b) throws IOException {
             Thread passwordWriterThread = new Thread(new PasswordWriterRunnable(stdinWriter))
             passwordWriterThread.setDaemon(true)
             passwordWriterThread.start()

@@ -23,9 +23,9 @@ import java.util.concurrent.CountDownLatch
  * @author Benjamin Muschko
  */
 class KickStartSynchronizer {
-    private final CountDownLatch gate = new CountDownLatch(1)
+    private final CountDownLatch GATE = new CountDownLatch(1)
 
-    public CountDownLatch getGate() {
-        gate
+    CountDownLatch getGate() {
+        GATE
     }
 }

@@ -26,29 +26,29 @@ class CommandLineStreamConsumer extends Thread {
     private KickStartSynchronizer kickStartSynchronizer
     private boolean done
 
-	public CommandLineStreamConsumer(InputStream stdin, StreamOutputHandler streamHandler, KickStartSynchronizer kickStartSynchronizer) {
-		this.bReader = new BufferedReader(new InputStreamReader(stdin, "UTF-8"))
+    CommandLineStreamConsumer(InputStream stdin, StreamOutputHandler streamHandler, KickStartSynchronizer kickStartSynchronizer) {
+        this.bReader = new BufferedReader(new InputStreamReader(stdin, 'UTF-8'))
         this.streamHandler = streamHandler
         this.kickStartSynchronizer = kickStartSynchronizer
-	}
+    }
 
     @Override
-	public void run() {
-		try {
-			String line = bReader.readLine()
+    void run() {
+        try {
+            String line = bReader.readLine()
 
             while(!done && line != null) {
-				streamHandler.handleLine(line)
+                streamHandler.handleLine(line)
                 line = bReader.readLine()
-			}
-		}
+            }
+        }
         catch(Exception e) {
             // Don't care
-		}
+        }
         finally {
             bReader.close()
             done = true
-            kickStartSynchronizer.getGate().countDown()
+            kickStartSynchronizer.gate.countDown()
         }
-	}
+    }
 }

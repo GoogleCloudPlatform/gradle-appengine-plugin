@@ -25,8 +25,8 @@ import org.gradle.api.tasks.TaskAction
  * @author Benjamin Muschko
  */
 class GaeExplodeWarTask extends ConventionTask implements Explodable {
-    private File warArchive
-    private File explodedWarDirectory
+    File warArchive
+    File explodedWarDirectory
 
     @TaskAction
     protected void start() {
@@ -35,21 +35,17 @@ class GaeExplodeWarTask extends ConventionTask implements Explodable {
     }
 
     @InputFile
-    public File getWarArchive() {
+    File getWarArchive() {
         warArchive
     }
 
-    public void setWarArchive(File warArchive) {
-        this.warArchive = warArchive
-    }
-
     @Override
-    public File getExplodedWarDirectory() {
+    File getExplodedWarDirectory() {
         explodedWarDirectory
     }
 
     @Override
-    public void setExplodedWarDirectory(File explodedWarDirectory) {
+    void setExplodedWarDirectory(File explodedWarDirectory) {
         this.explodedWarDirectory = explodedWarDirectory
     }
 }

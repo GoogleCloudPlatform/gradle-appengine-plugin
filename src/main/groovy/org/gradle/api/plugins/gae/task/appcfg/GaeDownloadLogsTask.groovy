@@ -16,6 +16,8 @@
 package org.gradle.api.plugins.gae.task.appcfg
 
 import org.gradle.api.InvalidUserDataException
+import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 
 /**
  * Google App Engine task downloading application logs from the server.
@@ -24,11 +26,12 @@ import org.gradle.api.InvalidUserDataException
  * @author Benjamin Muschko
  */
 class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "request_logs"
-    private Integer numDays
-    private Integer severity
-    private Boolean append
-    private File outputFile
+    static final Logger LOGGER = LoggerFactory.getLogger(GaeDownloadLogsTask.class)
+    static final String COMMAND = 'request_logs'
+    Integer numDays
+    Integer severity
+    Boolean append
+    File outputFile
 
     @Override
     void validateConfiguration(){
@@ -38,23 +41,23 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
             throw new InvalidUserDataException("Invalid log level: ${getSeverity()}. Valid values are 4 for CRITICAL, 3 for ERROR, 2 for WARNING, 1 for INFO, 0 for DEBUG.")
         }
         else {
-            logger.info "Pulling messages with minimum log level = ${getSeverity()}"
+            LOGGER.info "Pulling messages with minimum log level = ${getSeverity()}"
         }
     }
 
     @Override
     String startLogMessage() {
-        "Starting downloading logs process..."
+        'Starting downloading logs process...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred downloading logs from App Engine."
+        'An error occurred downloading logs from App Engine.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished downloading logs process."
+        'Finished downloading logs process.'
     }
 
     @Override
@@ -70,44 +73,12 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
         }
 
         if(getAppend()) {
-            params << "--append"
+            params << '--append'
         }
 
         params << COMMAND
-        params << getWebAppSourceDirectory().getCanonicalPath()
-        params << getOutputFile().getCanonicalFile()
+        params << getWebAppSourceDirectory().canonicalPath
+        params << getOutputFile().canonicalFile
         params
-    }
-
-    public Integer getNumDays() {
-        numDays
-    }
-
-    public void setNumDays(Integer numDays) {
-        this.numDays = numDays
-    }
-
-    public Integer getSeverity() {
-        severity
-    }
-
-    public void setSeverity(Integer severity) {
-        this.severity = severity
-    }
-
-    public Boolean getAppend() {
-        append
-    }
-
-    public void setAppend(Boolean append) {
-        this.append = append
-    }
-
-    public File getOutputFile() {
-        outputFile
-    }
-
-    public void setOutputFile(File outputFile) {
-        this.outputFile = outputFile
     }
 }

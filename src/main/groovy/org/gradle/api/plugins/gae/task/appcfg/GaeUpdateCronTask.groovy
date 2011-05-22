@@ -22,25 +22,25 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeUpdateCronTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "update_cron"
+    static final String COMMAND = 'update_cron'
 
     @Override
     String startLogMessage() {
-        "Starting updating scheduled tasks..."
+        'Starting updating scheduled tasks...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred updating scheduled tasks."
+        'An error occurred updating scheduled tasks.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished updating scheduled tasks."
+        'Finished updating scheduled tasks.'
     }
 
     @Override
     List getParams() {
-        [COMMAND, getWebAppSourceDirectory().getCanonicalPath()]
+        [COMMAND, getWebAppSourceDirectory().canonicalPath]
     }
 }

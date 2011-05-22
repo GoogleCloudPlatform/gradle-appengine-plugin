@@ -21,21 +21,21 @@ package org.gradle.api.plugins.gae.task.appcfg
  * @author Benjamin Muschko
  */
 class GaeVersionTask extends GaeAppConfigTaskTemplate {
-    final String COMMAND = "version"
+    static final String COMMAND = 'version'
 
     @Override
     String startLogMessage() {
-        "Starting to get version information..."
+        'Starting to get version information...'
     }
 
     @Override
     String errorLogMessage() {
-        "An error occurred getting version information."
+        'An error occurred getting version information.'
     }
 
     @Override
     String finishLogMessage() {
-        "Finished to get version information."
+        'Finished to get version information.'
     }
 
     @Override
