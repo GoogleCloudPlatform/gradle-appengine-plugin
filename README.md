@@ -14,16 +14,16 @@ either get the plugin from the GitHub download section or upload it to your loca
 shows an example:
 
     buildscript {
-	    repositories {
-		    add(new org.apache.ivy.plugins.resolver.URLResolver()) {
-    		    name = "GitHub"
-    		    addArtifactPattern 'http://cloud.github.com/downloads/bmuschko/gradle-gae-plugin/[module]-[revision].[ext]'
-  		    }
+        repositories {
+            add(new org.apache.ivy.plugins.resolver.URLResolver()) {
+                name = 'GitHub'
+                addArtifactPattern 'http://cloud.github.com/downloads/bmuschko/gradle-gae-plugin/[module]-[revision].[ext]'
+            }
             mavenCentral()
         }
 
-	    dependencies {
-		    classpath 'com.google.appengine:appengine-tools-sdk:1.4.2'
+        dependencies {
+            classpath 'com.google.appengine:appengine-tools-sdk:1.4.2'
             classpath ':gradle-gae-plugin:0.4'
         }
     }
@@ -102,12 +102,12 @@ the plugin will overwrite the log output file.
         httpPort = 8085
 
         appcfg {
-            email = "benjamin.muschko@gmail.com"
+            email = 'benjamin.muschko@gmail.com'
             passIn = true
 
             logs {
                 severity = 1
-                outputFile = new File("mylogs.txt")
+                outputFile = file('mylogs.txt')
             }
         }
     }
@@ -124,16 +124,16 @@ Yes, you just have to configure the WAR plugin to point to the correct web appli
     sourceSets {
         main {
             groovy {
-                srcDirs = ["src"]
+                srcDirs = ['src']
             }
         }
     }
 
-    webAppDirName = new File("war")
+    webAppDirName = file('war')
 
 When editing a Groovlets/Groovy templates in Gaelyk the server automatically deploys the change and you see it take effect almost instantly.
 The plugin provides support for that. Simply set the `warDir` convention property and leave the server running.
 
     gae {
-        warDir = new File("war")
+        warDir = file('war')
     }
