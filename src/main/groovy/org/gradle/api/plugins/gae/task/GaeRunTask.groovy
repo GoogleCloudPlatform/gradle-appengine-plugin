@@ -95,7 +95,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     }
 
     private class KickStartRunnable implements Runnable {
-        final Logger LOGGER = LoggerFactory.getLogger(KickStartRunnable.class)
+        final Logger logger = LoggerFactory.getLogger(KickStartRunnable.class)
 
         @Override
         void run() {
@@ -128,7 +128,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         private class OutStreamHandler implements StreamOutputHandler {
             @Override
             void handleLine(String line) {
-                LOGGER.info line
+                logger.info line
                 checkServerStartupProgress(line)
             }
         }
@@ -136,7 +136,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         private class ErrStreamHandler implements StreamOutputHandler {
             @Override
             void handleLine(String line) {
-                LOGGER.error line
+                logger.error line
                 checkServerStartupProgress(line)
             }
         }

@@ -101,8 +101,6 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     }
 
     private class AppConfigRunnable implements Runnable {
-        final Logger LOGGER = LoggerFactory.getLogger(AppConfigRunnable.class)
-
         @Override
         void run() {
             PrintStream systemOutOriginal = System.out
