@@ -9,9 +9,8 @@ To use the GAE plugin, include in your build script:
 
     apply plugin: 'gae'
 
-The plugin JAR and the App Engine tools SDK library need to be defined in the classpath of your build script. You can
-either get the plugin from the GitHub download section or upload it to your local repository. The following code snippet
-shows an example:
+The plugin JAR needs to be defined in the classpath of your build script. You can either get the plugin from the GitHub
+download section or upload it to your local repository. The following code snippet shows an example:
 
     buildscript {
         repositories {
@@ -23,8 +22,7 @@ shows an example:
         }
 
         dependencies {
-            classpath 'com.google.appengine:appengine-tools-sdk:1.4.2'
-            classpath ':gradle-gae-plugin:0.4'
+            classpath ':gradle-gae-plugin:0.5'
         }
     }
 

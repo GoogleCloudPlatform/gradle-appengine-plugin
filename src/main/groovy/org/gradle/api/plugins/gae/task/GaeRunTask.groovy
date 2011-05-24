@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import com.google.appengine.tools.KickStart
 import org.gradle.api.GradleException
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -89,7 +88,10 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         }
 
         LOGGER.info "Using params = $params"
-        KickStart.main(params as String[])
+
+        ClassLoader classLoader = Thread.currentThread().contextClassLoader
+        def kickstart = classLoader.loadClass('com.google.appengine.tools.KickStart')
+        kickstart.main(params as String[])
     }
 
     private class KickStartRunnable implements Runnable {

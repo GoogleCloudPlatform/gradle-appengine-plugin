@@ -13,7 +13,6 @@ repositories {
 dependencies {
     groovy fileTree(dir: new File(gradle.gradleHomeDir, 'lib'), includes: ['**/groovy-all-*.jar'])
     compile gradleApi()
-    compile group: 'com.google.appengine', name: 'appengine-tools-sdk', version: '1.5.0'
     testCompile 'junit:junit:4.+'
 }
 

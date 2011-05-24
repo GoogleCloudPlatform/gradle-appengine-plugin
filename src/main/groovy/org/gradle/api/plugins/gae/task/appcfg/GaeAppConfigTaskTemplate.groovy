@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg
 
-import com.google.appengine.tools.admin.AppCfg
 import org.gradle.api.GradleException
 import org.gradle.api.plugins.gae.task.GaeWebAppDirTask
 import org.slf4j.Logger
@@ -63,7 +62,9 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
             params.addAll getParams()
             LOGGER.info "Using params = $params"
 
-            AppCfg.main(params as String[])
+            ClassLoader classLoader = Thread.currentThread().contextClassLoader
+            def appCfg = classLoader.loadClass('com.google.appengine.tools.admin.AppCfg')
+            appCfg.main(params as String[])
         }
         catch(Exception e) {
             throw new GradleException(errorLogMessage(), e)
