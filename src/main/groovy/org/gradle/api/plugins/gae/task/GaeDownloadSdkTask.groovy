@@ -32,7 +32,7 @@ class GaeDownloadSdkTask extends ConventionTask {
     @TaskAction
     void start() {
         if(!getExplodedSdkDirectory().exists()) {
-            boolean success = getExplodedSdkDirectory().mkdir()
+            boolean success = getExplodedSdkDirectory().mkdirs()
 
             if(!success) {
                 throw new GradleException("Could not create exploded Google App Engine SDK directory in ${getExplodedSdkDirectory().canonicalPath}")
