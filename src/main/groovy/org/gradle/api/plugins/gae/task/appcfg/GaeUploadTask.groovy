@@ -26,7 +26,7 @@ import org.gradle.api.tasks.InputDirectory
  */
 class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
     static final String COMMAND = 'update'
-    private File explodedWarDirectory
+    @InputDirectory File explodedWarDirectory
 
     @Override
     String startLogMessage() {
@@ -46,16 +46,5 @@ class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
     @Override
     List getParams() {
         [COMMAND, getExplodedWarDirectory().canonicalPath]
-    }
-
-    @Override
-    @InputDirectory
-    File getExplodedWarDirectory() {
-        explodedWarDirectory
-    }
-
-    @Override
-    void setExplodedWarDirectory(File explodedWarDirectory) {
-        this.explodedWarDirectory = explodedWarDirectory
     }
 }

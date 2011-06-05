@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory
  */
 abstract class GaeWebAppDirTask extends AbstractGaeTask {
     static final Logger LOGGER = LoggerFactory.getLogger(GaeWebAppDirTask.class)
-    File webAppSourceDirectory
+    @InputDirectory File webAppSourceDirectory
 
     @Override
     void validateConfiguration(){
@@ -46,10 +46,5 @@ abstract class GaeWebAppDirTask extends AbstractGaeTask {
         catch(IOException e) {
             throw new InvalidUserDataException('Webapp source directory does not exist', e)
         }
-    }
-
-    @InputDirectory
-    File getWebAppSourceDirectory() {
-        webAppSourceDirectory
     }
 }

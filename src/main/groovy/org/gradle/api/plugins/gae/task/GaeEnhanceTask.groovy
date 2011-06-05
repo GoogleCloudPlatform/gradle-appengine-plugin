@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory
  */
 class GaeEnhanceTask extends GaeWebAppDirTask {
     static final Logger LOGGER = LoggerFactory.getLogger(GaeEnhanceTask.class)
-    File classesDirectory
+    @InputDirectory File classesDirectory
 
     @Override
     void executeTask() {
@@ -55,10 +55,5 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
         finally {
             LOGGER.info 'Finished enhancing DataNucleus classes.'
         }
-    }
-
-    @InputDirectory
-    File getClassesDirectory() {
-        classesDirectory
     }
 }

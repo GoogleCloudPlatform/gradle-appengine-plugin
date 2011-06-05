@@ -147,15 +147,5 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
             }
         }
     }
-
-    @Override
-    File getExplodedWarDirectory() {
-        explodedWarDirectory
-    }
-
-    @Override
-    void setExplodedWarDirectory(File explodedWarDirectory) {
-        this.explodedWarDirectory = explodedWarDirectory
-    }
 }
 

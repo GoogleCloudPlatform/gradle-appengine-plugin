@@ -25,27 +25,12 @@ import org.gradle.api.tasks.TaskAction
  * @author Benjamin Muschko
  */
 class GaeExplodeWarTask extends ConventionTask implements Explodable {
-    File warArchive
+    @InputFile File warArchive
     File explodedWarDirectory
 
     @TaskAction
     protected void start() {
         ant.delete(dir: getExplodedWarDirectory())
         ant.unzip(src: getWarArchive(), dest: getExplodedWarDirectory())
-    }
-
-    @InputFile
-    File getWarArchive() {
-        warArchive
-    }
-
-    @Override
-    File getExplodedWarDirectory() {
-        explodedWarDirectory
-    }
-
-    @Override
-    void setExplodedWarDirectory(File explodedWarDirectory) {
-        this.explodedWarDirectory = explodedWarDirectory
     }
 }
