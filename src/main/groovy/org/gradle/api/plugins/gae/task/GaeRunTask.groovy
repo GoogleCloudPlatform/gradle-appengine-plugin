@@ -76,7 +76,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     }
 
     private void runKickStart() {
-        List params = ['com.google.appengine.tools.development.DevAppServerMain', '--port=' + getHttpPort(), getExplodedWarDirectory().canonicalPath]
+        List params = ['com.google.appengine.tools.development.DevAppServerMain', "--port=${getHttpPort()}", getExplodedWarDirectory().canonicalPath]
 
         if(getDisableUpdateCheck()) {
             params.add(1, '--disable_update_check')
@@ -90,8 +90,8 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         LOGGER.info "Using params = $params"
 
         ClassLoader classLoader = Thread.currentThread().contextClassLoader
-        def kickstart = classLoader.loadClass('com.google.appengine.tools.KickStart')
-        kickstart.main(params as String[])
+        Class kickStart = Class.forName('com.google.appengine.tools.KickStart', true, classLoader)
+        kickStart.main(params as String[])
     }
 
     private class KickStartRunnable implements Runnable {
