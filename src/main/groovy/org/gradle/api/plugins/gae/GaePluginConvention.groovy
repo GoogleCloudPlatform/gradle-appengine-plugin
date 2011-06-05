@@ -28,6 +28,7 @@ class GaePluginConvention {
     String stopKey
     Boolean daemon = false
     File warDir
+    Boolean downloadSdk = false
     GaeAppConfigConvention appCfg = new GaeAppConfigConvention()
 
     def gae(Closure closure) {
