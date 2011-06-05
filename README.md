@@ -41,6 +41,7 @@ the configuration `gaeSdk`.
 The GAE plugin defines the following tasks:
 
 * `gaeCronInfo`: Verifies and prints the scheduled task (cron) configuration.
+* `gaeDownloadSdk`: Downloads and sets Google App Engine SDK.
 * `gaeEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
 * `gaeExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
 * `gaeLogs`: Retrieves log data for the application running on App Engine.
