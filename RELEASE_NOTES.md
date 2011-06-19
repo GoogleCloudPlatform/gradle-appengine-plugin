@@ -1,3 +1,7 @@
+### Version 0.5.1 (June 19, 2011)
+
+* Ignore `IllegalStateException` when running `gradle -t` and `gaeSdk` configuration is not declared.
+
 ### Version 0.5 (June 5, 2011)
 
 * Added convention property `disableUpdateCheck` for disabling the update check.
