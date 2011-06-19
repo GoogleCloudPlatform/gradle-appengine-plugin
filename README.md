@@ -18,11 +18,10 @@ download section or upload it to your local repository. The following code snipp
                 name = 'GitHub'
                 addArtifactPattern 'http://cloud.github.com/downloads/[organisation]/[module]/[module]-[revision].[ext]'
             }
-            mavenCentral()
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.5'
+            classpath 'bmuschko:gradle-gae-plugin:0.5.1'
         }
     }
 
