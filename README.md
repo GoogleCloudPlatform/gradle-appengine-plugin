@@ -16,13 +16,13 @@ download section or upload it to your local repository. The following code snipp
         repositories {
             add(new org.apache.ivy.plugins.resolver.URLResolver()) {
                 name = 'GitHub'
-                addArtifactPattern 'http://cloud.github.com/downloads/bmuschko/gradle-gae-plugin/[module]-[revision].[ext]'
+                addArtifactPattern 'http://cloud.github.com/downloads/[organisation]/[module]/[module]-[revision].[ext]'
             }
             mavenCentral()
         }
 
         dependencies {
-            classpath ':gradle-gae-plugin:0.5'
+            classpath 'bmuschko:gradle-gae-plugin:0.5'
         }
     }
 
