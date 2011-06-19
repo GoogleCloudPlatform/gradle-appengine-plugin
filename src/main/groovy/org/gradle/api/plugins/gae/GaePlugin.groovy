@@ -104,7 +104,14 @@ class GaePlugin implements Plugin<Project> {
 
     private void configureDownloadSdk(Project project, File explodedSdkDirectory) {
         project.tasks.withType(GaeDownloadSdkTask.class).whenTaskAdded { GaeDownloadSdkTask gaeDownloadSdkTask ->
-            gaeDownloadSdkTask.conventionMapping.map('gaeSdkZipFile') { project.configurations.getByName(GAE_SDK_CONFIGURATION_NAME).singleFile }
+            gaeDownloadSdkTask.conventionMapping.map('gaeSdkZipFile') {
+                try {
+                    project.configurations.getByName(GAE_SDK_CONFIGURATION_NAME).singleFile
+                }
+                catch(IllegalStateException e) {
+                    // make "gradle -t" happy in case we don't declare configuration!
+                }
+            }
             gaeDownloadSdkTask.conventionMapping.map(EXPLODED_SDK_DIR_CONVENTION_PARAM) { explodedSdkDirectory }
         }
 
