@@ -15,7 +15,7 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import org.gradle.api.internal.ConventionTask
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
 
@@ -24,7 +24,7 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author Benjamin Muschko
  */
-class GaeExplodeWarTask extends ConventionTask implements Explodable {
+class GaeExplodeWarTask extends DefaultTask implements Explodable {
     @InputFile File warArchive
     File explodedWarDirectory
 

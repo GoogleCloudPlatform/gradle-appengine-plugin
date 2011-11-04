@@ -15,8 +15,8 @@
  */
 package org.gradle.api.plugins.gae.task
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
-import org.gradle.api.internal.ConventionTask
 import org.gradle.api.tasks.TaskAction
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory
  *
  * @author Benjamin Muschko
  */
-abstract class AbstractGaeTask extends ConventionTask {
+abstract class AbstractGaeTask extends DefaultTask {
     static final Logger LOGGER = LoggerFactory.getLogger(AbstractGaeTask.class)
     static final String APPENGINE_HOME_ENV_PROP_KEY = 'APPENGINE_HOME'
     static final String APPENGINE_SDK_ROOT_SYS_PROP_KEY = 'appengine.sdk.root'
