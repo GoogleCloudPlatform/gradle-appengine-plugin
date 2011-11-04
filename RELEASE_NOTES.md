@@ -1,3 +1,7 @@
+### Version 0.5.2 (November 4, 2011)
+
+* New version of SDK Zip not exploded if parent directory exists - [Issue 7](https://github.com/bmuschko/gradle-gae-plugin/issues/7).
+
 ### Version 0.5.1 (June 19, 2011)
 
 * Ignore `IllegalStateException` when running `gradle -t` and `gaeSdk` configuration is not declared.
