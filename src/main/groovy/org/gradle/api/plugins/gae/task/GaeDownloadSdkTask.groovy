@@ -37,8 +37,10 @@ class GaeDownloadSdkTask extends ConventionTask {
             if(!success) {
                 throw new GradleException("Could not create exploded Google App Engine SDK directory in ${getExplodedSdkDirectory().canonicalPath}")
             }
+        }
 
-            ant.unzip(src: getGaeSdkZipFile(), dest: getExplodedSdkDirectory())
+        if(!new File(getDownloadedSdkRoot()).exists()) {
+             ant.unzip(src: getGaeSdkZipFile(), dest: getExplodedSdkDirectory())
         }
 
         System.setProperty(AbstractGaeTask.APPENGINE_SDK_ROOT_SYS_PROP_KEY, getDownloadedSdkRoot())
