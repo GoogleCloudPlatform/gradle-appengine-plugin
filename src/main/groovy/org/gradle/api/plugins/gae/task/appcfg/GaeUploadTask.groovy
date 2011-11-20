@@ -45,6 +45,6 @@ class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
 
     @Override
     List getParams() {
-        [COMMAND, getExplodedWarDirectory().canonicalPath]
+        ['--enable_jar_splitting', COMMAND, getExplodedWarDirectory().canonicalPath]
     }
 }

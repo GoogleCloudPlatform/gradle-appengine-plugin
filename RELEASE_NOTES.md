@@ -1,3 +1,7 @@
+### Version 0.5.3 (November 19, 2011)
+
+* Upload task enables JAR splitting by default by using `--enable_jar_splitting` - [Issue 8](https://github.com/bmuschko/gradle-gae-plugin/issues/8).
+
 ### Version 0.5.2 (November 4, 2011)
 
 * New version of SDK Zip not exploded if parent directory exists - [Issue 7](https://github.com/bmuschko/gradle-gae-plugin/issues/7).
