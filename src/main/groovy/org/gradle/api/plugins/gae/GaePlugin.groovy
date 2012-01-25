@@ -17,6 +17,7 @@ package org.gradle.api.plugins.gae
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.plugins.WarPlugin
 import org.gradle.api.plugins.WarPluginConvention
 import org.slf4j.Logger
@@ -279,10 +280,12 @@ class GaePlugin implements Plugin<Project> {
      * @param gaePluginConvention GAE plugin convention
      */
     private void configureGaeSdk(Project project, GaePluginConvention gaePluginConvention) {
-        project.afterEvaluate {
-            if(gaePluginConvention.downloadSdk) {
-                project.tasks.findAll { task -> task.name.startsWith('gae') && task.name != GAE_DOWNLOAD_SDK }.each { gaeTask ->
-                    gaeTask.dependsOn project.tasks.getByName(GAE_DOWNLOAD_SDK)
+        project.tasks.all { Task task ->
+            if(task.name.startsWith('gae') && task.name != GAE_DOWNLOAD_SDK) {
+                task.dependsOn {
+                    if(gaePluginConvention.downloadSdk) {
+                        return task.project.tasks.getByName(GAE_DOWNLOAD_SDK)
+                    }
                 }
             }
         }

@@ -1,3 +1,8 @@
+### Version 0.5.4 (January 24, 2012)
+
+* Fixed evaluation order in multi-module projects - [Issue 10](https://github.com/bmuschko/gradle-gae-plugin/issues/10).
+* Upgrade to Gradle Wrapper 1.0-milestone7.
+
 ### Version 0.5.3 (November 19, 2011)
 
 * Upload task enables JAR splitting by default by using `--enable_jar_splitting` - [Issue 8](https://github.com/bmuschko/gradle-gae-plugin/issues/8).
