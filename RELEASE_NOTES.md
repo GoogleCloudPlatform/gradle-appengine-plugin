@@ -1,3 +1,7 @@
+### Version 0.5.5 (March 10, 2012)
+
+* Added `@OutputDirectory` annotation to task downloading GAE SDK - [Issue 12](https://github.com/bmuschko/gradle-gae-plugin/issues/12).
+
 ### Version 0.5.4 (January 24, 2012)
 
 * Fixed evaluation order in multi-module projects - [Issue 10](https://github.com/bmuschko/gradle-gae-plugin/issues/10).

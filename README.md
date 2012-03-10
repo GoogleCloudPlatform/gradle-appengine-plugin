@@ -23,7 +23,7 @@ download section or upload it to your local repository. The following code snipp
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.5.4'
+            classpath 'bmuschko:gradle-gae-plugin:0.5.5'
         }
     }
 
@@ -34,7 +34,7 @@ convention property `downloadSdk` to `true`. This option requires you to specify
 the configuration `gaeSdk`.
 
     dependencies {
-        gaeSdk 'com.google.appengine:appengine-java-sdk:1.6.1.1'
+        gaeSdk 'com.google.appengine:appengine-java-sdk:1.6.3'
     }
 
 ## Tasks
