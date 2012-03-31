@@ -1,6 +1,6 @@
 # Gradle GAE plugin
 
-![Google App Engine Logo](http://code.google.com/appengine/images/appengine_lowres.png)
+![Google App Engine Logo](https://developers.google.com/appengine/images/appengine_lowres.png)
 
 The plugin provides tasks for uploading, downloading, running and managing [Google App Engine](http://code.google.com/appengine/)
 (GAE) projects in any given Gradle build. It extends the War plugin.
