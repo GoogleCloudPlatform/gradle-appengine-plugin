@@ -20,10 +20,9 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.plugins.WarPlugin
 import org.gradle.api.plugins.WarPluginConvention
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.gradle.api.plugins.gae.task.*
 import org.gradle.api.plugins.gae.task.appcfg.*
+import org.gradle.api.plugins.gae.task.appcfg.backends.*
 
 /**
  * <p>A {@link Plugin} that provides tasks for uploading, running and managing of Google App Engine projects.</p>
@@ -31,7 +30,6 @@ import org.gradle.api.plugins.gae.task.appcfg.*
  * @author Benjamin Muschko
  */
 class GaePlugin implements Plugin<Project> {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaePlugin.class)
     static final String GAE_SDK_CONFIGURATION_NAME = 'gaeSdk'
     static final String GAE_GROUP = 'Google App Engine'
     static final String GAE_DOWNLOAD_SDK = 'gaeDownloadSdk'
@@ -49,18 +47,28 @@ class GaePlugin implements Plugin<Project> {
     static final String GAE_LOGS = 'gaeLogs'
     static final String GAE_VERSION = 'gaeVersion'
     static final String GAE_EXPLODE_WAR = 'gaeExplodeWar'
+    static final String GAE_UPDATE_BACKEND = 'gaeUpdateBackend'
+    static final String GAE_UPDATE_ALL_BACKENDS = 'gaeUpdateAllBackends'
+    static final String GAE_ROLLBACK_BACKEND = 'gaeRollbackBackend'
+    static final String GAE_LIST_BACKENDS = 'gaeListBackends'
+    static final String GAE_START_BACKEND = 'gaeStartBackend'
+    static final String GAE_STOP_BACKEND = 'gaeStopBackend'
+    static final String GAE_DELETE_BACKEND = 'gaeDeleteBackend'
+    static final String GAE_CONFIGURE_BACKENDS = 'gaeConfigureBackends'
     static final String GRADLE_USER_PROP_PASSWORD = 'gaePassword'
     static final String STOP_PORT_CONVENTION_PARAM = 'stopPort'
     static final String STOP_KEY_CONVENTION_PARAM = 'stopKey'
     static final String EXPLODED_WAR_DIR_CONVENTION_PARAM = 'explodedWarDirectory'
     static final String EXPLODED_SDK_DIR_CONVENTION_PARAM = 'explodedSdkDirectory'
+    static final String BACKEND_PROJECT_PROPERTY = 'backend'
+    static final String SETTING_PROJECT_PROPERTY = 'setting'
 
     @Override
     void apply(Project project) {
         project.plugins.apply(WarPlugin.class)
 
         project.configurations.add(GAE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
-               .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
+                .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
 
         GaePluginConvention gaePluginConvention = new GaePluginConvention()
         project.convention.plugins.gae = gaePluginConvention
@@ -85,6 +93,14 @@ class GaePlugin implements Plugin<Project> {
         configureGaeDownloadLogs(project, gaePluginConvention)
         configureGaeVersion(project)
         configureGaeSdk(project, gaePluginConvention)
+        configureGaeUpdateBackends(project)
+        configureGaeUpdateAllBackends(project)
+        configureGaeRollbackBackends(project)
+        configureGaeListBackends(project)
+        configureGaeStartBackend(project)
+        configureGaeStopBackend(project)
+        configureGaeDeleteBackend(project)
+        configureGaeConfigureBackends(project)
     }
 
     private File getExplodedSdkDirectory(Project project) {
@@ -289,6 +305,60 @@ class GaePlugin implements Plugin<Project> {
                 }
             }
         }
+    }
+
+    private void configureGaeUpdateBackends(Project project) {
+        GaeUpdateBackendTask gaeUpdateBackendsTask = project.tasks.add(GAE_UPDATE_BACKEND, GaeUpdateBackendTask)
+        gaeUpdateBackendsTask.description = 'Updates backend on App Engine.'
+        gaeUpdateBackendsTask.group = GAE_GROUP
+        gaeUpdateBackendsTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+    }
+
+    private void configureGaeUpdateAllBackends(Project project) {
+        GaeUpdateAllBackendsTask gaeUpdateAllBackendsTask = project.tasks.add(GAE_UPDATE_ALL_BACKENDS, GaeUpdateAllBackendsTask)
+        gaeUpdateAllBackendsTask.description = 'Updates all backends on App Engine.'
+        gaeUpdateAllBackendsTask.group = GAE_GROUP
+    }
+
+    private void configureGaeRollbackBackends(Project project) {
+        GaeRollbackBackendTask gaeRollbackBackendsTask = project.tasks.add(GAE_ROLLBACK_BACKEND, GaeRollbackBackendTask)
+        gaeRollbackBackendsTask.description = 'Rolls back backend on App Engine.'
+        gaeRollbackBackendsTask.group = GAE_GROUP
+        gaeRollbackBackendsTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+    }
+
+    private void configureGaeListBackends(Project project) {
+        GaeListBackendsTask gaeListBackendsTask = project.tasks.add(GAE_LIST_BACKENDS, GaeListBackendsTask)
+        gaeListBackendsTask.description = 'Lists backends on App Engine.'
+        gaeListBackendsTask.group = GAE_GROUP
+    }
+
+    private void configureGaeStartBackend(Project project) {
+        GaeStartBackendTask gaeStartBackendTask = project.tasks.add(GAE_START_BACKEND, GaeStartBackendTask)
+        gaeStartBackendTask.description = 'Starts backend on App Engine.'
+        gaeStartBackendTask.group = GAE_GROUP
+        gaeStartBackendTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+    }
+
+    private void configureGaeStopBackend(Project project) {
+        GaeStopBackendTask gaeStopBackendTask = project.tasks.add(GAE_STOP_BACKEND, GaeStopBackendTask)
+        gaeStopBackendTask.description = 'Stops backend on App Engine.'
+        gaeStopBackendTask.group = GAE_GROUP
+        gaeStopBackendTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+    }
+
+    private void configureGaeDeleteBackend(Project project) {
+        GaeDeleteBackendTask gaeDeleteBackendTask = project.tasks.add(GAE_DELETE_BACKEND, GaeDeleteBackendTask)
+        gaeDeleteBackendTask.description = 'Deletes backend on App Engine.'
+        gaeDeleteBackendTask.group = GAE_GROUP
+        gaeDeleteBackendTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+    }
+
+    private void configureGaeConfigureBackends(Project project) {
+        GaeConfigureBackendsTask gaeConfigureBackendsTask = project.tasks.add(GAE_CONFIGURE_BACKENDS, GaeConfigureBackendsTask)
+        gaeConfigureBackendsTask.description = 'Configures backends on App Engine.'
+        gaeConfigureBackendsTask.group = GAE_GROUP
+        gaeConfigureBackendsTask.conventionMapping.map('setting') { project.property(SETTING_PROJECT_PROPERTY) }
     }
 
     private WarPluginConvention getWarConvention(Project project) {

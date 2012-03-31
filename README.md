@@ -23,7 +23,7 @@ download section or upload it to your local repository. The following code snipp
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.5.5'
+            classpath 'bmuschko:gradle-gae-plugin:0.6'
         }
     }
 
@@ -41,16 +41,24 @@ the configuration `gaeSdk`.
 
 The GAE plugin defines the following tasks:
 
+* `gaeConfigureBackends`: Dynamically updates settings in `backends.xml` without having to stop the backend. The setting is defined by the project property `setting`.
 * `gaeCronInfo`: Verifies and prints the scheduled task (cron) configuration.
+* `gaeDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
 * `gaeDownloadSdk`: Downloads and sets Google App Engine SDK.
 * `gaeEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
 * `gaeExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
+* `gaeListBackends`: Lists all the backends configured for the app specified in `appengine-web.xml`.
 * `gaeLogs`: Retrieves log data for the application running on App Engine.
 * `gaeRollback`: Undoes a partially completed update for the given application.
+* `gaeRollbackBackend`: Rolls back a backend update that was interrupted by the user or stopped due to a configuration error. The backend is defined by the project property `backend`.
 * `gaeRun`: Starts a local development server running your project code. By default the WAR file is created, exploded and used as
 web application directory each time you run this task. This behavior can be changed by setting the convention property
 `warDir`.
+* `gaeStartBackend`: Sets the backend state to `START`, allowing it to receive HTTP requests. The backend is defined by the project property `backend`.
 * `gaeStop`: Stops the local development server.
+* `gaeStopBackend`: Sets the backend state to `STOP` and shuts down any running instances. The backend is defined by the project property `backend`.
+* `gaeUpdateAllBackends`: Creates or updates all backends configured in `backends.xml`.
+* `gaeUpdateBackend`: Creates or updates backend configured in `backends.xml`. The backend is defined by the project property `backend`.
 * `gaeUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
 * `gaeUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
 * `gaeUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
