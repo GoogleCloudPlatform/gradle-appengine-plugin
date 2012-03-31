@@ -1,3 +1,7 @@
+### Version 0.6 (March 31, 2012)
+
+* Added support for backend tasks - [Issue 13](https://github.com/bmuschko/gradle-gae-plugin/issues/13).
+
 ### Version 0.5.5 (March 10, 2012)
 
 * Added `@OutputDirectory` annotation to task downloading GAE SDK - [Issue 12](https://github.com/bmuschko/gradle-gae-plugin/issues/12).
