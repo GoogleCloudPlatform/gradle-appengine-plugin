@@ -15,33 +15,24 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg.backends
 
+import org.gradle.api.tasks.Input
+
 /**
- * Google App Engine task deleting backend on the server.
+ * Abstract Google App Engine task handling a single backend.
  *
  * @see <a href="https://developers.google.com/appengine/docs/java/backends/overview?hl=cs#Commands">Documentation</a>
  * @author Benjamin Muschko
  */
-class GaeDeleteBackendTask extends AbstractGaeSingleBackendTask {
-    static final String COMMAND = 'delete'
+abstract class AbstractGaeSingleBackendTask extends AbstractGaeBackendsTask {
+    @Input String backend
 
     @Override
-    String startLogMessage() {
-        "Starting to delete backend '${getBackend()}'..."
+    List getParams() {
+        List params = super.getParams()
+        params << getCommand()
+        params << getBackend()
+        params
     }
 
-    @Override
-    String errorLogMessage() {
-        "An error occurred deleting backend '${getBackend()}'."
-    }
-
-    @Override
-    String finishLogMessage() {
-        "Finished deleting backend '${getBackend()}'."
-    }
-
-    @Override
-    String getCommand() {
-        COMMAND
-    }
+    abstract String getCommand()
 }
-

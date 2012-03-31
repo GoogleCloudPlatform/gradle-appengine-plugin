@@ -15,17 +15,14 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg.backends
 
-import org.gradle.api.tasks.Input
-
 /**
  * Google App Engine task rolling back backend on the server.
  *
  * @see <a href="https://developers.google.com/appengine/docs/java/backends/overview?hl=cs#Commands">Documentation</a>
  * @author Benjamin Muschko
  */
-class GaeRollbackBackendTask extends AbstractGaeBackendsTask {
+class GaeRollbackBackendTask extends AbstractGaeSingleBackendTask {
     static final String COMMAND = 'rollback'
-    @Input String backend
 
     @Override
     String startLogMessage() {
@@ -43,10 +40,7 @@ class GaeRollbackBackendTask extends AbstractGaeBackendsTask {
     }
 
     @Override
-    List getParams() {
-        List params = super.getParams()
-        params << COMMAND
-        params << getBackend()
-        params
+    String getCommand() {
+        COMMAND
     }
 }

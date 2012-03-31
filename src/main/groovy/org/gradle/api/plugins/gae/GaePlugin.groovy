@@ -65,7 +65,7 @@ class GaePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        project.plugins.apply(WarPlugin.class)
+        project.plugins.apply(WarPlugin)
 
         project.configurations.add(GAE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                 .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
@@ -93,6 +93,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeDownloadLogs(project, gaePluginConvention)
         configureGaeVersion(project)
         configureGaeSdk(project, gaePluginConvention)
+        configureGaeSingleBackendTask(project)
         configureGaeUpdateBackends(project)
         configureGaeUpdateAllBackends(project)
         configureGaeRollbackBackends(project)
@@ -120,7 +121,7 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private void configureDownloadSdk(Project project, File explodedSdkDirectory) {
-        project.tasks.withType(GaeDownloadSdkTask.class).whenTaskAdded { GaeDownloadSdkTask gaeDownloadSdkTask ->
+        project.tasks.withType(GaeDownloadSdkTask).whenTaskAdded { GaeDownloadSdkTask gaeDownloadSdkTask ->
             gaeDownloadSdkTask.conventionMapping.map('gaeSdkZipFile') {
                 try {
                     project.configurations.getByName(GAE_SDK_CONFIGURATION_NAME).singleFile
@@ -132,19 +133,19 @@ class GaePlugin implements Plugin<Project> {
             gaeDownloadSdkTask.conventionMapping.map(EXPLODED_SDK_DIR_CONVENTION_PARAM) { explodedSdkDirectory }
         }
 
-        GaeDownloadSdkTask gaeDownloadSdkTask = project.tasks.add(GAE_DOWNLOAD_SDK, GaeDownloadSdkTask.class)
+        GaeDownloadSdkTask gaeDownloadSdkTask = project.tasks.add(GAE_DOWNLOAD_SDK, GaeDownloadSdkTask)
         gaeDownloadSdkTask.description = 'Downloads and sets Google App Engine SDK.'
         gaeDownloadSdkTask.group = GAE_GROUP
     }
 
     private void configureWebAppDir(Project project) {
-        project.tasks.withType(GaeWebAppDirTask.class).whenTaskAdded { GaeWebAppDirTask gaeWebAppDirTask ->
+        project.tasks.withType(GaeWebAppDirTask).whenTaskAdded { GaeWebAppDirTask gaeWebAppDirTask ->
             gaeWebAppDirTask.conventionMapping.map('webAppSourceDirectory') { getWarConvention(project).webAppDir }
         }
     }
 
     private void configureAppConfig(Project project, GaePluginConvention gaePluginConvention) {
-        project.tasks.withType(GaeAppConfigTaskTemplate.class).whenTaskAdded { GaeAppConfigTaskTemplate gaeAppConfigTaskTemplate ->
+        project.tasks.withType(GaeAppConfigTaskTemplate).whenTaskAdded { GaeAppConfigTaskTemplate gaeAppConfigTaskTemplate ->
             gaeAppConfigTaskTemplate.conventionMapping.map('email') { gaePluginConvention.appCfg.email }
             gaeAppConfigTaskTemplate.conventionMapping.map('server') { gaePluginConvention.appCfg.server }
             gaeAppConfigTaskTemplate.conventionMapping.map('host') { gaePluginConvention.appCfg.host }
@@ -159,19 +160,19 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private void configureGaeExplodeWarTask(Project project, File explodedWarDirectory) {
-        project.tasks.withType(GaeExplodeWarTask.class).whenTaskAdded { GaeExplodeWarTask gaeExplodeWarTask ->
+        project.tasks.withType(GaeExplodeWarTask).whenTaskAdded { GaeExplodeWarTask gaeExplodeWarTask ->
             gaeExplodeWarTask.conventionMapping.map('warArchive') { project.war.archivePath }
             gaeExplodeWarTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
         }
 
-        GaeExplodeWarTask gaeExplodeWarTask = project.tasks.add(GAE_EXPLODE_WAR, GaeExplodeWarTask.class)
+        GaeExplodeWarTask gaeExplodeWarTask = project.tasks.add(GAE_EXPLODE_WAR, GaeExplodeWarTask)
         gaeExplodeWarTask.description = 'Explodes WAR archive into directory.'
         gaeExplodeWarTask.group = GAE_GROUP
         gaeExplodeWarTask.dependsOn project.war
     }
 
     private void configureGaeRun(Project project, GaePluginConvention gaePluginConvention, File explodedWarDirectory) {
-        project.tasks.withType(GaeRunTask.class).whenTaskAdded { GaeRunTask gaeRunTask ->
+        project.tasks.withType(GaeRunTask).whenTaskAdded { GaeRunTask gaeRunTask ->
             gaeRunTask.conventionMapping.map('httpPort') { gaePluginConvention.httpPort }
             gaeRunTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { gaePluginConvention.stopPort }
             gaeRunTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { gaePluginConvention.stopKey }
@@ -182,7 +183,7 @@ class GaePlugin implements Plugin<Project> {
             gaeRunTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { gaePluginConvention.warDir ?: explodedWarDirectory }
         }
 
-        GaeRunTask gaeRunTask = project.tasks.add(GAE_RUN, GaeRunTask.class)
+        GaeRunTask gaeRunTask = project.tasks.add(GAE_RUN, GaeRunTask)
         gaeRunTask.description = 'Starts up a local App Engine development server.'
         gaeRunTask.group = GAE_GROUP
 
@@ -195,7 +196,7 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private void configureGaeStop(Project project, GaePluginConvention gaePluginConvention) {
-        GaeStopTask gaeStopTask = project.tasks.add(GAE_STOP, GaeStopTask.class)
+        GaeStopTask gaeStopTask = project.tasks.add(GAE_STOP, GaeStopTask)
         gaeStopTask.description = 'Stops local App Engine development server.'
         gaeStopTask.group = GAE_GROUP
         gaeStopTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { gaePluginConvention.stopPort }
@@ -203,11 +204,11 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private void configureGaeEnhance(Project project) {
-        project.tasks.withType(GaeEnhanceTask.class).whenTaskAdded { GaeEnhanceTask gaeEnhanceTask ->
+        project.tasks.withType(GaeEnhanceTask).whenTaskAdded { GaeEnhanceTask gaeEnhanceTask ->
             gaeEnhanceTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
         }
 
-        GaeEnhanceTask gaeEnhanceTask = project.tasks.add(GAE_ENHANCE, GaeEnhanceTask.class)
+        GaeEnhanceTask gaeEnhanceTask = project.tasks.add(GAE_ENHANCE, GaeEnhanceTask)
         gaeEnhanceTask.description = 'Enhances DataNucleus classes.'
         gaeEnhanceTask.group = GAE_GROUP
 
@@ -220,60 +221,60 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private void configureGaeUpload(Project project, File explodedWarDirectory) {
-        project.tasks.withType(GaeUploadTask.class).whenTaskAdded { GaeUploadTask gaeUploadTask ->
+        project.tasks.withType(GaeUploadTask).whenTaskAdded { GaeUploadTask gaeUploadTask ->
             gaeUploadTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
         }
 
-        GaeUploadTask gaeUploadTask = project.tasks.add(GAE_UPLOAD, GaeUploadTask.class)
+        GaeUploadTask gaeUploadTask = project.tasks.add(GAE_UPLOAD, GaeUploadTask)
         gaeUploadTask.description = 'Uploads your application to App Engine.'
         gaeUploadTask.group = GAE_GROUP
         gaeUploadTask.dependsOn project.gaeExplodeWar
     }
 
     private void configureGaeRollback(Project project) {
-        GaeRollbackTask gaeRollbackTask = project.tasks.add(GAE_ROLLBACK, GaeRollbackTask.class)
+        GaeRollbackTask gaeRollbackTask = project.tasks.add(GAE_ROLLBACK, GaeRollbackTask)
         gaeRollbackTask.description = 'Undoes a partially completed update for the given application.'
         gaeRollbackTask.group = GAE_GROUP
     }
 
     private void configureGaeUpdateIndexes(Project project) {
-        GaeUpdateIndexesTask gaeUpdateIndexesTask = project.tasks.add(GAE_UPDATE_INDEXES, GaeUpdateIndexesTask.class)
+        GaeUpdateIndexesTask gaeUpdateIndexesTask = project.tasks.add(GAE_UPDATE_INDEXES, GaeUpdateIndexesTask)
         gaeUpdateIndexesTask.description = 'Updates indexes on App Engine.'
         gaeUpdateIndexesTask.group = GAE_GROUP
     }
 
     private void configureGaeVacuumIndexes(Project project) {
-        GaeVacuumIndexesTask gaeVacuumIndexesTask = project.tasks.add(GAE_VACUUM_INDEXES, GaeVacuumIndexesTask.class)
+        GaeVacuumIndexesTask gaeVacuumIndexesTask = project.tasks.add(GAE_VACUUM_INDEXES, GaeVacuumIndexesTask)
         gaeVacuumIndexesTask.description = 'Deletes unused indexes on App Engine.'
         gaeVacuumIndexesTask.group = GAE_GROUP
     }
 
     private void configureGaeUpdateTaskQueues(Project project) {
-        GaeUpdateQueuesTask gaeUpdateQueuesTask = project.tasks.add(GAE_UPDATE_TASK_QUEUES, GaeUpdateQueuesTask.class)
+        GaeUpdateQueuesTask gaeUpdateQueuesTask = project.tasks.add(GAE_UPDATE_TASK_QUEUES, GaeUpdateQueuesTask)
         gaeUpdateQueuesTask.description = 'Updates task queues on App Engine.'
         gaeUpdateQueuesTask.group = GAE_GROUP
     }
 
     private void configureGaeUpdateDoS(Project project) {
-        GaeUpdateDoSTask gaeUpdateDoSTask = project.tasks.add(GAE_UPDATE_DOS, GaeUpdateDoSTask.class)
+        GaeUpdateDoSTask gaeUpdateDoSTask = project.tasks.add(GAE_UPDATE_DOS, GaeUpdateDoSTask)
         gaeUpdateDoSTask.description = 'Updates DoS protection configuration on App Engine.'
         gaeUpdateDoSTask.group = GAE_GROUP
     }
 
     private void configureGaeUpdateCron(Project project) {
-        GaeUpdateCronTask gaeUpdateCronTask = project.tasks.add(GAE_UPDATE_CRON, GaeUpdateCronTask.class)
+        GaeUpdateCronTask gaeUpdateCronTask = project.tasks.add(GAE_UPDATE_CRON, GaeUpdateCronTask)
         gaeUpdateCronTask.description = 'Updates scheduled tasks definition (known as cron jobs) on App Engine.'
         gaeUpdateCronTask.group = GAE_GROUP
     }
 
     private void configureGaeCronInfo(Project project) {
-        GaeCronInfoTask gaeCronInfoTask = project.tasks.add(GAE_CRON_INFO, GaeCronInfoTask.class)
+        GaeCronInfoTask gaeCronInfoTask = project.tasks.add(GAE_CRON_INFO, GaeCronInfoTask)
         gaeCronInfoTask.description = 'Get cron information from App Engine.'
         gaeCronInfoTask.group = GAE_GROUP
     }
 
     private void configureGaeDownloadLogs(Project project, GaePluginConvention gaePluginConvention) {
-        GaeDownloadLogsTask gaeDownloadLogsTask = project.tasks.add(GAE_LOGS, GaeDownloadLogsTask.class)
+        GaeDownloadLogsTask gaeDownloadLogsTask = project.tasks.add(GAE_LOGS, GaeDownloadLogsTask)
         gaeDownloadLogsTask.description = 'Download logs from App Engine.'
         gaeDownloadLogsTask.group = GAE_GROUP
         gaeDownloadLogsTask.conventionMapping.map('numDays') { gaePluginConvention.appCfg.logs.numDays }
@@ -283,7 +284,7 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private void configureGaeVersion(Project project) {
-        GaeVersionTask gaeVersionTask = project.tasks.add(GAE_VERSION, GaeVersionTask.class)
+        GaeVersionTask gaeVersionTask = project.tasks.add(GAE_VERSION, GaeVersionTask)
         gaeVersionTask.description = 'Prints detailed version information about the SDK, Java and the operating system.'
         gaeVersionTask.group = GAE_GROUP
     }
@@ -307,11 +308,16 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
+    private void configureGaeSingleBackendTask(Project project) {
+        project.tasks.withType(AbstractGaeSingleBackendTask).whenTaskAdded { AbstractGaeSingleBackendTask gaeSingleBackendTask ->
+            gaeSingleBackendTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+        }
+    }
+
     private void configureGaeUpdateBackends(Project project) {
         GaeUpdateBackendTask gaeUpdateBackendsTask = project.tasks.add(GAE_UPDATE_BACKEND, GaeUpdateBackendTask)
         gaeUpdateBackendsTask.description = 'Updates backend on App Engine.'
         gaeUpdateBackendsTask.group = GAE_GROUP
-        gaeUpdateBackendsTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
     }
 
     private void configureGaeUpdateAllBackends(Project project) {
@@ -324,7 +330,6 @@ class GaePlugin implements Plugin<Project> {
         GaeRollbackBackendTask gaeRollbackBackendsTask = project.tasks.add(GAE_ROLLBACK_BACKEND, GaeRollbackBackendTask)
         gaeRollbackBackendsTask.description = 'Rolls back backend on App Engine.'
         gaeRollbackBackendsTask.group = GAE_GROUP
-        gaeRollbackBackendsTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
     }
 
     private void configureGaeListBackends(Project project) {
@@ -337,14 +342,12 @@ class GaePlugin implements Plugin<Project> {
         GaeStartBackendTask gaeStartBackendTask = project.tasks.add(GAE_START_BACKEND, GaeStartBackendTask)
         gaeStartBackendTask.description = 'Starts backend on App Engine.'
         gaeStartBackendTask.group = GAE_GROUP
-        gaeStartBackendTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
     }
 
     private void configureGaeStopBackend(Project project) {
         GaeStopBackendTask gaeStopBackendTask = project.tasks.add(GAE_STOP_BACKEND, GaeStopBackendTask)
         gaeStopBackendTask.description = 'Stops backend on App Engine.'
         gaeStopBackendTask.group = GAE_GROUP
-        gaeStopBackendTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
     }
 
     private void configureGaeDeleteBackend(Project project) {
@@ -362,6 +365,6 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private WarPluginConvention getWarConvention(Project project) {
-        project.convention.getPlugin(WarPluginConvention.class)
+        project.convention.getPlugin(WarPluginConvention)
     }
 }
