@@ -23,8 +23,6 @@ package org.gradle.api.plugins.gae.task.internal
 class KickStartParams {
     Integer httpPort
     Boolean disableUpdateCheck
-    Boolean debug
-    Integer debugPort
     List<String> jvmFlags
     File explodedWarDirectory
 }

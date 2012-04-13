@@ -1,3 +1,9 @@
+### Version 0.6.1 (April 13, 2012)
+
+* Added convention property to set JVM flags - [Issue 14](https://github.com/bmuschko/gradle-gae-plugin/issues/14).
+**Note: This new property replaces the previously existing properties `debug` and `debugPort`. For more information see
+the FAQ section in the [README file](RELEASE_NOTES.md).**
+
 ### Version 0.6 (March 31, 2012)
 
 * Added support for backend tasks - [Issue 13](https://github.com/bmuschko/gradle-gae-plugin/issues/13).

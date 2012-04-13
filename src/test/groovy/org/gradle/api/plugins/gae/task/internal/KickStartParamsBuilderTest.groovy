@@ -53,12 +53,11 @@ class KickStartParamsBuilderTest extends Specification {
             params.get(3) == '/dev/main/war'
     }
 
-    def "Build parameters for minimal arguments plus disable update check and debug"() {
+    def "Build parameters for minimal arguments plus disable update check and additional JVM flags"() {
         given: "no extra arguments are provided"
             KickStartParams kickStartParams = createBasicParams()
             kickStartParams.disableUpdateCheck = true
-            kickStartParams.debug = true
-            kickStartParams.debugPort = 8090
+            kickStartParams.jvmFlags = ['-Xmx1024', '-Dappengine.user.timezone=UTC']
 
         when: "the params are built"
             List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
@@ -68,32 +67,9 @@ class KickStartParamsBuilderTest extends Specification {
             params.get(0) == KickStartParamsBuilder.MAIN_CLASS
             params.get(1) == "$KickStartParamsBuilder.PORT=8080"
             params.get(2) == KickStartParamsBuilder.DISABLE_UPDATE_CHECK
-            params.get(3) == "$KickStartParamsBuilder.JVM_FLAG=-Xdebug"
-            params.get(4) == "$KickStartParamsBuilder.JVM_FLAG=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8090"
+            params.get(3) == "$KickStartParamsBuilder.JVM_FLAG=-Xmx1024"
+            params.get(4) == "$KickStartParamsBuilder.JVM_FLAG=-Dappengine.user.timezone=UTC"
             params.get(5) == '/dev/main/war'
-    }
-
-    def "Build parameters for minimal arguments plus disable update check, debug and additional JVM flags"() {
-        given: "no extra arguments are provided"
-            KickStartParams kickStartParams = createBasicParams()
-            kickStartParams.disableUpdateCheck = true
-            kickStartParams.debug = true
-            kickStartParams.debugPort = 8090
-            kickStartParams.jvmFlags = ['-Xmx1024', '-Dappengine.user.timezone=UTC']
-
-        when: "the params are built"
-            List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
-
-        then: "the basic parameters are set up"
-            params.size() == 8
-            params.get(0) == KickStartParamsBuilder.MAIN_CLASS
-            params.get(1) == "$KickStartParamsBuilder.PORT=8080"
-            params.get(2) == KickStartParamsBuilder.DISABLE_UPDATE_CHECK
-            params.get(3) == "$KickStartParamsBuilder.JVM_FLAG=-Xdebug"
-            params.get(4) == "$KickStartParamsBuilder.JVM_FLAG=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8090"
-            params.get(5) == "$KickStartParamsBuilder.JVM_FLAG=-Xmx1024"
-            params.get(6) == "$KickStartParamsBuilder.JVM_FLAG=-Dappengine.user.timezone=UTC"
-            params.get(7) == '/dev/main/war'
     }
 
     private KickStartParams createBasicParams() {

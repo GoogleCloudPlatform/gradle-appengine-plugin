@@ -34,8 +34,6 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     File explodedWarDirectory
     Boolean daemon
     Boolean disableUpdateCheck
-    Boolean debug
-    Integer debugPort
     List<String> jvmFlags
     final KickStartSynchronizer kickStartSynchronizer = new KickStartSynchronizer()
 
@@ -80,8 +78,6 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         KickStartParams kickStartParams = new KickStartParams()
         kickStartParams.httpPort = getHttpPort()
         kickStartParams.disableUpdateCheck = getDisableUpdateCheck()
-        kickStartParams.debug = getDebug()
-        kickStartParams.debugPort = getDebugPort()
         kickStartParams.jvmFlags = getJvmFlags()
         kickStartParams.explodedWarDirectory = getExplodedWarDirectory()
 

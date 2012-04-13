@@ -23,7 +23,7 @@ download section or upload it to your local repository. The following code snipp
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.6'
+            classpath 'bmuschko:gradle-gae-plugin:0.6.1'
         }
     }
 
@@ -82,7 +82,7 @@ The GAE plugin defines the following convention properties in the `gae` closure:
 soon as the server has started. When false, this task blocks until the local development server is stopped (defaults to false).
 * `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
 * `disableUpdateCheck`: Disables the Google App Engine update check if set to true.
-* `debug`: Enables remote JVM debugging if set to true.
+* `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
 * `debugPort`: The TCP port the JVM listens on for remote debug connections (defaults to 8000).
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `gaeSdk` and explodes the artifact into
 `build/exploded-gae-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
@@ -156,4 +156,13 @@ The plugin provides support for that. Simply set the `warDir` convention propert
 
     gae {
         warDir = file('war')
+    }
+
+**How do I remote debug the local development server?**
+
+You can use the convention property `jvmFlags` to set the JVM debug parameters. Make sure to set the TCP port you want
+your JVM to listen on. The following example show how to set the JVM flags to listen on port `8000`.
+
+    gae {
+        jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
     }

@@ -178,8 +178,6 @@ class GaePlugin implements Plugin<Project> {
             gaeRunTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { gaePluginConvention.stopKey }
             gaeRunTask.conventionMapping.map('daemon') { gaePluginConvention.daemon }
             gaeRunTask.conventionMapping.map('disableUpdateCheck') { gaePluginConvention.disableUpdateCheck }
-            gaeRunTask.conventionMapping.map('debug') { gaePluginConvention.debug }
-            gaeRunTask.conventionMapping.map('debugPort') { gaePluginConvention.debugPort }
             gaeRunTask.conventionMapping.map('jvmFlags') { gaePluginConvention.jvmFlags }
             gaeRunTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { gaePluginConvention.warDir ?: explodedWarDirectory }
         }

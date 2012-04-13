@@ -40,11 +40,6 @@ class KickStartParamsBuilder {
             params << DISABLE_UPDATE_CHECK
         }
 
-        if(kickStartParams.debug) {
-            params << "$JVM_FLAG=-Xdebug"
-            params << "$JVM_FLAG=-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=$kickStartParams.debugPort"
-        }
-
         if(kickStartParams.jvmFlags) {
             kickStartParams.jvmFlags.each { jvmFlag ->
                 params << "$JVM_FLAG=$jvmFlag"
