@@ -15,10 +15,9 @@
  */
 package org.gradle.api.plugins.gae.task
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.InputDirectory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Google App Engine task enhancing DataNucleus classes.
@@ -26,8 +25,8 @@ import org.slf4j.LoggerFactory
  * @see <a href="http://www.datanucleus.org/products/accessplatform/enhancer.html">Documentation</a>
  * @author Benjamin Muschko
  */
+@Slf4j
 class GaeEnhanceTask extends GaeWebAppDirTask {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaeEnhanceTask.class)
     @InputDirectory File classesDirectory
 
     @Override
@@ -37,7 +36,7 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
 
     private void enhanceClasses() {
         try {
-            LOGGER.info 'Enhancing DataNucleus classes...'
+            log.info 'Enhancing DataNucleus classes...'
 
             ant.taskdef(name: 'enhance', classpath: System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY), classname: 'com.google.appengine.tools.enhancer.EnhancerTask')
             ant.enhance(failonerror: true, verbose: true) {
@@ -53,7 +52,7 @@ class GaeEnhanceTask extends GaeWebAppDirTask {
             throw new GradleException('An error occurred enhancing DataNucleus classes.', e)
         }
         finally {
-            LOGGER.info 'Finished enhancing DataNucleus classes.'
+            log.info 'Finished enhancing DataNucleus classes.'
         }
     }
 }

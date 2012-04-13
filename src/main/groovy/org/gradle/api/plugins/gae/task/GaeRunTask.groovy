@@ -15,9 +15,8 @@
  */
 package org.gradle.api.plugins.gae.task
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.gradle.api.plugins.gae.task.internal.*
 
 /**
@@ -26,8 +25,8 @@ import org.gradle.api.plugins.gae.task.internal.*
  * @see <a href="http://code.google.com/appengine/docs/java/tools/devserver.html#Running_the_Development_Web_Server">Documentation</a>
  * @author Benjamin Muschko
  */
+@Slf4j
 class GaeRunTask extends AbstractGaeTask implements Explodable {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaeRunTask.class)
     Integer httpPort
     Integer stopPort
     String stopKey
@@ -44,7 +43,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
 
     private void startLocalDevelopmentServer() {
         try {
-            LOGGER.info 'Starting local development server...'
+            log.info 'Starting local development server...'
 
             if(!getDaemon()) {
                 startShutdownMonitor(new SystemExitShutdownCallback())
@@ -64,7 +63,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         }
         finally {
             if(!getDaemon()) {
-                LOGGER.info 'Local development server exiting.'
+                log.info 'Local development server exiting.'
             }
         }
     }
@@ -82,15 +81,15 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         kickStartParams.explodedWarDirectory = getExplodedWarDirectory()
 
         List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
-        LOGGER.info "Using params = $params"
+        log.info "Using params = $params"
 
         ClassLoader classLoader = Thread.currentThread().contextClassLoader
         Class kickStart = Class.forName('com.google.appengine.tools.KickStart', true, classLoader)
         kickStart.main(params as String[])
     }
 
+    @Slf4j
     private class KickStartRunnable implements Runnable {
-        final Logger logger = LoggerFactory.getLogger(KickStartRunnable.class)
 
         @Override
         void run() {
@@ -123,7 +122,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         private class OutStreamHandler implements StreamOutputHandler {
             @Override
             void handleLine(String line) {
-                logger.info line
+                log.info line
                 checkServerStartupProgress(line)
             }
         }
@@ -131,7 +130,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         private class ErrStreamHandler implements StreamOutputHandler {
             @Override
             void handleLine(String line) {
-                logger.error line
+                log.error line
                 checkServerStartupProgress(line)
             }
         }

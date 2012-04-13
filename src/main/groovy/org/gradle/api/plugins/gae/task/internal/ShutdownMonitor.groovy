@@ -15,16 +15,15 @@
  */
 package org.gradle.api.plugins.gae.task.internal
 
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import groovy.util.logging.Slf4j
 
 /**
  * Monitor that keeps thread running until stop command got issued.
  *
  * @author Benjamin Muschko
  */
+@Slf4j
 class ShutdownMonitor extends Thread {
-    static final Logger LOGGER = LoggerFactory.getLogger(ShutdownMonitor.class)
     final int port
     final String key
     final ShutdownCallback shutdownCallback
@@ -62,20 +61,20 @@ class ShutdownMonitor extends Thread {
                 String cmd = lin.readLine()
 
                 if('stop' == cmd) {
-                    LOGGER.info 'Shutting down server'
+                    log.info 'Shutting down server'
 
                     try {
                         socket.close()
                     }
                     catch(Exception e) {
-                        LOGGER.debug 'Exception when closing socket', e
+                        log.debug 'Exception when closing socket', e
                     }
 
                     try {
                         serverSocket.close()
                     }
                     catch(IOException e) {
-                        LOGGER.debug 'Exception when closing server socket', e
+                        log.debug 'Exception when closing server socket', e
                     }
 
                     serverSocket = null
@@ -83,7 +82,7 @@ class ShutdownMonitor extends Thread {
                 }
             }
             catch(Exception e) {
-                LOGGER.error 'Exception in shutdown monitor', e
+                log.error 'Exception in shutdown monitor', e
                 System.exit(1)
             }
             finally {
@@ -92,7 +91,7 @@ class ShutdownMonitor extends Thread {
                         socket.close()
                     }
                     catch(Exception e) {
-                        LOGGER.debug 'Exception when stopping server', e
+                        log.debug 'Exception when stopping server', e
                     }
                 }
             }

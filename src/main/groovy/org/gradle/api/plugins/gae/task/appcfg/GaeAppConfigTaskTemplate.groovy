@@ -15,18 +15,17 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
 import org.gradle.api.plugins.gae.task.GaeWebAppDirTask
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Abstract Google App Engine task used for application configuration.
  *
  * @author Benjamin Muschko
  */
+@Slf4j
 abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaeAppConfigTaskTemplate.class)
     String email
     String server
     String host
@@ -55,12 +54,12 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
 
     void runAppConfig() {
         try {
-            LOGGER.info startLogMessage()
+            log.info startLogMessage()
 
             def params = []
             addCommonParams(params)
             params.addAll getParams()
-            LOGGER.info "Using params = $params"
+            log.info "Using params = $params"
 
             ClassLoader classLoader = Thread.currentThread().contextClassLoader
             def appCfg = classLoader.loadClass('com.google.appengine.tools.admin.AppCfg')
@@ -70,7 +69,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
             throw new GradleException(errorLogMessage(), e)
         }
         finally {
-            LOGGER.info finishLogMessage()
+            log.info finishLogMessage()
         }
     }
 

@@ -15,19 +15,18 @@
  */
 package org.gradle.api.plugins.gae.task
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.TaskAction
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Google App Engine task stopping the local development server.
  *
  * @author Benjamin Muschko
  */
+@Slf4j
 class GaeStopTask extends DefaultTask {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaeStopTask.class)
     Integer stopPort
     String stopKey
 
@@ -51,10 +50,10 @@ class GaeStopTask extends DefaultTask {
             out.flush()
         }
         catch(ConnectException e) {
-            LOGGER.info 'Local App Engine server not running!'
+            log.info 'Local App Engine server not running!'
         }
         catch(Exception e) {
-            LOGGER.error 'Exception during stopping', e
+            log.error 'Exception during stopping', e
         }
         finally {
             if(socket && !socket.isClosed()) {

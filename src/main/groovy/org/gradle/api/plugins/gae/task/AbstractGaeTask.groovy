@@ -15,19 +15,18 @@
  */
 package org.gradle.api.plugins.gae.task
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.TaskAction
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Abstract Google App Engine task taking care of general setup.
  *
  * @author Benjamin Muschko
  */
+@Slf4j
 abstract class AbstractGaeTask extends DefaultTask {
-    static final Logger LOGGER = LoggerFactory.getLogger(AbstractGaeTask.class)
     static final String APPENGINE_HOME_ENV_PROP_KEY = 'APPENGINE_HOME'
     static final String APPENGINE_SDK_ROOT_SYS_PROP_KEY = 'appengine.sdk.root'
     static final String JAVA_CLASSPATH_SYS_PROP_KEY = 'java.class.path'
@@ -64,7 +63,7 @@ abstract class AbstractGaeTask extends DefaultTask {
             }
         }
 
-        LOGGER.info "App Engine SDK root = ${appEngineSdkRoot}"
+        log.info "App Engine SDK root = ${appEngineSdkRoot}"
     }
 
     private void setAppEngineSdkRoot() {
@@ -94,7 +93,7 @@ abstract class AbstractGaeTask extends DefaultTask {
             System.setProperty JAVA_CLASSPATH_SYS_PROP_KEY, "${javaClasspath}${pathSeparator}${appEngineToolsApiJar}"
         }
 
-        LOGGER.info "Java classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
+        log.info "Java classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
 
         // Adding appengine-tools-api.jar to context ClassLoader
         ClassLoader rootClassLoader = ClassLoader.systemClassLoader.parent

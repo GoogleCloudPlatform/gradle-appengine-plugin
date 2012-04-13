@@ -15,18 +15,17 @@
  */
 package org.gradle.api.plugins.gae.task
 
+import groovy.util.logging.Slf4j
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.InputDirectory
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
  * Abstract Google App Engine task that requires setting the web application dir.
  *
  * @author Benjamin Muschko
  */
+@Slf4j
 abstract class GaeWebAppDirTask extends AbstractGaeTask {
-    static final Logger LOGGER = LoggerFactory.getLogger(GaeWebAppDirTask.class)
     @InputDirectory File webAppSourceDirectory
 
     @Override
@@ -40,7 +39,7 @@ abstract class GaeWebAppDirTask extends AbstractGaeTask {
                         + ' does not exist')
             }
             else {
-                LOGGER.info "Webapp source directory = ${getWebAppSourceDirectory().canonicalPath}"
+                log.info "Webapp source directory = ${getWebAppSourceDirectory().canonicalPath}"
             }
         }
         catch(IOException e) {
