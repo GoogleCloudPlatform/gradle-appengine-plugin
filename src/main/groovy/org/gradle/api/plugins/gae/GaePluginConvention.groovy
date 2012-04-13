@@ -27,6 +27,10 @@ class GaePluginConvention {
     Integer stopPort = 8081
     String stopKey
     Boolean daemon = false
+    Boolean disableUpdateCheck = false
+    Boolean debug = false
+    Integer debugPort = 8000
+    List<String> jvmFlags = []
     File warDir
     Boolean downloadSdk = false
     GaeAppConfigConvention appCfg = new GaeAppConfigConvention()
