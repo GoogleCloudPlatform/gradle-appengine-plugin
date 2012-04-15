@@ -27,10 +27,14 @@ import org.gradle.api.tasks.TaskAction
 class GaeExplodeWarTask extends DefaultTask implements Explodable {
     @InputFile File warArchive
     File explodedWarDirectory
+    Boolean cleanClasses
 
     @TaskAction
     protected void start() {
         ant.delete(dir: getExplodedWarDirectory())
         ant.unzip(src: getWarArchive(), dest: getExplodedWarDirectory())
+        if(getCleanClasses()){
+            ant.delete(dir: new File(getExplodedWarDirectory(), 'WEB-INF/classes'))
+        }
     }
 }

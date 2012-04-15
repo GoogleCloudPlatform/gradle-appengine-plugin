@@ -114,12 +114,13 @@ will be retrieved (defaults to 1 (INFO)).
 requested data, it does not guarantee the file won't contain duplicate error messages. If this argument is not specified,
 the plugin will overwrite the log output file.
 * `outputFile`: The file the logs get written to.
+* `optimizeWar`: Set it to `true` if you want to budle generated classes and dependencies into one single JAR file. [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be installed otherwise the flag has no effect.
 
 ### Example
 
     gae {
         httpPort = 8085
-
+        optimizeWar = true
         appcfg {
             email = 'benjamin.muschko@gmail.com'
             passIn = true

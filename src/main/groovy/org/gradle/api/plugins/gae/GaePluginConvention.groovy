@@ -31,6 +31,7 @@ class GaePluginConvention {
     List<String> jvmFlags = []
     File warDir
     Boolean downloadSdk = false
+    Boolean optimizeWar = false
     GaeAppConfigConvention appCfg = new GaeAppConfigConvention()
 
     def gae(Closure closure) {
