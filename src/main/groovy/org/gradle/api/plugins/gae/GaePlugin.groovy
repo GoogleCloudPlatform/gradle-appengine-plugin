@@ -106,8 +106,8 @@ class GaePlugin implements Plugin<Project> {
         configureGaeVersion(project)
         configureGaeSdk(project, gaePluginConvention)
         configureGaeSingleBackendTask(project)
-        configureGaeUpdateBackends(project)
-        configureGaeUpdateAllBackends(project)
+        configureGaeUpdateBackends(project, explodedWarDirectory)
+        configureGaeUpdateAllBackends(project, explodedWarDirectory)
         configureGaeRollbackBackends(project)
         configureGaeListBackends(project)
         configureGaeStartBackend(project)
@@ -335,16 +335,21 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeUpdateBackends(Project project) {
+    private void configureGaeUpdateBackends(Project project, File explodedWarDirectory) {
         GaeUpdateBackendTask gaeUpdateBackendsTask = project.tasks.add(GAE_UPDATE_BACKEND, GaeUpdateBackendTask)
         gaeUpdateBackendsTask.description = 'Updates backend on App Engine.'
         gaeUpdateBackendsTask.group = GAE_GROUP
+        gaeUpdateBackendsTask.conventionMapping.map('backend') { project.property(BACKEND_PROJECT_PROPERTY) }
+        gaeUpdateBackendsTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
+        gaeUpdateBackendsTask.dependsOn project.gaeExplodeWar
     }
 
-    private void configureGaeUpdateAllBackends(Project project) {
+    private void configureGaeUpdateAllBackends(Project project, File explodedWarDirectory) {
         GaeUpdateAllBackendsTask gaeUpdateAllBackendsTask = project.tasks.add(GAE_UPDATE_ALL_BACKENDS, GaeUpdateAllBackendsTask)
         gaeUpdateAllBackendsTask.description = 'Updates all backends on App Engine.'
         gaeUpdateAllBackendsTask.group = GAE_GROUP
+        gaeUpdateAllBackendsTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
+        gaeUpdateAllBackendsTask.dependsOn project.gaeExplodeWar
     }
 
     private void configureGaeRollbackBackends(Project project) {

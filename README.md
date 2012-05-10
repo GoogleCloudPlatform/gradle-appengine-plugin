@@ -23,7 +23,7 @@ download section or upload it to your local repository. The following code snipp
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.6.1'
+            classpath 'bmuschko:gradle-gae-plugin:0.6.2'
         }
     }
 
