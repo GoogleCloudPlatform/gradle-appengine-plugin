@@ -56,6 +56,7 @@ class GaePlugin implements Plugin<Project> {
     static final String GAE_STOP_BACKEND = 'gaeStopBackend'
     static final String GAE_DELETE_BACKEND = 'gaeDeleteBackend'
     static final String GAE_CONFIGURE_BACKENDS = 'gaeConfigureBackends'
+    static final String GAE_UPLOAD_ALL = 'gaeUploadAll'
     static final String GRADLE_USER_PROP_PASSWORD = 'gaePassword'
     static final String STOP_PORT_CONVENTION_PARAM = 'stopPort'
     static final String STOP_KEY_CONVENTION_PARAM = 'stopKey'
@@ -114,6 +115,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeStopBackend(project)
         configureGaeDeleteBackend(project)
         configureGaeConfigureBackends(project)
+        configureGaeUploadAll(project)
     }
 
     private File getExplodedSdkDirectory(Project project) {
@@ -388,6 +390,13 @@ class GaePlugin implements Plugin<Project> {
         gaeConfigureBackendsTask.description = 'Configures backends on App Engine.'
         gaeConfigureBackendsTask.group = GAE_GROUP
         gaeConfigureBackendsTask.conventionMapping.map('setting') { project.property(SETTING_PROJECT_PROPERTY) }
+    }
+
+    private void configureGaeUploadAll(Project project) {
+        Task gaeUploadAllTask = project.tasks.add(GAE_UPLOAD_ALL)
+        gaeUploadAllTask.description = 'Uploads your application to App Engine and updates all backends.'
+        gaeUploadAllTask.group = GAE_GROUP
+        gaeUploadAllTask.dependsOn project.gaeUpload, project.gaeUpdateAllBackends
     }
 
     private WarPluginConvention getWarConvention(Project project) {
