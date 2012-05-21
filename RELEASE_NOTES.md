@@ -1,3 +1,7 @@
+### Version 0.6.2 (May 21, 2012)
+
+* Provided task `gaeUploadAll` and using `warDir` convention property for some of the backends tasks - [Issue 14](https://github.com/bmuschko/gradle-gae-plugin/issues/18).
+
 ### Version 0.6.1 (April 13, 2012)
 
 * Added convention property to set JVM flags - [Issue 14](https://github.com/bmuschko/gradle-gae-plugin/issues/14).
