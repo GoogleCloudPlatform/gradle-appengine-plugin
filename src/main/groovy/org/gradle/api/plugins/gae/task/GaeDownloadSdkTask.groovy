@@ -28,7 +28,7 @@ import org.gradle.api.tasks.TaskAction
  */
 class GaeDownloadSdkTask extends DefaultTask {
     @InputFile File gaeSdkZipFile
-    @OutputDirectory File explodedSdkDirectory
+    File explodedSdkDirectory
 
     @TaskAction
     void start() {
