@@ -34,7 +34,7 @@ convention property `downloadSdk` to `true`. This option requires you to specify
 the configuration `gaeSdk`.
 
     dependencies {
-        gaeSdk 'com.google.appengine:appengine-java-sdk:1.6.3'
+        gaeSdk 'com.google.appengine:appengine-java-sdk:1.6.6'
     }
 
 ## Tasks

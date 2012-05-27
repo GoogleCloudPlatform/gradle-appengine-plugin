@@ -1,3 +1,9 @@
+### Version 0.6.3 (May 27, 2012)
+
+* Provided task for downloading the application - [Issue 20](https://github.com/bmuschko/gradle-gae-plugin/issues/20).
+* Fixed task for automatically downloading the GAE SDK. We may not add the `@OutputDirectory` annotation as it wouldn't
+set the correct SDK at runtime if task is considered up-to-date.
+
 ### Version 0.6.2 (May 21, 2012)
 
 * Provided task `gaeUploadAll` and using `warDir` convention property for some of the backends tasks - [Issue 18](https://github.com/bmuschko/gradle-gae-plugin/issues/18).
