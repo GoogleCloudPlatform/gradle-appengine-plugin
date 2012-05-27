@@ -1,3 +1,8 @@
+### Version 0.7 (May 27, 2012)
+
+* Support for bundling generated classes and dependencies into one JAR - [Issue 16](https://github.com/bmuschko/gradle-gae-plugin/issues/16).
+* Added task for running functional tests - [Issue 22](https://github.com/bmuschko/gradle-gae-plugin/issues/22).
+
 ### Version 0.6.3 (May 27, 2012)
 
 * Provided task for downloading the application - [Issue 20](https://github.com/bmuschko/gradle-gae-plugin/issues/20).
