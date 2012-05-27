@@ -67,11 +67,12 @@ web application directory each time you run this task. This behavior can be chan
 * `gaeUpload`: Uploads files for an application given the application's root directory. The application ID and version are taken from the appengine-web.xml file.
 * `gaeUploadAll`: Uploads your application to App Engine and updates all backends by running the task `gaeUpload` and `gaeUpdateAllBackends`.
 * `gaeVacuumIndexes`: Deletes unused indexes in App Engine server.
+* `gaeFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
 * `gaeVersion`: Prints detailed version information about the SDK, Java and the operating system.
 
 ## Project layout
 
-The GAE plugin uses the same layout as the War plugin.
+The GAE plugin uses the same layout as the War plugin. The only difference is the addition of the `functionalTest` source set (located at 'src/functionalTest' by default) which is used by the `gaeFunctionalTest` task.
 
 ## Convention properties
 
