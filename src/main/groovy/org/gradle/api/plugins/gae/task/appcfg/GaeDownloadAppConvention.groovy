@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 the original author or authors.
+ * Copyright 2012 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,12 @@
 package org.gradle.api.plugins.gae.task.appcfg
 
 /**
- * Defines App Engine plugin application configuration convention.
+ * Defines App Engine plugin download application configuration convention.
  *
  * @author Benjamin Muschko
  */
-class GaeAppConfigConvention {
-    String email
-    String server
-    String host
-    Boolean passIn
-    String password
-    String httpProxy
-    String httpsProxy
-    GaeDownloadLogsConvention logs = new GaeDownloadLogsConvention()
-    GaeDownloadAppConvention app = new GaeDownloadAppConvention()
+class GaeDownloadAppConvention {
+    String id
+    String version
+    File outputDirectory
 }

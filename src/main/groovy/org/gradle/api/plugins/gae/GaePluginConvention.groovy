@@ -45,6 +45,12 @@ class GaePluginConvention {
         closure()
     }
 
+    def app(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = appCfg.app
+        closure()
+    }
+
     def logs(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = appCfg.logs

@@ -23,7 +23,7 @@ download section or upload it to your local repository. The following code snipp
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.6.2'
+            classpath 'bmuschko:gradle-gae-plugin:0.6.3'
         }
     }
 
@@ -44,6 +44,7 @@ The GAE plugin defines the following tasks:
 * `gaeConfigureBackends`: Dynamically updates settings in `backends.xml` without having to stop the backend. The setting is defined by the project property `setting`.
 * `gaeCronInfo`: Verifies and prints the scheduled task (cron) configuration.
 * `gaeDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
+* `gaeDownloadApp`: Retrieves the most current version of your application.
 * `gaeDownloadSdk`: Downloads and sets Google App Engine SDK.
 * `gaeEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
 * `gaeExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
@@ -103,6 +104,13 @@ convention property was provided also. Alternatively, you can set the password i
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.
 
+The task `gaeDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
+closure `app`:
+
+* `id`: The application ID.
+* `version`: The current application version (defaults to current default version).
+* `outputDirectory`: The directory where you wish to save the files (defaults to `build/downloaded-app`).
+
 The task `gaeLogs` requires you to at least define the file to write the logs to. Define the tasks' properties in the
 closure `logs`:
 
@@ -129,6 +137,10 @@ the plugin will overwrite the log output file.
             logs {
                 severity = 1
                 outputFile = file('mylogs.txt')
+            }
+
+            app {
+                id = 'sample-app'
             }
         }
     }

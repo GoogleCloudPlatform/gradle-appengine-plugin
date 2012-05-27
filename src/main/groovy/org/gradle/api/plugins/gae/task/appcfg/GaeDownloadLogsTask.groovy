@@ -33,7 +33,7 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
     File outputFile
 
     @Override
-    void validateConfiguration(){
+    void validateConfiguration() {
         super.validateConfiguration()
 
         if(getSeverity() && (getSeverity() < 0 || getSeverity() > 4)) {
@@ -46,7 +46,7 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
 
     @Override
     String startLogMessage() {
-        'Starting downloading logs process...'
+        'Starting downloading logs...'
     }
 
     @Override
@@ -56,7 +56,7 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
 
     @Override
     String finishLogMessage() {
-        'Finished downloading logs process.'
+        'Finished downloading logs.'
     }
 
     @Override

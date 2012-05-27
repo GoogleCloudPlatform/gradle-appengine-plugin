@@ -47,6 +47,7 @@ class GaePlugin implements Plugin<Project> {
     static final String GAE_CRON_INFO = 'gaeCronInfo'
     static final String GAE_LOGS = 'gaeLogs'
     static final String GAE_VERSION = 'gaeVersion'
+    static final String GAE_DOWNLOAD_APP = 'gaeDownloadApp'
     static final String GAE_EXPLODE_WAR = 'gaeExplodeWar'
     static final String GAE_UPDATE_BACKEND = 'gaeUpdateBackend'
     static final String GAE_UPDATE_ALL_BACKENDS = 'gaeUpdateAllBackends'
@@ -88,6 +89,7 @@ class GaePlugin implements Plugin<Project> {
         
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedWarDirectory = getExplodedWarDirectory(project)
+        File downloadedAppDirectory = getDownloadedAppDirectory(project)
         configureDownloadSdk(project, explodedSdkDirectory)
         configureWebAppDir(project)
         configureAppConfig(project, gaePluginConvention)
@@ -105,6 +107,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeCronInfo(project)
         configureGaeDownloadLogs(project, gaePluginConvention)
         configureGaeVersion(project)
+        configureGaeDownloadApplication(project, gaePluginConvention, downloadedAppDirectory)
         configureGaeSdk(project, gaePluginConvention)
         configureGaeSingleBackendTask(project)
         configureGaeUpdateBackends(project, explodedWarDirectory)
@@ -124,6 +127,10 @@ class GaePlugin implements Plugin<Project> {
 
     private File getExplodedWarDirectory(Project project) {
         getBuildSubDirectory(project, 'exploded-war')
+    }
+
+    private File getDownloadedAppDirectory(Project project) {
+        getBuildSubDirectory(project, 'downloaded-app')
     }
 
     private File getBuildSubDirectory(Project project, String subDirectory) {
@@ -310,6 +317,15 @@ class GaePlugin implements Plugin<Project> {
         GaeVersionTask gaeVersionTask = project.tasks.add(GAE_VERSION, GaeVersionTask)
         gaeVersionTask.description = 'Prints detailed version information about the SDK, Java and the operating system.'
         gaeVersionTask.group = GAE_GROUP
+    }
+
+    private void configureGaeDownloadApplication(Project project, GaePluginConvention gaePluginConvention, File downloadedAppDirectory) {
+        GaeDownloadAppTask gaeDownloadAppTask = project.tasks.add(GAE_DOWNLOAD_APP, GaeDownloadAppTask)
+        gaeDownloadAppTask.description = 'Retrieves the most current version of your application.'
+        gaeDownloadAppTask.group = GAE_GROUP
+        gaeDownloadAppTask.conventionMapping.map('appId') { gaePluginConvention.appCfg.app.id }
+        gaeDownloadAppTask.conventionMapping.map('appVersion') { gaePluginConvention.appCfg.app.version }
+        gaeDownloadAppTask.conventionMapping.map('outputDirectory') { gaePluginConvention.appCfg.app.outputDirectory ?: downloadedAppDirectory }
     }
 
     /**
