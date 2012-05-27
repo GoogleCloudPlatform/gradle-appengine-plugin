@@ -21,6 +21,14 @@ import org.gradle.api.Task
 import org.gradle.api.plugins.UnknownPluginException;
 import org.gradle.api.plugins.WarPlugin
 import org.gradle.api.plugins.WarPluginConvention
+import org.gradle.api.artifacts.Configuration
+import org.gradle.api.artifacts.ConfigurationContainer
+import org.gradle.api.execution.TaskExecutionGraph
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.testing.Test
+import org.gradle.plugins.ide.idea.IdeaPlugin
+import org.gradle.api.plugins.*
 import org.gradle.api.plugins.gae.task.*
 import org.gradle.api.plugins.gae.task.appcfg.*
 import org.gradle.api.plugins.gae.task.appcfg.backends.*
@@ -58,6 +66,7 @@ class GaePlugin implements Plugin<Project> {
     static final String GAE_DELETE_BACKEND = 'gaeDeleteBackend'
     static final String GAE_CONFIGURE_BACKENDS = 'gaeConfigureBackends'
     static final String GAE_UPLOAD_ALL = 'gaeUploadAll'
+    static final String GAE_FUNCTIONAL_TEST = 'gaeFunctionalTest'
     static final String GRADLE_USER_PROP_PASSWORD = 'gaePassword'
     static final String STOP_PORT_CONVENTION_PARAM = 'stopPort'
     static final String STOP_KEY_CONVENTION_PARAM = 'stopKey'
@@ -65,6 +74,9 @@ class GaePlugin implements Plugin<Project> {
     static final String EXPLODED_SDK_DIR_CONVENTION_PARAM = 'explodedSdkDirectory'
     static final String BACKEND_PROJECT_PROPERTY = 'backend'
     static final String SETTING_PROJECT_PROPERTY = 'setting'
+    static final String FUNCTIONAL_TEST_COMPILE_CONFIGURATION = 'functionalTestCompile'
+    static final String FUNCTIONAL_TEST_RUNTIME_CONFIGURATION = 'functionalTestRuntime'
+    static final String FUNCTIONAL_TEST_SOURCE_SET = 'functionalTest'
 
     @Override
     void apply(Project project) {
@@ -119,6 +131,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeDeleteBackend(project)
         configureGaeConfigureBackends(project)
         configureGaeUploadAll(project)
+        configureGaeFunctionalTest(project, gaePluginConvention)
     }
 
     private File getExplodedSdkDirectory(Project project) {
@@ -413,6 +426,55 @@ class GaePlugin implements Plugin<Project> {
         gaeUploadAllTask.description = 'Uploads your application to App Engine and updates all backends.'
         gaeUploadAllTask.group = GAE_GROUP
         gaeUploadAllTask.dependsOn project.gaeUpload, project.gaeUpdateAllBackends
+    }
+
+    private void configureGaeFunctionalTest(Project project, GaePluginConvention convention) {
+        SourceSet functionalSourceSet = addFunctionalTestConfigurationsAndSourceSet(project)
+
+        Test gaeFunctionalTest = project.tasks.add(GAE_FUNCTIONAL_TEST, Test)
+        gaeFunctionalTest.description = 'Runs functional tests'
+        gaeFunctionalTest.group = GAE_GROUP
+        gaeFunctionalTest.testClassesDir = functionalSourceSet.output.classesDir
+        gaeFunctionalTest.classpath = functionalSourceSet.runtimeClasspath
+        gaeFunctionalTest.dependsOn(project.tasks.getByName(GAE_RUN))
+
+        project.gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
+            if (taskGraph.hasTask(gaeFunctionalTest)) {
+                convention.daemon = true
+            }
+        }
+
+        project.tasks.getByName(JavaBasePlugin.CHECK_TASK_NAME).dependsOn(gaeFunctionalTest)
+    }
+
+    private SourceSet addFunctionalTestConfigurationsAndSourceSet(Project project) {
+        ConfigurationContainer configurations = project.configurations
+        Configuration functionalTestCompileConfiguration = configurations.add(FUNCTIONAL_TEST_COMPILE_CONFIGURATION)
+        Configuration testCompileConfiguration = configurations.getByName(JavaPlugin.TEST_COMPILE_CONFIGURATION_NAME)
+        functionalTestCompileConfiguration.extendsFrom(testCompileConfiguration)
+
+        Configuration functionalTestRuntimeConfiguration = configurations.add(FUNCTIONAL_TEST_RUNTIME_CONFIGURATION)
+        Configuration testRuntimeConfiguration = configurations.getByName(JavaPlugin.TEST_RUNTIME_CONFIGURATION_NAME)
+        functionalTestRuntimeConfiguration.extendsFrom(functionalTestCompileConfiguration, testRuntimeConfiguration)
+
+        SourceSetContainer sourceSets = project.convention.getPlugin(JavaPluginConvention).sourceSets
+        SourceSet functionalSourceSet = sourceSets.add(FUNCTIONAL_TEST_SOURCE_SET)
+        functionalSourceSet.compileClasspath = functionalTestCompileConfiguration
+        functionalSourceSet.runtimeClasspath = functionalSourceSet.output + functionalTestRuntimeConfiguration
+
+        addIdeaConfigurationForFunctionalTestSourceSet(project, functionalTestCompileConfiguration, functionalTestRuntimeConfiguration, functionalSourceSet)
+
+        functionalSourceSet
+    }
+
+    private void addIdeaConfigurationForFunctionalTestSourceSet(Project project, Configuration compile, Configuration runtime, SourceSet sourceSet) {
+        project.plugins.withType(IdeaPlugin) { IdeaPlugin plugin ->
+            plugin.model.module {
+                testSourceDirs += sourceSet.allSource.srcDirs
+                scopes.TEST.plus += compile
+                scopes.TEST.plus += runtime
+            }
+        }
     }
 
     private WarPluginConvention getWarConvention(Project project) {
