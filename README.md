@@ -71,7 +71,8 @@ web application directory each time you run this task. This behavior can be chan
 
 ## Project layout
 
-The GAE plugin uses the same layout as the War plugin. The only difference is the addition of the `functionalTest` source set (located at 'src/functionalTest' by default) which is used by the `gaeFunctionalTest` task.
+The GAE plugin uses the same layout as the War plugin. The only difference is the addition of the `functionalTest` source set
+(located in `src/functionalTest` by default) which is used by the `gaeFunctionalTest` task.
 
 ## Convention properties
 
