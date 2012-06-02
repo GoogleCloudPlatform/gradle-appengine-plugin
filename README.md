@@ -153,7 +153,7 @@ Gaelyk's [template project](http://gaelyk.appspot.com/tutorial/template-project)
 additional configuration needs to be done. If you start your project from scratch and decide to use the plugin please refer
 to the following sections to configure it properly.
 
-### Gaelyk <= 1.1
+*Gaelyk <= 1.1*
 
 Yes, you just have to configure the WAR plugin to point to the correct web application (by default `war`) and source code
 (by default `src`) directory. If you want to stick to the default source directory simply create the subdirectory `src/main/groovy`.
@@ -177,7 +177,7 @@ The plugin provides support for that. Simply set the `warDir` convention propert
         warDir = file('war')
     }
 
-### Gaelyk >= 1.2
+*Gaelyk >= 1.2*
 
 Starting with version 1.2 Gaelyk adopted Gradle's default directory structure. The following changes are required to
 leverage Gaelyk's hot-reloading feature.
