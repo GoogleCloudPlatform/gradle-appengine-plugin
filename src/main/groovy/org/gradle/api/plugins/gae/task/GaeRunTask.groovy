@@ -17,6 +17,7 @@ package org.gradle.api.plugins.gae.task
 
 import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
+import org.gradle.api.InvalidUserDataException
 import org.gradle.api.plugins.gae.task.internal.*
 
 /**
@@ -35,6 +36,25 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     Boolean disableUpdateCheck
     List<String> jvmFlags
     final KickStartSynchronizer kickStartSynchronizer = new KickStartSynchronizer()
+
+    @Override
+    void validateConfiguration() {
+        super.validateConfiguration()
+        validatePort(getHttpPort(), 'HTTP')
+        validatePort(getStopPort(), 'Stop')
+    }
+
+    private void validatePort(Integer port, String type) {
+        if(!PortUtility.isValidPortNumber(port)) {
+            throw new InvalidUserDataException("Invalid $type port number: $port")
+        }
+
+        if(!PortUtility.isAvailable(port)) {
+            throw new InvalidUserDataException("$type port number already in use: $port")
+        }
+
+        log.info "$type port = $port"
+    }
 
     @Override
     void executeTask() {
