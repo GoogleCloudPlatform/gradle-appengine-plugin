@@ -1,3 +1,8 @@
+### Version 0.7.1 (June 2, 2012)
+
+* Validation of HTTP and stop port - [Issue 24](https://github.com/bmuschko/gradle-gae-plugin/issues/24).
+* Updated documentation.
+
 ### Version 0.7 (May 27, 2012)
 
 * Support for bundling generated classes and dependencies into one JAR - [Issue 16](https://github.com/bmuschko/gradle-gae-plugin/issues/16).

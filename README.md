@@ -11,19 +11,18 @@ To use the GAE plugin, include in your build script:
 
     apply plugin: 'gae'
 
-The plugin JAR needs to be defined in the classpath of your build script. You can either get the plugin from the GitHub
-download section or upload it to your local repository. The following code snippet shows an example:
+The plugin JAR needs to be defined in the classpath of your build script. It is directly available on
+[Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.gradle.api.plugins%22%20AND%20a%3A%22gradle-gae-plugin%22).
+Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet shows an
+example on how to retrieve it from Maven Central:
 
     buildscript {
         repositories {
-            add(new org.apache.ivy.plugins.resolver.URLResolver()) {
-                name = 'GitHub'
-                addArtifactPattern 'http://cloud.github.com/downloads/[organisation]/[module]/[module]-[revision].[ext]'
-            }
+            mavenCentral()
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.7'
+            classpath 'bmuschko:gradle-gae-plugin:0.7.1'
         }
     }
 
@@ -48,6 +47,7 @@ The GAE plugin defines the following tasks:
 * `gaeDownloadSdk`: Downloads and sets Google App Engine SDK.
 * `gaeEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
 * `gaeExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
+* `gaeFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
 * `gaeListBackends`: Lists all the backends configured for the app specified in `appengine-web.xml`.
 * `gaeLogs`: Retrieves log data for the application running on App Engine.
 * `gaeRollback`: Undoes a partially completed update for the given application.
@@ -67,7 +67,6 @@ web application directory each time you run this task. This behavior can be chan
 * `gaeUpload`: Uploads files for an application given the application's root directory. The application ID and version are taken from the appengine-web.xml file.
 * `gaeUploadAll`: Uploads your application to App Engine and updates all backends by running the task `gaeUpload` and `gaeUpdateAllBackends`.
 * `gaeVacuumIndexes`: Deletes unused indexes in App Engine server.
-* `gaeFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
 * `gaeVersion`: Prints detailed version information about the SDK, Java and the operating system.
 
 ## Project layout
@@ -150,6 +149,12 @@ the plugin will overwrite the log output file.
 
 **Can I use the plugin with a [Gaelyk](http://gaelyk.appspot.com/) project?**
 
+Gaelyk's [template project](http://gaelyk.appspot.com/tutorial/template-project) uses this plugin out-of-the-box so no
+additional configuration needs to be done. If you start your project from scratch and decide to use the plugin please refer
+to the following sections to configure it properly.
+
+### Gaelyk <= 1.1
+
 Yes, you just have to configure the WAR plugin to point to the correct web application (by default `war`) and source code
 (by default `src`) directory. If you want to stick to the default source directory simply create the subdirectory `src/main/groovy`.
 
@@ -172,6 +177,18 @@ The plugin provides support for that. Simply set the `warDir` convention propert
         warDir = file('war')
     }
 
+### Gaelyk >= 1.2
+
+Starting with version 1.2 Gaelyk adopted Gradle's default directory structure. The following changes are required to
+leverage Gaelyk's hot-reloading feature.
+
+    gae {
+        warDir = file('src/main/webapp')
+    }
+
+    sourceSets.main.output.classesDir = 'src/main/webapp/WEB-INF/classes'
+
+<br>
 **How do I remote debug the local development server?**
 
 You can use the convention property `jvmFlags` to set the JVM debug parameters. Make sure to set the TCP port you want
@@ -180,3 +197,15 @@ your JVM to listen on. The following example show how to set the JVM flags to li
     gae {
         jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
     }
+
+<br>
+**How do I run functional tests on the local development server?**
+
+If you want to execute your tests in the container alongside the rest of your application you have to configure the `gaeRun` task
+to run in `daemon` mode. Starting with version 0.7 of the plugin this has become even easier. It provides the task `gaeFunctionalTest`
+which lets you define your functional test dependencies via the configuration `functionalTestCompile`. On top of that the task
+has been fully integrated into the build lifecycle.
+
+One of the most prominent functional testing libraries in the Groovy ecosystem is [Geb](http://www.gebish.org/), an expressive
+and powerful browser automation solution. Please refer to this short and sweet [tutorial](http://blog.proxerd.pl/article/funcational-testing-of-gae-lyk-applications-with-geb)
+for a quickstart.

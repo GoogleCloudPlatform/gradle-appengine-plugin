@@ -6,7 +6,7 @@ def compatibilityVersion = 1.5
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 group = 'org.gradle.api.plugins'
-version = '0.6.3'
+version = '0.7.1'
 
 repositories {
     mavenCentral()
@@ -67,33 +67,31 @@ artifacts {
     archives groovydocJar
 }
 
-def getPomConfiguration() {
-    return {
-        name 'Gradle GAE plugin'
-        description 'Gradle plugin that provides tasks for uploading, running and managing Google App Engine projects.'
+ext.pomConfiguration = {
+    name 'Gradle GAE plugin'
+    description 'Gradle plugin that provides tasks for uploading, running and managing Google App Engine projects.'
+    url 'https://github.com/bmuschko/gradle-gae-plugin'
+    inceptionYear '2011'
+
+    scm {
         url 'https://github.com/bmuschko/gradle-gae-plugin'
-        inceptionYear '2011'
+        connection 'scm:https://bmuschko@github.com/bmuschko/gradle-gae-plugin.git'
+        developerConnection 'scm:git://github.com/bmuschko/gradle-gae-plugin.git'
+    }
 
-        scm {
-            url 'https://github.com/bmuschko/gradle-gae-plugin'
-            connection 'scm:https://bmuschko@github.com/bmuschko/gradle-gae-plugin.git'
-            developerConnection 'scm:git://github.com/bmuschko/gradle-gae-plugin.git'
+    licenses {
+        license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+            distribution 'repo'
         }
+    }
 
-        licenses {
-            license {
-                name 'The Apache Software License, Version 2.0'
-                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                distribution 'repo'
-            }
-        }
-
-        developers {
-            developer {
-                id 'bmuschko'
-                name 'Benjamin Muschko'
-                email 'benjamin.muschko@gmail.com'
-            }
+    developers {
+        developer {
+            id 'bmuschko'
+            name 'Benjamin Muschko'
+            email 'benjamin.muschko@gmail.com'
         }
     }
 }
