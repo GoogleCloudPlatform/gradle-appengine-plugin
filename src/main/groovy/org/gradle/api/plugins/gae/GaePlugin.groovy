@@ -136,7 +136,7 @@ class GaePlugin implements Plugin<Project> {
     }
 
     private File getExplodedSdkDirectory(Project project) {
-        getBuildSubDirectory(project, 'exploded-gae-sdk')
+        new File(project.gradle.gradleUserHomeDir, 'gae-sdk')
     }
 
     private File getExplodedWarDirectory(Project project) {
