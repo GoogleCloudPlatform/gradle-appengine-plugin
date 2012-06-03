@@ -22,7 +22,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'bmuschko:gradle-gae-plugin:0.7.1'
+            classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.7.1'
         }
     }
 
