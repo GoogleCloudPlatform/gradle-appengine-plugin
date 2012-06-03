@@ -1,3 +1,7 @@
+### Version 0.7.2 (June 3, 2012)
+
+* Storing App Engine SDKs in Gradle home directory so they can be shared among projects - [Issue 11](https://github.com/bmuschko/gradle-gae-plugin/issues/11).
+
 ### Version 0.7.1 (June 2, 2012)
 
 * Validation of HTTP and stop port - [Issue 24](https://github.com/bmuschko/gradle-gae-plugin/issues/24).

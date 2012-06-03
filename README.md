@@ -22,7 +22,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.7.1'
+            classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.7.2'
         }
     }
 
@@ -87,7 +87,7 @@ soon as the server has started. When false, this task blocks until the local dev
 * `disableUpdateCheck`: Disables the Google App Engine update check if set to true.
 * `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `gaeSdk` and explodes the artifact into
-`build/exploded-gae-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
+`~/.gradle/gae-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
 takes precedence over _APPENGINE_HOME_ and the system property _google.appengine.sdk_.
 
 Within `gae` you can define optional properties in a closure named `appcfg`:
