@@ -1,3 +1,7 @@
+### Version 0.7.3 (July 1, 2012)
+
+* Use onlyIf for skipping gaeExplodeWar if warDir is specified - [Issue 26](https://github.com/bmuschko/gradle-gae-plugin/issues/26).
+
 ### Version 0.7.2 (June 3, 2012)
 
 * Storing App Engine SDKs in Gradle home directory so they can be shared among projects - [Issue 11](https://github.com/bmuschko/gradle-gae-plugin/issues/11).
