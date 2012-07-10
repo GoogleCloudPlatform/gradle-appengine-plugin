@@ -33,6 +33,7 @@ import org.gradle.api.plugins.*
 import org.gradle.api.plugins.gae.task.*
 import org.gradle.api.plugins.gae.task.appcfg.*
 import org.gradle.api.plugins.gae.task.appcfg.backends.*
+import org.gradle.plugins.ide.eclipse.EclipsePlugin
 
 /**
  * <p>A {@link Plugin} that provides tasks for uploading, running and managing of Google App Engine projects.</p>
@@ -462,6 +463,7 @@ class GaePlugin implements Plugin<Project> {
         functionalSourceSet.runtimeClasspath = functionalSourceSet.output + functionalTestRuntimeConfiguration
 
         addIdeaConfigurationForFunctionalTestSourceSet(project, functionalTestCompileConfiguration, functionalTestRuntimeConfiguration, functionalSourceSet)
+        addEclipseConfigurationForFunctionalTestRuntimeConfiguration(project, functionalTestRuntimeConfiguration)
 
         functionalSourceSet
     }
@@ -473,6 +475,12 @@ class GaePlugin implements Plugin<Project> {
                 scopes.TEST.plus += compile
                 scopes.TEST.plus += runtime
             }
+        }
+    }
+
+    private void addEclipseConfigurationForFunctionalTestRuntimeConfiguration(Project project, Configuration functionalTestRuntimeConfiguration) {
+        project.plugins.withType(EclipsePlugin) { EclipsePlugin plugin ->
+            plugin.model.classpath.plusConfigurations += functionalTestRuntimeConfiguration
         }
     }
 
