@@ -94,6 +94,10 @@ ext.pomConfiguration = {
             name 'Benjamin Muschko'
             email 'benjamin.muschko@gmail.com'
         }
+        developer {
+            id 'erdi'
+            name 'Marcin Erdmann'
+        }
     }
 }
 
