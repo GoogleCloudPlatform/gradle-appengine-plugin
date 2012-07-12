@@ -208,9 +208,6 @@ class GaePlugin implements Plugin<Project> {
         gaeExplodeWarTask.description = 'Explodes WAR archive into directory.'
         gaeExplodeWarTask.group = GAE_GROUP
 
-        // If WAR directory gets set we assume we have a fully functional web application, WAR creation/explosion is skipped
-        gaeExplodeWarTask.onlyIf { !gaePluginConvention.warDir }
-        
         project.afterEvaluate {
             if(gaePluginConvention.optimizeWar && project.plugins.hasPlugin('fatjar')){
                 gaeExplodeWarTask.dependsOn project.slimWar
@@ -235,7 +232,11 @@ class GaePlugin implements Plugin<Project> {
         gaeRunTask.description = 'Starts up a local App Engine development server.'
         gaeRunTask.group = GAE_GROUP
 
-        gaeRunTask.dependsOn project.tasks.getByName(GAE_EXPLODE_WAR)
+        GaeExplodeWarTask gaeExplodeWarTask = project.tasks.getByName(GAE_EXPLODE_WAR)
+        gaeRunTask.dependsOn gaeExplodeWarTask
+
+        // If WAR directory gets set we assume we have a fully functional web application, WAR creation/explosion is skipped
+        gaeExplodeWarTask.onlyIf { !gaePluginConvention.warDir || !project.gradle.taskGraph.hasTask(gaeRunTask) }
     }
 
     private void configureGaeStop(Project project, GaePluginConvention gaePluginConvention) {
