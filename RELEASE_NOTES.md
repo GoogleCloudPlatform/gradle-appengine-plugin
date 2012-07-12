@@ -1,3 +1,7 @@
+### Version 0.7.4 (July 11, 2012)
+
+* Fix functionalTest source set dependencies for Eclipse projects - [Issue 27](https://github.com/bmuschko/gradle-gae-plugin/issues/27).
+
 ### Version 0.7.3 (July 1, 2012)
 
 * Use onlyIf for skipping gaeExplodeWar if warDir is specified - [Issue 26](https://github.com/bmuschko/gradle-gae-plugin/issues/26).
