@@ -1,3 +1,7 @@
+### Version 0.7.5 (July 14, 2012)
+
+* Fix bug where war explosing is skipped during gaeUpload - [Issue 28](https://github.com/bmuschko/gradle-gae-plugin/issues/28).
+
 ### Version 0.7.4 (July 11, 2012)
 
 * Fix functionalTest source set dependencies for Eclipse projects - [Issue 27](https://github.com/bmuschko/gradle-gae-plugin/issues/27).
