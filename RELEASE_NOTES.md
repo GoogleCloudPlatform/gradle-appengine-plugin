@@ -1,3 +1,7 @@
+### Version 0.7.6 (July 15, 2012)
+
+* Added main source set output to functional test classpath - [Issue 29](https://github.com/bmuschko/gradle-gae-plugin/issues/29).
+
 ### Version 0.7.5 (July 14, 2012)
 
 * Fix bug where war explosing is skipped during gaeUpload - [Issue 28](https://github.com/bmuschko/gradle-gae-plugin/issues/28).
