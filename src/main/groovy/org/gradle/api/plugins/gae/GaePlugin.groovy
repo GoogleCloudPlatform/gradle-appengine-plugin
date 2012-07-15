@@ -34,6 +34,7 @@ import org.gradle.api.plugins.*
 import org.gradle.api.plugins.gae.task.*
 import org.gradle.api.plugins.gae.task.appcfg.*
 import org.gradle.api.plugins.gae.task.appcfg.backends.*
+import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
 
 /**
  * <p>A {@link Plugin} that provides tasks for uploading, running and managing of Google App Engine projects.</p>
@@ -459,8 +460,9 @@ class GaePlugin implements Plugin<Project> {
         functionalTestRuntimeConfiguration.extendsFrom(functionalTestCompileConfiguration, testRuntimeConfiguration)
 
         SourceSetContainer sourceSets = project.convention.getPlugin(JavaPluginConvention).sourceSets
+        SourceSet mainSourceSet = sourceSets.getByName(MAIN_SOURCE_SET_NAME)
         SourceSet functionalSourceSet = sourceSets.add(FUNCTIONAL_TEST_SOURCE_SET)
-        functionalSourceSet.compileClasspath = functionalTestCompileConfiguration
+        functionalSourceSet.compileClasspath = mainSourceSet.output + functionalTestCompileConfiguration
         functionalSourceSet.runtimeClasspath = functionalSourceSet.output + functionalTestRuntimeConfiguration
 
         addIdeaConfigurationForFunctionalTestSourceSet(project, functionalTestCompileConfiguration, functionalTestRuntimeConfiguration, functionalSourceSet)
