@@ -1,3 +1,12 @@
+### Version 0.8 (December 9, 2012)
+* Expose convention property for setting Java 7 compatibility - [Issue 33](https://github.com/bmuschko/gradle-gae-plugin/issues/33).
+* Expose convention properties for OAuth2 and no cookies flags - [Issue 35](http://github.com/bmuschko/gradle-gae-plugin/issues/35).
+* Renamed tasks `gaeUpload`/`gaeUploadAll` to `gaeUpdate`/`gaeUpdateAll` - [Issue 36](http://github.com/bmuschko/gradle-gae-plugin/issues/36). _Note_: The old task names
+  will not be available anymore.
+* Using the Gradle logger instead of the Slf4J AST transformation.
+* Upgrade to Gradle Wrapper 1.3.
+* Using Gradle Nexus plugin to simplify upload code.
+
 ### Version 0.7.6 (July 15, 2012)
 
 * Added main source set output to functional test classpath - [Issue 29](https://github.com/bmuschko/gradle-gae-plugin/issues/29).
