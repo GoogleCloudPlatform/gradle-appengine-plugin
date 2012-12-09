@@ -24,10 +24,12 @@ class GaeAppConfigConvention {
     String email
     String server
     String host
+    Boolean noCookies
     Boolean passIn
     String password
     String httpProxy
     String httpsProxy
+    Boolean oauth2
     GaeDownloadLogsConvention logs = new GaeDownloadLogsConvention()
     GaeDownloadAppConvention app = new GaeDownloadAppConvention()
     GaeUpdateConvention update = new GaeUpdateConvention()
