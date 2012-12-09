@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae
 
-import groovy.util.logging.Slf4j
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -136,6 +135,20 @@ class GaePlugin implements Plugin<Project> {
         configureGaeConfigureBackends(project)
         configureGaeUpdateAll(project)
         configureGaeFunctionalTest(project, gaePluginConvention)
+    }
+
+    private void applyFatJarPlugin(Project project) {
+        try {
+            project.plugins.apply(ThirdPartyPlugin.FATJAR.id)
+
+            project.slimWar.doFirst {
+                File webAppDir = project.convention.getPlugin(WarPluginConvention).webAppDir
+                project.ant.delete dir: new File(webAppDir, 'WEB-INF/lib')
+            }
+        }
+        catch(UnknownPluginException e) {
+            project.logger.info 'FatJar plugin not installed.'
+        }
     }
 
     private File getExplodedSdkDirectory(Project project) {

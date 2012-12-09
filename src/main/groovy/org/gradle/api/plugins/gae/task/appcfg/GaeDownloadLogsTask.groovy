@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg
 
-import groovy.util.logging.Slf4j
 import org.gradle.api.InvalidUserDataException
 
 /**
@@ -24,7 +23,6 @@ import org.gradle.api.InvalidUserDataException
  * @see <a href="http://code.google.com/appengine/docs/java/tools/uploadinganapp.html#Downloading_Logs">Documentation</a>
  * @author Benjamin Muschko
  */
-@Slf4j
 class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
     static final String COMMAND = 'request_logs'
     Integer numDays
@@ -40,7 +38,7 @@ class GaeDownloadLogsTask extends GaeAppConfigTaskTemplate {
             throw new InvalidUserDataException("Invalid log level: ${getSeverity()}. Valid values are 4 for CRITICAL, 3 for ERROR, 2 for WARNING, 1 for INFO, 0 for DEBUG.")
         }
         else {
-            log.info "Pulling messages with minimum log level = ${getSeverity()}"
+            logger.info "Pulling messages with minimum log level = ${getSeverity()}"
         }
     }
 

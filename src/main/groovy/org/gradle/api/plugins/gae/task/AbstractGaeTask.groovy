@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import groovy.util.logging.Slf4j
 import org.gradle.api.DefaultTask
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.TaskAction
@@ -25,7 +24,6 @@ import org.gradle.api.tasks.TaskAction
  *
  * @author Benjamin Muschko
  */
-@Slf4j
 abstract class AbstractGaeTask extends DefaultTask {
     static final String APPENGINE_HOME_ENV_PROP_KEY = 'APPENGINE_HOME'
     static final String APPENGINE_SDK_ROOT_SYS_PROP_KEY = 'appengine.sdk.root'
@@ -63,7 +61,7 @@ abstract class AbstractGaeTask extends DefaultTask {
             }
         }
 
-        log.info "App Engine SDK root = ${appEngineSdkRoot}"
+        logger.info "App Engine SDK root = ${appEngineSdkRoot}"
     }
 
     private void setAppEngineSdkRoot() {
@@ -93,7 +91,7 @@ abstract class AbstractGaeTask extends DefaultTask {
             System.setProperty JAVA_CLASSPATH_SYS_PROP_KEY, "${javaClasspath}${pathSeparator}${appEngineToolsApiJar}"
         }
 
-        log.info "Java classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
+        logger.info "Java classpath = ${System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)}"
 
         // Adding appengine-tools-api.jar to context ClassLoader
         ClassLoader rootClassLoader = ClassLoader.systemClassLoader.parent

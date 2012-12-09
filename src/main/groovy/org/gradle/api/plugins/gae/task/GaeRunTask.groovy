@@ -26,7 +26,6 @@ import org.gradle.api.plugins.gae.task.internal.*
  * @see <a href="http://code.google.com/appengine/docs/java/tools/devserver.html#Running_the_Development_Web_Server">Documentation</a>
  * @author Benjamin Muschko
  */
-@Slf4j
 class GaeRunTask extends AbstractGaeTask implements Explodable {
     Integer httpPort
     Integer stopPort
@@ -53,7 +52,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
             throw new InvalidUserDataException("$type port number already in use: $port")
         }
 
-        log.info "$type port = $port"
+        logger.info "$type port = $port"
     }
 
     @Override
@@ -63,7 +62,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
 
     private void startLocalDevelopmentServer() {
         try {
-            log.info 'Starting local development server...'
+            logger.info 'Starting local development server...'
 
             if(!getDaemon()) {
                 startShutdownMonitor(new SystemExitShutdownCallback())
@@ -83,7 +82,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         }
         finally {
             if(!getDaemon()) {
-                log.info 'Local development server exiting.'
+                logger.info 'Local development server exiting.'
             }
         }
     }
@@ -101,16 +100,14 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         kickStartParams.explodedWarDirectory = getExplodedWarDirectory()
 
         List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
-        log.info "Using params = $params"
+        logger.info "Using params = $params"
 
         ClassLoader classLoader = Thread.currentThread().contextClassLoader
         Class kickStart = Class.forName('com.google.appengine.tools.KickStart', true, classLoader)
         kickStart.main(params as String[])
     }
 
-    @Slf4j
     private class KickStartRunnable implements Runnable {
-
         @Override
         void run() {
             InputStream systemInOriginal = System.in
@@ -142,7 +139,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         private class OutStreamHandler implements StreamOutputHandler {
             @Override
             void handleLine(String line) {
-                log.info line
+                logger.info line
                 checkServerStartupProgress(line)
             }
         }
@@ -150,7 +147,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
         private class ErrStreamHandler implements StreamOutputHandler {
             @Override
             void handleLine(String line) {
-                log.error line
+                logger.error line
                 checkServerStartupProgress(line)
             }
         }

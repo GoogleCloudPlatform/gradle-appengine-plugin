@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import groovy.util.logging.Slf4j
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.tasks.InputDirectory
 
@@ -24,7 +23,6 @@ import org.gradle.api.tasks.InputDirectory
  *
  * @author Benjamin Muschko
  */
-@Slf4j
 abstract class GaeWebAppDirTask extends AbstractGaeTask {
     @InputDirectory File webAppSourceDirectory
 
@@ -39,7 +37,7 @@ abstract class GaeWebAppDirTask extends AbstractGaeTask {
                         + ' does not exist')
             }
             else {
-                log.info "Webapp source directory = ${getWebAppSourceDirectory().canonicalPath}"
+                logger.info "Webapp source directory = ${getWebAppSourceDirectory().canonicalPath}"
             }
         }
         catch(IOException e) {

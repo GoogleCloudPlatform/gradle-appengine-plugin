@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task.appcfg
 
-import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
 import org.gradle.api.plugins.gae.task.GaeWebAppDirTask
 
@@ -24,7 +23,6 @@ import org.gradle.api.plugins.gae.task.GaeWebAppDirTask
  *
  * @author Benjamin Muschko
  */
-@Slf4j
 abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     String email
     String server
@@ -56,12 +54,12 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
 
     void runAppConfig() {
         try {
-            log.info startLogMessage()
+            logger.info startLogMessage()
 
             def params = []
             addCommonParams(params)
             params.addAll getParams()
-            log.info "Using params = $params"
+            logger.info "Using params = $params"
 
             ClassLoader classLoader = Thread.currentThread().contextClassLoader
             def appCfg = classLoader.loadClass('com.google.appengine.tools.admin.AppCfg')
@@ -71,7 +69,7 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
             throw new GradleException(errorLogMessage(), e)
         }
         finally {
-            log.info finishLogMessage()
+            logger.info finishLogMessage()
         }
     }
 
