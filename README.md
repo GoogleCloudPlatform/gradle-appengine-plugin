@@ -130,7 +130,7 @@ the plugin will overwrite the log output file.
 
 The task `gaeUpdate` allows you to specify that you want to upload a Java 7-compatible application:
 
-* `useJava7`: Java 7 compatibility flag (default to `false` if not set).
+* `useJava7`: Java 7 compatibility flag (default to `false` if not set). This feature will require a App Engine SDK of >= 1.7.3.
 
 ### Example
 

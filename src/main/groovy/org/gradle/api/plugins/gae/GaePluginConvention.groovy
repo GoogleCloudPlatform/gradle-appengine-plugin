@@ -56,4 +56,10 @@ class GaePluginConvention {
         closure.delegate = appCfg.logs
         closure()
     }
+
+    def update(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = appCfg.update
+        closure()
+    }
 }

@@ -46,12 +46,13 @@ class GaeUpdateTask extends GaeAppConfigTaskTemplate implements Explodable {
 
     @Override
     List getParams() {
-        def params = ['--enable_jar_splitting', COMMAND, getExplodedWarDirectory().canonicalPath]
+        def params = ['--enable_jar_splitting']
 
         if(getUseJava7()) {
             params << '--use_java7'
         }
 
+        params.addAll([COMMAND, getExplodedWarDirectory().canonicalPath])
         params
     }
 }
