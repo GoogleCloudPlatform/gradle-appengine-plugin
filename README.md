@@ -22,7 +22,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.7.6'
+            classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.8'
         }
     }
 
@@ -33,7 +33,7 @@ convention property `downloadSdk` to `true`. This option requires you to specify
 the configuration `gaeSdk`.
 
     dependencies {
-        gaeSdk 'com.google.appengine:appengine-java-sdk:1.6.6'
+        gaeSdk 'com.google.appengine:appengine-java-sdk:1.7.3'
     }
 
 ## Tasks
