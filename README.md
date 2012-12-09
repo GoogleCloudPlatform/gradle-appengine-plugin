@@ -128,6 +128,10 @@ the plugin will overwrite the log output file.
 * `outputFile`: The file the logs get written to.
 * `optimizeWar`: Set it to `true` if you want to budle generated classes and dependencies into one single JAR file. [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be installed otherwise the flag has no effect.
 
+The task `gaeUpdate` allows you to specify that you want to upload a Java 7-compatible application:
+
+* `useJava7`: Java 7 compatibility flag (default to `false` if not set).
+
 ### Example
 
     gae {

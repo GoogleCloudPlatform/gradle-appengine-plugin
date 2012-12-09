@@ -113,7 +113,7 @@ class GaePlugin implements Plugin<Project> {
         configureGaeRun(project, gaePluginConvention, explodedWarDirectory)
         configureGaeStop(project, gaePluginConvention)
         configureGaeEnhance(project)
-        configureGaeUpdate(project, explodedWarDirectory)
+        configureGaeUpdate(project, gaePluginConvention, explodedWarDirectory)
         configureGaeRollback(project)
         configureGaeUpdateIndexes(project)
         configureGaeVacuumIndexes(project)
@@ -268,9 +268,10 @@ class GaePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureGaeUpdate(Project project, File explodedWarDirectory) {
+    private void configureGaeUpdate(Project project, GaePluginConvention gaePluginConvention, File explodedWarDirectory) {
         project.tasks.withType(GaeUpdateTask).whenTaskAdded { GaeUpdateTask gaeUpdateTask ->
             gaeUpdateTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
+            gaeUpdateTask.conventionMapping.map('useJava7') { gaePluginConvention.appCfg.update.useJava7 }
         }
 
         GaeUpdateTask gaeUpdateTask = project.tasks.add(GAE_UPDATE, GaeUpdateTask)

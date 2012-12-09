@@ -30,4 +30,5 @@ class GaeAppConfigConvention {
     String httpsProxy
     GaeDownloadLogsConvention logs = new GaeDownloadLogsConvention()
     GaeDownloadAppConvention app = new GaeDownloadAppConvention()
+    GaeUpdateConvention update = new GaeUpdateConvention()
 }

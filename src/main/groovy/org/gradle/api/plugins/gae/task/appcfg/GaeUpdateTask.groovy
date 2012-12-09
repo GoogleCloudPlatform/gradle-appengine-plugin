@@ -27,6 +27,7 @@ import org.gradle.api.tasks.InputDirectory
 class GaeUpdateTask extends GaeAppConfigTaskTemplate implements Explodable {
     static final String COMMAND = 'update'
     @InputDirectory File explodedWarDirectory
+    Boolean useJava7
 
     @Override
     String startLogMessage() {
@@ -45,6 +46,12 @@ class GaeUpdateTask extends GaeAppConfigTaskTemplate implements Explodable {
 
     @Override
     List getParams() {
-        ['--enable_jar_splitting', COMMAND, getExplodedWarDirectory().canonicalPath]
+        def params = ['--enable_jar_splitting', COMMAND, getExplodedWarDirectory().canonicalPath]
+
+        if(getUseJava7()) {
+            params << '--use_java7'
+        }
+
+        params
     }
 }
