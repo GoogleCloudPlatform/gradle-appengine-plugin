@@ -19,28 +19,28 @@ import org.gradle.api.plugins.gae.task.Explodable
 import org.gradle.api.tasks.InputDirectory
 
 /**
- * Google App Engine task uploading your application to the server.
+ * Google App Engine task updating your application on the server.
  *
  * @see <a href="http://code.google.com/appengine/docs/java/tools/uploadinganapp.html#Uploading_the_App">Documentation</a>
  * @author Benjamin Muschko
  */
-class GaeUploadTask extends GaeAppConfigTaskTemplate implements Explodable {
+class GaeUpdateTask extends GaeAppConfigTaskTemplate implements Explodable {
     static final String COMMAND = 'update'
     @InputDirectory File explodedWarDirectory
 
     @Override
     String startLogMessage() {
-        'Starting upload process...'
+        'Starting update process...'
     }
 
     @Override
     String errorLogMessage() {
-        'An error occurred uploading the application to App Engine.'
+        'An error occurred updating the application on App Engine.'
     }
 
     @Override
     String finishLogMessage() {
-        'Finished uploading process.'
+        'Finished updating process.'
     }
 
     @Override

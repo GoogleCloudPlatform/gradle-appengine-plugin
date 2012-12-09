@@ -64,8 +64,8 @@ web application directory each time you run this task. This behavior can be chan
 * `gaeUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
 * `gaeUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
 * `gaeUpdateQueues`: Updates the task queue configuration (queue.xml) in App Engine.
-* `gaeUpload`: Uploads files for an application given the application's root directory. The application ID and version are taken from the appengine-web.xml file.
-* `gaeUploadAll`: Uploads your application to App Engine and updates all backends by running the task `gaeUpload` and `gaeUpdateAllBackends`.
+* `gaeUpdate`: Uploads files for an application given the application's root directory. The application ID and version are taken from the appengine-web.xml file.
+* `gaeUpdateAll`: Uploads your application to App Engine and updates all backends by running the task `gaeUpdate` and `gaeUpdateAllBackends`.
 * `gaeVacuumIndexes`: Deletes unused indexes in App Engine server.
 * `gaeVersion`: Prints detailed version information about the SDK, Java and the operating system.
 
