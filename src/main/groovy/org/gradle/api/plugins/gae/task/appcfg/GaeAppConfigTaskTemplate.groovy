@@ -29,10 +29,12 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
     String email
     String server
     String host
+    Boolean noCookies
     Boolean passIn
     String password
     String httpProxy
     String httpsProxy
+    Boolean oauth2
 
     @Override
     void executeTask() {
@@ -86,6 +88,10 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
             params << "--host=${getHost()}"
         }
 
+        if(getNoCookies()) {
+            params << '--no_cookies'
+        }
+
         if(getPassIn() || getPassword()) {
             params << '--passin'
         }
@@ -97,6 +103,11 @@ abstract class GaeAppConfigTaskTemplate extends GaeWebAppDirTask {
         if(getHttpsProxy()) {
             params << "--proxy_https=${getHttpsProxy()}"
         }
+
+        if(getOauth2()) {
+            params << '--oauth2'
+        }
+
     }
 
     private class AppConfigRunnable implements Runnable {

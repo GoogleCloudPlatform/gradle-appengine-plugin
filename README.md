@@ -96,6 +96,7 @@ Within `gae` you can define optional properties in a closure named `appcfg`:
 If omitted and no cookie is stored from a previous use of the command, the command will prompt for this value.
 * `server`: The App Engine server hostname (defaults to appengine.google.com).
 * `host`: The hostname of the local machine for use with remote procedure calls.
+* `noCookies`: Do not store the administrator sign-in credentials. Prompt for a password every time. (or go through the OAuth2 flow when the `oauth2` option is used).
 * `passIn`: Do not store the administrator sign-in credentials as a cookie; prompt for a password every time. If the property
 `password` was provided then this value will always be true.
 * `password`: The password in plain text to be used whenever a task requires one. The password is only applied if the `email`
@@ -104,6 +105,7 @@ convention property was provided also. Alternatively, you can set the password i
 * `httpProxy`: Use the given HTTP proxy to contact App Engine.
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.
+* `oauth2`: Use OAuth2 authentication instead of password-based authentication.
 
 The task `gaeDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
 closure `app`:

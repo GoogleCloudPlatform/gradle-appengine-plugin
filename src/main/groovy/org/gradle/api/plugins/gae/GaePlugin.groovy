@@ -186,6 +186,7 @@ class GaePlugin implements Plugin<Project> {
             gaeAppConfigTaskTemplate.conventionMapping.map('email') { gaePluginConvention.appCfg.email }
             gaeAppConfigTaskTemplate.conventionMapping.map('server') { gaePluginConvention.appCfg.server }
             gaeAppConfigTaskTemplate.conventionMapping.map('host') { gaePluginConvention.appCfg.host }
+            gaeAppConfigTaskTemplate.conventionMapping.map('noCookies') { gaePluginConvention.appCfg.noCookies }
             gaeAppConfigTaskTemplate.conventionMapping.map('passIn') { gaePluginConvention.appCfg.passIn }
             gaeAppConfigTaskTemplate.conventionMapping.map('password') {
                 // Password from gradle.properties takes precedence
@@ -193,6 +194,7 @@ class GaePlugin implements Plugin<Project> {
             }
             gaeAppConfigTaskTemplate.conventionMapping.map('httpProxy') { gaePluginConvention.appCfg.httpProxy }
             gaeAppConfigTaskTemplate.conventionMapping.map('httpsProxy') { gaePluginConvention.appCfg.httpsProxy }
+            gaeAppConfigTaskTemplate.conventionMapping.map('oauth2') { gaePluginConvention.appCfg.oauth2 }
         }
     }
 
