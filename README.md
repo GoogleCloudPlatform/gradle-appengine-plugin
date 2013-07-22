@@ -78,6 +78,7 @@ The GAE plugin uses the same layout as the [Gradle War plugin](http://gradle.org
 
 The GAE plugin defines the following convention properties in the `gae` closure:
 
+* `httpAddress`: The IP address for the local development server (if server is to be accessed from network). Default is localhost.
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
 * `stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).
 * `stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).

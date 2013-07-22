@@ -236,6 +236,7 @@ class GaePlugin implements Plugin<Project> {
 
     private void configureGaeRun(Project project, GaePluginConvention gaePluginConvention, File explodedWarDirectory) {
         project.tasks.withType(GaeRunTask).whenTaskAdded { GaeRunTask gaeRunTask ->
+            gaeRunTask.conventionMapping.map('httpAddress') { gaePluginConvention.httpAddress }
             gaeRunTask.conventionMapping.map('httpPort') { gaePluginConvention.httpPort }
             gaeRunTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { gaePluginConvention.stopPort }
             gaeRunTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { gaePluginConvention.stopKey }

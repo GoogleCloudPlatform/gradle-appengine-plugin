@@ -21,6 +21,7 @@ package org.gradle.api.plugins.gae.task.internal
  * @author Benjamin Muschko
  */
 class KickStartParams {
+    String httpAddress
     Integer httpPort
     Boolean disableUpdateCheck
     List<String> jvmFlags

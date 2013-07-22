@@ -23,6 +23,7 @@ import org.gradle.api.plugins.gae.task.appcfg.GaeAppConfigConvention
  * @author Benjamin Muschko
  */
 class GaePluginConvention {
+    String httpAddress
     Integer httpPort = 8080
     Integer stopPort = 8081
     String stopKey

@@ -23,6 +23,7 @@ package org.gradle.api.plugins.gae.task.internal
 @Singleton
 class KickStartParamsBuilder {
     static final String MAIN_CLASS = 'com.google.appengine.tools.development.DevAppServerMain'
+    static final String ADDRESS = '--address'
     static final String PORT = '--port'
     static final String DISABLE_UPDATE_CHECK = '--disable_update_check'
     static final String JVM_FLAG = '--jvm_flag'
@@ -35,6 +36,10 @@ class KickStartParamsBuilder {
      */
     List<String> buildCommandLineParams(KickStartParams kickStartParams) {
         List<String> params = [MAIN_CLASS, "$PORT=$kickStartParams.httpPort"]
+
+        if (kickStartParams.httpAddress) {
+            params << "$ADDRESS=${kickStartParams.httpAddress}"
+        }
 
         if(kickStartParams.disableUpdateCheck) {
             params << DISABLE_UPDATE_CHECK

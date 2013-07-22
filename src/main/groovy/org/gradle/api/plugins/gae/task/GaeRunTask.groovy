@@ -15,7 +15,6 @@
  */
 package org.gradle.api.plugins.gae.task
 
-import groovy.util.logging.Slf4j
 import org.gradle.api.GradleException
 import org.gradle.api.InvalidUserDataException
 import org.gradle.api.plugins.gae.task.internal.*
@@ -27,6 +26,7 @@ import org.gradle.api.plugins.gae.task.internal.*
  * @author Benjamin Muschko
  */
 class GaeRunTask extends AbstractGaeTask implements Explodable {
+    String httpAddress
     Integer httpPort
     Integer stopPort
     String stopKey
@@ -95,6 +95,7 @@ class GaeRunTask extends AbstractGaeTask implements Explodable {
     private void runKickStart() {
         KickStartParams kickStartParams = new KickStartParams()
         kickStartParams.httpPort = getHttpPort()
+        kickStartParams.httpAddress = getHttpAddress()
         kickStartParams.disableUpdateCheck = getDisableUpdateCheck()
         kickStartParams.jvmFlags = getJvmFlags()
         kickStartParams.explodedWarDirectory = getExplodedWarDirectory()
