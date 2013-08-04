@@ -1,7 +1,9 @@
-### Version 0.8.1 (July 22, 2013)
-* Expose convention property for setting the host name of development server - - [Issue 52](https://github.com/bmuschko/gradle-gae-plugin/issues/52).
+### Version 0.8.1 (August 4, 2013)
+
+* Expose convention property for setting the host name of development server - [Issue 52](https://github.com/bmuschko/gradle-gae-plugin/issues/52).
 
 ### Version 0.8 (December 9, 2012)
+
 * Expose convention property for setting Java 7 compatibility - [Issue 33](https://github.com/bmuschko/gradle-gae-plugin/issues/33).
 * Expose convention properties for OAuth2 and no cookies flags - [Issue 35](http://github.com/bmuschko/gradle-gae-plugin/issues/35).
 * Renamed tasks `gaeUpload`/`gaeUploadAll` to `gaeUpdate`/`gaeUpdateAll` - [Issue 36](http://github.com/bmuschko/gradle-gae-plugin/issues/36). _Note_: The old task names
