@@ -1,3 +1,9 @@
+### Version 0.9 (August 18, 2013)
+
+* Fixed deprecation warnings.
+* Upgrade to Gradle Nexus plugin 0.3 and Gradle FatJar plugin 0.2.
+* Upgrade to Gradle Wrapper 1.7.
+
 ### Version 0.8.1 (August 4, 2013)
 
 * Expose convention property for setting the host name of development server - [Issue 52](https://github.com/bmuschko/gradle-gae-plugin/issues/52).
