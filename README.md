@@ -26,7 +26,7 @@ example on how to retrieve it from Maven Central:
         }
     }
 
-*Note:* The plugin requires you to set the environment variable _APPENGINE_HOME_ or the system property _google.appengine.sdk_
+*Note:* The plugin requires you to set the environment variable _APPENGINE_HOME_ or the system property _appengine.sdk.root_
 pointing to your current Google App Engine SDK installation. In case you have both variables set the system property takes
 precedence over the environment variable. Alternatively, you can choose to automatically download the SDK by setting the
 convention property `downloadSdk` to `true`. This option requires you to specify the SDK version you want to use by setting
@@ -89,7 +89,7 @@ soon as the server has started. When false, this task blocks until the local dev
 * `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `gaeSdk` and explodes the artifact into
 `~/.gradle/gae-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
-takes precedence over _APPENGINE_HOME_ and the system property _google.appengine.sdk_.
+takes precedence over _APPENGINE_HOME_ and the system property _appengine.sdk.root_.
 * `optimizeWar`: Specifies whether the generated classes and dependencies should be bundled into one single JAR file.
 The [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be applied to your project. Otherwise the flag has no effect.
 
