@@ -1,4 +1,4 @@
-# Gradle GAE plugin
+# Gradle App Engine plugin
 
 ![Google App Engine Logo](https://developers.google.com/appengine/images/appengine_lowres.png)
 
@@ -7,7 +7,7 @@ The plugin provides tasks for uploading, downloading, running and managing [Goog
 
 ## Usage
 
-To use the GAE plugin, include in your build script:
+To use the App Engine plugin, include in your build script:
 
     apply plugin: 'gae'
 
@@ -38,7 +38,7 @@ the configuration `gaeSdk`.
 
 ## Tasks
 
-The GAE plugin defines the following tasks:
+The App Engine plugin defines the following tasks:
 
 * `gaeConfigureBackends`: Dynamically updates settings in `backends.xml` without having to stop the backend. The setting is defined by the project property `setting`.
 * `gaeCronInfo`: Verifies and prints the scheduled task (cron) configuration.
