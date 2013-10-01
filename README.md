@@ -90,6 +90,8 @@ soon as the server has started. When false, this task blocks until the local dev
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `gaeSdk` and explodes the artifact into
 `~/.gradle/gae-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
 takes precedence over _APPENGINE_HOME_ and the system property _google.appengine.sdk_.
+* `optimizeWar`: Specifies whether the generated classes and dependencies should be bundled into one single JAR file.
+The [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be applied to your project. Otherwise the flag has no effect.
 
 Within `gae` you can define optional properties in a closure named `appcfg`:
 
@@ -127,7 +129,6 @@ will be retrieved (defaults to 1 (INFO)).
 requested data, it does not guarantee the file won't contain duplicate error messages. If this argument is not specified,
 the plugin will overwrite the log output file.
 * `outputFile`: The file the logs get written to.
-* `optimizeWar`: Set it to `true` if you want to budle generated classes and dependencies into one single JAR file. [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be installed otherwise the flag has no effect.
 
 The task `gaeUpdate` allows you to specify upload specific settings. Define the tasks' properties in the closure `update`:
 
@@ -138,6 +139,7 @@ The task `gaeUpdate` allows you to specify upload specific settings. Define the 
     gae {
         httpPort = 8085
         optimizeWar = true
+
         appcfg {
             email = 'benjamin.muschko@gmail.com'
             passIn = true

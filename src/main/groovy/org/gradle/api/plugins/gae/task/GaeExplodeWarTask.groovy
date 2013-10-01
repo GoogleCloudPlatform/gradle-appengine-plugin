@@ -33,7 +33,8 @@ class GaeExplodeWarTask extends DefaultTask implements Explodable {
     protected void start() {
         ant.delete(dir: getExplodedWarDirectory())
         ant.unzip(src: getWarArchive(), dest: getExplodedWarDirectory())
-        if(getCleanClasses()){
+
+        if(getCleanClasses()) {
             ant.delete(dir: new File(getExplodedWarDirectory(), 'WEB-INF/classes'))
         }
     }
