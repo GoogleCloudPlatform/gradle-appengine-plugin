@@ -25,7 +25,7 @@ import org.gradle.api.plugins.gae.task.appcfg.GaeAppConfigConvention
 class GaePluginConvention {
     String httpAddress
     Integer httpPort = 8080
-    Integer stopPort = 8081
+    Integer stopPort = 8079
     String stopKey
     Boolean daemon = false
     Boolean disableUpdateCheck = false
