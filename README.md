@@ -138,7 +138,6 @@ The task `gaeUpdate` allows you to specify upload specific settings. Define the 
 
     gae {
         httpPort = 8085
-        optimizeWar = true
 
         appcfg {
             email = 'benjamin.muschko@gmail.com'
