@@ -3,16 +3,16 @@
 ![Google App Engine Logo](https://developers.google.com/appengine/images/appengine_lowres.png)
 
 The plugin provides tasks for uploading, downloading, running and managing [Google App Engine](http://code.google.com/appengine/)
-(GAE) projects in any given Gradle build. It extends the War plugin.
+(App Engine) projects in any given Gradle build. It extends the War plugin.
 
 ## Usage
 
 To use the App Engine plugin, include in your build script:
 
-    apply plugin: 'gae'
+    apply plugin: 'appengine'
 
 The plugin JAR needs to be defined in the classpath of your build script. It is directly available on
-[Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22org.gradle.api.plugins%22%20AND%20a%3A%22gradle-gae-plugin%22).
+[Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.google.appengine%22%20AND%20a%3A%22gradle-appengine-plugin%22).
 Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet shows an
 example on how to retrieve it from Maven Central:
 
@@ -22,7 +22,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'org.gradle.api.plugins:gradle-gae-plugin:0.9'
+            classpath 'com.google.appengine:gradle-appengine-plugin:1.8.6'
         }
     }
 
@@ -30,53 +30,53 @@ example on how to retrieve it from Maven Central:
 pointing to your current Google App Engine SDK installation. In case you have both variables set the system property takes
 precedence over the environment variable. Alternatively, you can choose to automatically download the SDK by setting the
 convention property `downloadSdk` to `true`. This option requires you to specify the SDK version you want to use by setting
-the configuration `gaeSdk`.
+the configuration `appengineSdk`.
 
     dependencies {
-        gaeSdk 'com.google.appengine:appengine-java-sdk:1.7.3'
+        appengineSdk 'com.google.appengine:appengine-java-sdk:1.8.6'
     }
 
 ## Tasks
 
 The App Engine plugin defines the following tasks:
 
-* `gaeConfigureBackends`: Dynamically updates settings in `backends.xml` without having to stop the backend. The setting is defined by the project property `setting`.
-* `gaeCronInfo`: Verifies and prints the scheduled task (cron) configuration.
-* `gaeDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
-* `gaeDownloadApp`: Retrieves the most current version of your application.
-* `gaeDownloadSdk`: Downloads and sets Google App Engine SDK.
-* `gaeEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
-* `gaeExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
-* `gaeFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
-* `gaeListBackends`: Lists all the backends configured for the app specified in `appengine-web.xml`.
-* `gaeLogs`: Retrieves log data for the application running on App Engine.
-* `gaeRollback`: Undoes a partially completed update for the given application.
-* `gaeRollbackBackend`: Rolls back a backend update that was interrupted by the user or stopped due to a configuration error. The backend is defined by the project property `backend`.
-* `gaeRun`: Starts a local development server running your project code. By default the WAR file is created, exploded and used as
+* `appengineConfigureBackends`: Dynamically updates settings in `backends.xml` without having to stop the backend. The setting is defined by the project property `setting`.
+* `appengineCronInfo`: Verifies and prints the scheduled task (cron) configuration.
+* `appengineDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
+* `appengineDownloadApp`: Retrieves the most current version of your application.
+* `appengineDownloadSdk`: Downloads and sets Google App Engine SDK.
+* `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
+* `appengineExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
+* `appengineFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
+* `appengineListBackends`: Lists all the backends configured for the app specified in `appengine-web.xml`.
+* `appengineLogs`: Retrieves log data for the application running on App Engine.
+* `appengineRollback`: Undoes a partially completed update for the given application.
+* `appengineRollbackBackend`: Rolls back a backend update that was interrupted by the user or stopped due to a configuration error. The backend is defined by the project property `backend`.
+* `appengineRun`: Starts a local development server running your project code. By default the WAR file is created, exploded and used as
 web application directory each time you run this task. This behavior can be changed by setting the convention property
 `warDir`.
-* `gaeStartBackend`: Sets the backend state to `START`, allowing it to receive HTTP requests. The backend is defined by the project property `backend`.
-* `gaeStop`: Stops the local development server.
-* `gaeStopBackend`: Sets the backend state to `STOP` and shuts down any running instances. The backend is defined by the project property `backend`.
-* `gaeUpdateAllBackends`: Creates or updates all backends configured in `backends.xml`.
-* `gaeUpdateBackend`: Creates or updates backend configured in `backends.xml`. The backend is defined by the project property `backend`.
-* `gaeUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
-* `gaeUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
-* `gaeUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
-* `gaeUpdateQueues`: Updates the task queue configuration (queue.xml) in App Engine.
-* `gaeUpdate`: Uploads files for an application given the application's root directory. The application ID and version are taken from the appengine-web.xml file.
-* `gaeUpdateAll`: Uploads your application to App Engine and updates all backends by running the task `gaeUpdate` and `gaeUpdateAllBackends`.
-* `gaeVacuumIndexes`: Deletes unused indexes in App Engine server.
-* `gaeVersion`: Prints detailed version information about the SDK, Java and the operating system.
+* `appengineStartBackend`: Sets the backend state to `START`, allowing it to receive HTTP requests. The backend is defined by the project property `backend`.
+* `appengineStop`: Stops the local development server.
+* `appengineStopBackend`: Sets the backend state to `STOP` and shuts down any running instances. The backend is defined by the project property `backend`.
+* `appengineUpdateAllBackends`: Creates or updates all backends configured in `backends.xml`.
+* `appengineUpdateBackend`: Creates or updates backend configured in `backends.xml`. The backend is defined by the project property `backend`.
+* `appengineUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
+* `appengineUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
+* `appengineUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
+* `appengineUpdateQueues`: Updates the task queue configuration (queue.xml) in App Engine.
+* `appengineUpdate`: Uploads files for an application given the application's root directory. The application ID and version are taken from the appengine-web.xml file.
+* `appengineUpdateAll`: Uploads your application to App Engine and updates all backends by running the task `appengineUpdate` and `appengineUpdateAllBackends`.
+* `appengineVacuumIndexes`: Deletes unused indexes in App Engine server.
+* `appengineVersion`: Prints detailed version information about the SDK, Java and the operating system.
 
 ## Project layout
 
-The GAE plugin uses the same layout as the [Gradle War plugin](http://gradle.org/docs/current/userguide/war_plugin.html). The only difference is the addition of the `functionalTest` source set
-(located in `src/functionalTest` by default) which is used by the `gaeFunctionalTest` task.
+The App Engine plugin uses the same layout as the [Gradle War plugin](http://gradle.org/docs/current/userguide/war_plugin.html). The only difference is the addition of the `functionalTest` source set
+(located in `src/functionalTest` by default) which is used by the `appengineFunctionalTest` task.
 
 ## Convention properties
 
-The GAE plugin defines the following convention properties in the `gae` closure:
+The App Engine plugin defines the following convention properties in the `appengine` closure:
 
 * `httpAddress`: The IP address for the local development server (if server is to be accessed from network). Default is localhost.
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
@@ -87,13 +87,13 @@ soon as the server has started. When false, this task blocks until the local dev
 * `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
 * `disableUpdateCheck`: Disables the Google App Engine update check if set to true.
 * `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
-* `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `gaeSdk` and explodes the artifact into
-`~/.gradle/gae-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
+* `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `appengineSdk` and explodes the artifact into
+`~/.gradle/appengine-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
 takes precedence over _APPENGINE_HOME_ and the system property _appengine.sdk.root_.
 * `optimizeWar`: Specifies whether the generated classes and dependencies should be bundled into one single JAR file.
 The [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be applied to your project. Otherwise the flag has no effect.
 
-Within `gae` you can define optional properties in a closure named `appcfg`:
+Within `appengine` you can define optional properties in a closure named `appcfg`:
 
 * `email`: The email address of the Google account of an administrator for the application, for actions that require signing in.
 If omitted and no cookie is stored from a previous use of the command, the command will prompt for this value.
@@ -104,20 +104,20 @@ If omitted and no cookie is stored from a previous use of the command, the comma
 `password` was provided then this value will always be true.
 * `password`: The password in plain text to be used whenever a task requires one. The password is only applied if the `email`
 convention property was provided also. Alternatively, you can set the password in your `gradle.properties` via the property
-`gaePassword`. The password in `gradle.properties` takes precedence over the one set in this convention property.
+`appenginePassword`. The password in `gradle.properties` takes precedence over the one set in this convention property.
 * `httpProxy`: Use the given HTTP proxy to contact App Engine.
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.
 * `oauth2`: Use OAuth2 authentication instead of password-based authentication.
 
-The task `gaeDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
+The task `appengineDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
 closure `app`:
 
 * `id`: The application ID.
 * `version`: The current application version (defaults to current default version).
 * `outputDirectory`: The directory where you wish to save the files (defaults to `build/downloaded-app`).
 
-The task `gaeLogs` requires you to at least define the file to write the logs to. Define the tasks' properties in the
+The task `appengineLogs` requires you to at least define the file to write the logs to. Define the tasks' properties in the
 closure `logs`:
 
 * `numDays`: The number of days of log data to retrieve, ending on the current date at midnight UTC. A value of 0 retrieves
@@ -130,13 +130,13 @@ requested data, it does not guarantee the file won't contain duplicate error mes
 the plugin will overwrite the log output file.
 * `outputFile`: The file the logs get written to.
 
-The task `gaeUpdate` allows you to specify upload specific settings. Define the tasks' properties in the closure `update`:
+The task `appengineUpdate` allows you to specify upload specific settings. Define the tasks' properties in the closure `update`:
 
 * `useJava7`: Java 7 compatibility flag (default to `false` if not set). This feature will require a App Engine SDK of >= 1.7.3.
 
 ### Example
 
-    gae {
+    appengine {
         httpPort = 8085
 
         appcfg {
@@ -156,9 +156,9 @@ The task `gaeUpdate` allows you to specify upload specific settings. Define the 
 
 ## FAQ
 
-**Can I use the plugin with a [Gaelyk](http://gaelyk.appspot.com/) project?**
+**Can I use the plugin with a [Gaelyk](http://appenginelyk.appspot.com/) project?**
 
-Gaelyk's [template project](http://gaelyk.appspot.com/tutorial/template-project) uses this plugin out-of-the-box so no
+Gaelyk's [template project](http://appenginelyk.appspot.com/tutorial/template-project) uses this plugin out-of-the-box so no
 additional configuration needs to be done. If you start your project from scratch and decide to use the plugin please refer
 to the following sections to configure it properly.
 
@@ -182,7 +182,7 @@ Yes, you just have to configure the WAR plugin to point to the correct web appli
 When editing a Groovlets/Groovy templates in Gaelyk the server automatically deploys the change and you see it take effect almost instantly.
 The plugin provides support for that. Simply set the `warDir` convention property and leave the server running.
 
-    gae {
+    appengine {
         warDir = file('war')
     }
 
@@ -191,7 +191,7 @@ The plugin provides support for that. Simply set the `warDir` convention propert
 Starting with version 1.2 Gaelyk adopted Gradle's default directory structure. The following changes are required to
 leverage Gaelyk's hot-reloading feature.
 
-    gae {
+    appengine {
         warDir = file('src/main/webapp')
     }
 
@@ -203,18 +203,18 @@ leverage Gaelyk's hot-reloading feature.
 You can use the convention property `jvmFlags` to set the JVM debug parameters. Make sure to set the TCP port you want
 your JVM to listen on. The following example show how to set the JVM flags to listen on port `8000`.
 
-    gae {
+    appengine {
         jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
     }
 
 <br>
 **How do I run functional tests on the local development server?**
 
-If you want to execute your tests in the container alongside the rest of your application you have to configure the `gaeRun` task
-to run in `daemon` mode. Starting with version 0.7 of the plugin this has become even easier. It provides the task `gaeFunctionalTest`
+If you want to execute your tests in the container alongside the rest of your application you have to configure the `appengineRun` task
+to run in `daemon` mode. Starting with version 0.7 of the plugin this has become even easier. It provides the task `appengineFunctionalTest`
 which lets you define your functional test dependencies via the configuration `functionalTestCompile`. On top of that the task
 has been fully integrated into the build lifecycle.
 
 One of the most prominent functional testing libraries in the Groovy ecosystem is [Geb](http://www.gebish.org/), an expressive
-and powerful browser automation solution. Please refer to this short and sweet [tutorial](http://blog.proxerd.pl/article/funcational-testing-of-gae-lyk-applications-with-geb)
+and powerful browser automation solution. Please refer to this short and sweet [tutorial](http://blog.proxerd.pl/article/funcational-testing-of-appengine-lyk-applications-with-geb)
 for a quickstart.
