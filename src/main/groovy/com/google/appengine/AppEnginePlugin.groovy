@@ -28,7 +28,7 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.execution.TaskExecutionGraph
 import org.gradle.api.plugins.*
-import org.gradle.api.plugins.appengine.task.*
+import com.google.appengine.task.*
 import com.google.appengine.task.appcfg.*
 import com.google.appengine.task.appcfg.backends.*
 import org.gradle.api.tasks.SourceSet
