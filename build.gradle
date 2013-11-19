@@ -8,6 +8,12 @@ targetCompatibility = compatibilityVersion
 group = 'com.google.appengine'
 version = '1.8.7'
 
+gradle.taskGraph.whenReady { taskGraph ->
+    if (!taskGraph.hasTask(signArchives)) {
+        version = "${version}-SNAPSHOT"
+    }
+}
+
 buildscript {
     repositories {
         mavenCentral()
@@ -26,6 +32,7 @@ repositories {
 dependencies {
     compile localGroovy()
     compile gradleApi()
+    compile "com.google.appengine:appengine-local-endpoints:${version}"
     testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
 }
 
@@ -115,4 +122,8 @@ gradle.taskGraph.whenReady { taskGraph ->
         allprojects { ext."signing.secretKeyRingFile" = file }
         allprojects { ext."signing.password" = password }
     }
+}
+
+test {
+    systemProperty "appengine.version", "${version}"
 }

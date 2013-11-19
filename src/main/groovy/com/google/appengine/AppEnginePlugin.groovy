@@ -21,6 +21,9 @@ import com.google.appengine.task.ExplodeAppTask
 import com.google.appengine.task.RunTask
 import com.google.appengine.task.StopTask
 import com.google.appengine.task.WebAppDirTask
+import com.google.appengine.task.endpoints.EndpointsTask
+import com.google.appengine.task.endpoints.GetClientLibsTask
+import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -126,6 +129,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureDeleteBackend(project)
         configureConfigureBackends(project)
         configureUpdateAll(project)
+        configureEndpoints(project, explodedAppDirectory, appenginePluginConvention)
         configureFunctionalTest(project, appenginePluginConvention)
     }
 
@@ -423,6 +427,32 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineUpdateAllTask.dependsOn project.appengineUpdate, project.appengineUpdateAllBackends
     }
 
+    public void configureEndpoints(Project project, File explodedWarDirectory, AppEnginePluginConvention appEnginePluginConvention) {
+        project.tasks.withType(EndpointsTask).whenTaskAdded { EndpointsTask endpointsTask ->
+            endpointsTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
+            endpointsTask.conventionMapping.map("discoveryDocFormat") { appEnginePluginConvention.endpoints.discoveryDocFormat }
+        }
+
+        GetDiscoveryDocsTask endpointsGetDiscoveryDocs = project.tasks.create("appengineEndpointsGetDiscoveryDocs", GetDiscoveryDocsTask)
+        endpointsGetDiscoveryDocs.description = 'Generate Endpoints discovery docs for classes defined in web.xml'
+        endpointsGetDiscoveryDocs.group = APPENGINE_GROUP
+
+        GetClientLibsTask endpointsGetClientLibs = project.tasks.create("appengineEndpointsGetClientLibs", GetClientLibsTask)
+        endpointsGetClientLibs.description = 'Generate Endpoints java client libraries for classes defined in web.xml'
+        endpointsGetClientLibs.group = APPENGINE_GROUP
+
+        if(appEnginePluginConvention.endpoints.getDiscoveryOnBuild) {
+            endpointsGetDiscoveryDocs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
+            project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs);
+
+        }
+        if(appEnginePluginConvention.endpoints.getClientLibsOnBuild) {
+            endpointsGetClientLibs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
+            project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetClientLibs);
+        }
+
+    }
+
     private void configureFunctionalTest(Project project, AppEnginePluginConvention convention) {
         SourceSet functionalSourceSet = addFunctionalTestConfigurationsAndSourceSet(project)
 
@@ -488,3 +518,4 @@ class AppEnginePlugin implements Plugin<Project> {
         }
     }
 }
+

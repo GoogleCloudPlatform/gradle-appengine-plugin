@@ -16,6 +16,7 @@
 package com.google.appengine
 
 import com.google.appengine.task.appcfg.AppConfigConvention
+import com.google.appengine.task.endpoints.EndpointsConvention
 
 /**
  * Defines App Engine plugin convention.
@@ -33,6 +34,7 @@ class AppEnginePluginConvention {
     File warDir
     Boolean downloadSdk = false
     AppConfigConvention appCfg = new AppConfigConvention()
+    EndpointsConvention endpoints = new EndpointsConvention()
 
     def appengine(Closure closure) {
         closure.delegate = this
@@ -60,6 +62,12 @@ class AppEnginePluginConvention {
     def update(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = appCfg.update
+        closure()
+    }
+
+    def endpoints(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = endpoints
         closure()
     }
 }

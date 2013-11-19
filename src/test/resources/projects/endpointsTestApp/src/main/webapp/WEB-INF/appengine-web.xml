@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+
+    Copyright 2012 Google Inc. All Rights Reserved.
+
+-->
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+    <application>gradle-appengine-test-app</application>
+    <version>This should be overridden by the plugin.</version>
+    <threadsafe>true</threadsafe>
+</appengine-web-app>
