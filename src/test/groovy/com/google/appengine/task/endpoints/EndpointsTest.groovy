@@ -28,6 +28,9 @@ import org.junit.Test
  */
 class EndpointsTest extends AppIntegrationTest {
 
+    public static final String TEST_APP = "endpointsTestApp";
+
+    /** Generate endpoints docs and libs against a minimal endpoints project */
     @Test
     void smokeTest() {
 
@@ -51,12 +54,12 @@ class EndpointsTest extends AppIntegrationTest {
     }
 
     @Override
-    protected String getAppResourceBaseDir() {
-        APP_BASE_DIR + File.separatorChar + "endpointsTestApp"
+    protected String getTestAppName() {
+        TEST_APP
     }
 
     @Override
-    protected String[] preTestTasks() {
+    protected String[] getPreTestTasks() {
         ["appengineExplodeApp"]
     }
 }

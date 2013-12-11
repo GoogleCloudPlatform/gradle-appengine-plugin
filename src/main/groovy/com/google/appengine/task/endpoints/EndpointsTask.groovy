@@ -22,6 +22,7 @@ import org.gradle.api.tasks.InputDirectory
 
 /**
  * Abstract Endpoints task to run endpoints commands on the EndpointsTool
+ * https://developers.google.com/appengine/docs/java/endpoints/endpoints_tool
  *
  * @author Appu Goundan
  */
@@ -63,6 +64,6 @@ abstract class EndpointsTask extends AbstractTask {
     String getClasspath() {
         File libDir = new File(getExplodedAppDirectory(), "WEB-INF/lib/*")
         File classesDir = new File(getExplodedAppDirectory(), "WEB-INF/classes")
-        return libDir.canonicalPath + File.pathSeparator + classesDir.canonicalPath
+        return classesDir.canonicalPath + File.pathSeparator + libDir.canonicalPath
     }
 }

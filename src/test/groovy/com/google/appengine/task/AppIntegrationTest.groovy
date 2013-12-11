@@ -35,12 +35,13 @@ abstract class AppIntegrationTest {
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder()
 
+    /** Create the temp directory to copy the project and run gradle on */
     @Before
     void setUp() {
         projectRoot = tempFolder.getRoot()
         FileUtils.copyDirectory(new File(getClass().getClassLoader().getResource(getAppResourceBaseDir()).toURI()), projectRoot)
         replaceVersions()
-        String[] tasksToRun = preTestTasks()
+        String[] tasksToRun = getPreTestTasks()
         if (tasksToRun != null) {
             ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(projectRoot).connect()
             try {
@@ -61,9 +62,14 @@ abstract class AppIntegrationTest {
         }
     }
 
+    /** Name of the test project directory, subclasses implement this to copy the correct project **/
+    abstract protected getTestAppName()
+
     /** Location of the App Engine project to test against **/
-    abstract protected String getAppResourceBaseDir();
+    protected String getAppResourceBaseDir() {
+        APP_BASE_DIR + File.separatorChar + getTestAppName()
+    }
 
     /** List of tasks to run during setup **/
-    abstract protected String[] preTestTasks();
+    abstract protected String[] getPreTestTasks()
 }

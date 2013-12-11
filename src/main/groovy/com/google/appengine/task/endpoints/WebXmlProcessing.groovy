@@ -50,7 +50,7 @@ class WebXmlProcessing {
 
     private static String[] getClassNames(NodeChild servicesParam) {
         assert servicesParam.name() == "init-param"
-        return servicesParam."param-value".text().split(",")
+        return servicesParam."param-value".text().trim().split(",")
     }
 
     public static NodeChild getSystemServiceServletMapping(GPathResult root, NodeChild servlet) {
