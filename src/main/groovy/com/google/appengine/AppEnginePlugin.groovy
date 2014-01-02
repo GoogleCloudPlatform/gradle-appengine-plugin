@@ -78,6 +78,8 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String APPENGINE_CONFIGURE_BACKENDS = 'appengineConfigureBackends'
     static final String APPENGINE_UPDATE_ALL = 'appengineUpdateAll'
     static final String APPENGINE_FUNCTIONAL_TEST = 'appengineFunctionalTest'
+    static final String APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS = "appengineEndpointsGetDiscoveryDocs"
+    static final String APPENGINE_ENDPOINTS_GET_CLIENT_LIBS = "appengineEndpointsGetClientLibs"
     static final String GRADLE_USER_PROP_PASSWORD = 'appenginePassword'
     static final String STOP_PORT_CONVENTION_PARAM = 'stopPort'
     static final String STOP_KEY_CONVENTION_PARAM = 'stopKey'
@@ -96,7 +98,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
         AppEnginePluginConvention appenginePluginConvention = new AppEnginePluginConvention()
         project.convention.plugins.appengine = appenginePluginConvention
-        
+
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedAppDirectory = getExplodedAppDirectory(project)
         File downloadedAppDirectory = getDownloadedAppDirectory(project)
@@ -433,24 +435,24 @@ class AppEnginePlugin implements Plugin<Project> {
             endpointsTask.conventionMapping.map("discoveryDocFormat") { appEnginePluginConvention.endpoints.discoveryDocFormat }
         }
 
-        GetDiscoveryDocsTask endpointsGetDiscoveryDocs = project.tasks.create("appengineEndpointsGetDiscoveryDocs", GetDiscoveryDocsTask)
+        GetDiscoveryDocsTask endpointsGetDiscoveryDocs = project.tasks.create(APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS, GetDiscoveryDocsTask)
         endpointsGetDiscoveryDocs.description = 'Generate Endpoints discovery docs for classes defined in web.xml'
         endpointsGetDiscoveryDocs.group = APPENGINE_GROUP
 
-        GetClientLibsTask endpointsGetClientLibs = project.tasks.create("appengineEndpointsGetClientLibs", GetClientLibsTask)
+        GetClientLibsTask endpointsGetClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_GET_CLIENT_LIBS, GetClientLibsTask)
         endpointsGetClientLibs.description = 'Generate Endpoints java client libraries for classes defined in web.xml'
         endpointsGetClientLibs.group = APPENGINE_GROUP
 
-        if(appEnginePluginConvention.endpoints.getDiscoveryOnBuild) {
-            endpointsGetDiscoveryDocs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
-            project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs);
-
+        project.gradle.projectsEvaluated {
+            if(appEnginePluginConvention.endpoints.getDiscoveryOnBuild) {
+                endpointsGetDiscoveryDocs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
+                project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs);
+            }
+            if(appEnginePluginConvention.endpoints.getClientLibsOnBuild) {
+                endpointsGetClientLibs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
+                project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetClientLibs);
+            }
         }
-        if(appEnginePluginConvention.endpoints.getClientLibsOnBuild) {
-            endpointsGetClientLibs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
-            project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetClientLibs);
-        }
-
     }
 
     private void configureFunctionalTest(Project project, AppEnginePluginConvention convention) {
