@@ -46,11 +46,17 @@ class EndpointsTest extends AppIntegrationTest {
         }
         File webInf = new File(projectRoot, "build/exploded-app/WEB-INF");
         ["mysimpleendpoint-v1-rest.discovery",
-         "mysimpleendpoint-v1-rpc.discovery",
-         "mysimpleendpoint-v1-java.zip"].each {
-            println "checking ${it} in ${webInf.getCanonicalPath()}"
-            Assert.assertTrue(new File(webInf, it).exists())
+         "mysimpleendpoint-v1-rpc.discovery"].each {
+            assertExists(webInf, it)
         }
+        File clientLib = new File(projectRoot, "build/client-libs");
+        assertExists(clientLib, "mysimpleendpoint-v1-java.zip")
+    }
+
+    protected void assertExists(File dir, String fileName) {
+        println "checking ${fileName} in ${dir.getCanonicalPath()}"
+        Assert.assertTrue(new File(dir, fileName).exists())
+
     }
 
     @Override

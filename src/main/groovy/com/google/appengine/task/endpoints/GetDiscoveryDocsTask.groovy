@@ -31,6 +31,7 @@ class GetDiscoveryDocsTask extends EndpointsTask {
         if (discoveryDocFormat) {
             discoveryDocFormat.each { format ->
                 List<String> extras = []
+                extras << "-o" << new File(getExplodedAppDirectory(), "WEB-INF").canonicalPath
                 extras << "-f" << format
                 runEndpointsCommand("get-discovery-doc", extras)
             }

@@ -31,7 +31,6 @@ import org.gradle.api.artifacts.Configuration
 import org.gradle.api.artifacts.ConfigurationContainer
 import org.gradle.api.execution.TaskExecutionGraph
 import org.gradle.api.plugins.*
-import com.google.appengine.task.*
 import com.google.appengine.task.appcfg.*
 import com.google.appengine.task.appcfg.backends.*
 import org.gradle.api.tasks.SourceSet
@@ -85,6 +84,7 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String STOP_KEY_CONVENTION_PARAM = 'stopKey'
     static final String EXPLODED_WAR_DIR_CONVENTION_PARAM = 'explodedAppDirectory'
     static final String EXPLODED_SDK_DIR_CONVENTION_PARAM = 'explodedSdkDirectory'
+    static final String ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM = "endpointsClientLibDirectory"
     static final String BACKEND_PROJECT_PROPERTY = 'backend'
     static final String SETTING_PROJECT_PROPERTY = 'setting'
     static final String FUNCTIONAL_TEST_COMPILE_CONFIGURATION = 'functionalTestCompile'
@@ -102,6 +102,7 @@ class AppEnginePlugin implements Plugin<Project> {
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedAppDirectory = getExplodedAppDirectory(project)
         File downloadedAppDirectory = getDownloadedAppDirectory(project)
+        File endpointsClientLibDirectory = getEndpointsClientLibDirectory(project)
         configureDownloadSdk(project, explodedSdkDirectory)
         configureWebAppDir(project)
         configureAppConfig(project, appenginePluginConvention)
@@ -131,7 +132,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureDeleteBackend(project)
         configureConfigureBackends(project)
         configureUpdateAll(project)
-        configureEndpoints(project, explodedAppDirectory, appenginePluginConvention)
+        configureEndpoints(project, explodedAppDirectory, endpointsClientLibDirectory, appenginePluginConvention)
         configureFunctionalTest(project, appenginePluginConvention)
     }
 
@@ -145,6 +146,10 @@ class AppEnginePlugin implements Plugin<Project> {
 
     private File getDownloadedAppDirectory(Project project) {
         getBuildSubDirectory(project, 'downloaded-app')
+    }
+
+    private File getEndpointsClientLibDirectory(Project project) {
+        getBuildSubDirectory(project, 'client-libs');
     }
 
     private File getBuildSubDirectory(Project project, String subDirectory) {
@@ -429,9 +434,10 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineUpdateAllTask.dependsOn project.appengineUpdate, project.appengineUpdateAllBackends
     }
 
-    public void configureEndpoints(Project project, File explodedWarDirectory, AppEnginePluginConvention appEnginePluginConvention) {
+    public void configureEndpoints(Project project, File explodedWarDirectory, File endpointsClientLibDirectory, AppEnginePluginConvention appEnginePluginConvention) {
         project.tasks.withType(EndpointsTask).whenTaskAdded { EndpointsTask endpointsTask ->
             endpointsTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
+            endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
             endpointsTask.conventionMapping.map("discoveryDocFormat") { appEnginePluginConvention.endpoints.discoveryDocFormat }
         }
 
@@ -444,7 +450,7 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsGetClientLibs.group = APPENGINE_GROUP
 
         project.gradle.projectsEvaluated {
-            if(appEnginePluginConvention.endpoints.getDiscoveryOnBuild) {
+            if(appEnginePluginConvention.endpoints.getDiscoveryDocsOnBuild) {
                 endpointsGetDiscoveryDocs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
                 project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs);
             }

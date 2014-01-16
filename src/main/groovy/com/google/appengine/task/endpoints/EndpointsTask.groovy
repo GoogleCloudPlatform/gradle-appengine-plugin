@@ -19,6 +19,7 @@ import com.google.api.server.spi.tools.EndpointsTool
 import com.google.appengine.task.AbstractTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
 
 /**
  * Abstract Endpoints task to run endpoints commands on the EndpointsTool
@@ -28,6 +29,7 @@ import org.gradle.api.tasks.InputDirectory
  */
 abstract class EndpointsTask extends AbstractTask {
     @InputDirectory File explodedAppDirectory;
+    @OutputDirectory File endpointsClientLibDirectory
     List<String> discoveryDocFormat
 
     void runEndpointsCommand(String action, List<String> extraParams) {
@@ -52,7 +54,6 @@ abstract class EndpointsTask extends AbstractTask {
     List<String> getCommonParams() {
         List<String> params = []
         params << "-cp" << getClasspath()
-        params << "-o" << new File(getExplodedAppDirectory(), "WEB-INF").canonicalPath
         params << "-w" << getExplodedAppDirectory().canonicalPath
         return params;
     }

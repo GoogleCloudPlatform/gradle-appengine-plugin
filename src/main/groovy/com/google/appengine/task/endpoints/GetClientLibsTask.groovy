@@ -16,6 +16,7 @@
 package com.google.appengine.task.endpoints
 
 import org.gradle.api.Incubating
+import org.gradle.api.tasks.OutputDirectory
 
 /**
  * Endpoints task to download Java client libraries from the Endpoints service
@@ -29,7 +30,9 @@ class GetClientLibsTask extends EndpointsTask {
     void executeTask() {
         logger.debug "Generating Client Libraries"
         List<String> extras = []
+        extras << "-o" << endpointsClientLibDirectory.getCanonicalPath()
         extras << "-l" << "java"
+        extras << "-bs" << "gradle"
         runEndpointsCommand("get-client-lib", extras)
     }
 }

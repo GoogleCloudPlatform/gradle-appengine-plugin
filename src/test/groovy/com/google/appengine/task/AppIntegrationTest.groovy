@@ -56,10 +56,16 @@ abstract class AppIntegrationTest {
     /** Used to replace version in gradle build files to current App Engine version **/
     protected replaceVersions() {
         new File(projectRoot, "build.gradle").withWriter { w ->
-            new File(projectRoot, "build.gradle.template").eachLine { line ->
+            new File(projectRoot, getBuildGradleTemplate()).eachLine { line ->
                 w << line.replaceAll("@@version@@", System.getProperty("appengine.version")) << "\n"
             }
         }
+    }
+
+    /** Override this if a test project has multiple build.gradle templates but a single project source,
+     * see replaceVersions() **/
+    protected String getBuildGradleTemplate() {
+        return "build.gradle.template"
     }
 
     /** Name of the test project directory, subclasses implement this to copy the correct project **/
@@ -72,4 +78,5 @@ abstract class AppIntegrationTest {
 
     /** List of tasks to run during setup **/
     abstract protected String[] getPreTestTasks()
+
 }

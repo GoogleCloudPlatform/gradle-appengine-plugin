@@ -22,6 +22,7 @@ package com.google.appengine.task.endpoints
  */
 class EndpointsConvention {
     List<String> discoveryDocFormat = ["rpc", "rest"]
-    boolean getDiscoveryOnBuild = false
+    boolean getDiscoveryDocsOnBuild = false
     boolean getClientLibsOnBuild = false
+
 }
