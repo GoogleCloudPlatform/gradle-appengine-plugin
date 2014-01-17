@@ -16,7 +16,6 @@
 package com.google.appengine.task.endpoints
 
 import org.gradle.api.Incubating
-import org.gradle.api.tasks.OutputDirectory
 
 /**
  * Endpoints task to download Java client libraries from the Endpoints service
