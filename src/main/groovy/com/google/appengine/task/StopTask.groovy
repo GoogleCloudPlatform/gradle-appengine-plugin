@@ -30,12 +30,12 @@ import org.gradle.api.tasks.TaskAction
 class StopTask extends DefaultTask {
     String httpAddress
     Integer httpPort
+    static final String SHUTDOWN_PATH = "/_ah/admin/quit"
 
     @TaskAction
     void stop() throws GradleScriptException {
         HttpURLConnection connection = null;
-        Integer port = Objects.firstNonNull(httpPort, 8080);
-        URL url = new URL("http", Objects.firstNonNull(httpAddress, "localhost"), port, "/_ah/admin/quit");
+        URL url = new URL("http", httpAddress, httpPort, SHUTDOWN_PATH);
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
