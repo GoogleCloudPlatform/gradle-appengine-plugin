@@ -34,24 +34,27 @@ class StopTask extends DefaultTask {
     @TaskAction
     void stop() throws GradleScriptException {
         HttpURLConnection connection = null;
+        Integer port = Objects.firstNonNull(httpPort, 8080);
+        URL url = new URL("http", Objects.firstNonNull(httpAddress, "localhost"), port, "/_ah/admin/quit");
         try {
-            Integer port = Objects.firstNonNull(httpPort, 8080);
-            URL url = new URL("http", Objects.firstNonNull(httpAddress, "localhost"), port, "/_ah/admin/quit");
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);
             connection.setDoInput(true);
             connection.setRequestMethod("POST");
             connection.getOutputStream().write(0);
             ByteStreams.toByteArray(connection.getInputStream());
-            connection.disconnect();
-            logger.warn("Shutting down devappserver on port " + port);
+            logger.lifecycle("Shutting down devappserver on port : " + port);
             Thread.sleep(2000);
         } catch (MalformedURLException e) {
             throw new GradleScriptException("URL malformed attempting to stop the devappserver : " + e.getMessage());
         } catch (IOException e) {
-            logger.debug("Could not contact the devappserver to shut it down.  It is most likely not running anymore. ", e);
+            logger.info("Could not contact the devappserver at ${url} to shut it down.  It is most likely not running anymore. ", e);
         } catch (InterruptedException e) {
             Throwables.propagate(e);
+        } finally {
+            if(connection != null) {
+                connection.disconnect();
+            }
         }
     }
 }

@@ -37,6 +37,7 @@ class RunTask extends AbstractTask implements Explodable {
     Boolean disableUpdateCheck
     List<String> jvmFlags
     final KickStartSynchronizer kickStartSynchronizer = new KickStartSynchronizer()
+    private static final String DEV_SERVER_STARTED = 'Dev App Server is now running'
 
     @Override
     void validateConfiguration() {
@@ -154,7 +155,7 @@ class RunTask extends AbstractTask implements Explodable {
         }
 
         private void checkServerStartupProgress(final String line) {
-            if(line.contains('Dev App Server is now running')) {
+            if(line.contains(DEV_SERVER_STARTED)) {
                 RunTask.this.kickStartSynchronizer.resume()
             }
         }
