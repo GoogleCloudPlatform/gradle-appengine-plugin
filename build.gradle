@@ -28,6 +28,7 @@ dependencies {
     compile localGroovy()
     compile gradleApi()
     compile "com.google.appengine:appengine-local-endpoints:${version}"
+    compile 'com.google.guava:guava:16.0'
     testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
 }
 

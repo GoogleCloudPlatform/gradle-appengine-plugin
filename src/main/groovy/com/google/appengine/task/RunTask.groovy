@@ -17,8 +17,10 @@ package com.google.appengine.task
 
 import org.gradle.api.GradleException
 import org.gradle.api.InvalidUserDataException
-import com.google.appengine.task.internal.*
+import org.gradle.api.logging.Logger
+import org.gradle.api.logging.Logging
 
+import com.google.appengine.task.internal.*
 /**
  * Google App Engine task starting up a local development server.
  *
@@ -40,7 +42,6 @@ class RunTask extends AbstractTask implements Explodable {
     void validateConfiguration() {
         super.validateConfiguration()
         validatePort(getHttpPort(), 'HTTP')
-        validatePort(getStopPort(), 'Stop')
     }
 
     private void validatePort(Integer port, String type) {
@@ -65,12 +66,10 @@ class RunTask extends AbstractTask implements Explodable {
             logger.info 'Starting local development server...'
 
             if(!getDaemon()) {
-                startShutdownMonitor(new SystemExitShutdownCallback())
                 runKickStart()
             }
             else {
                 Thread kickStartThread = new Thread(new KickStartRunnable())
-                startShutdownMonitor(new ThreadShutdownCallback(kickStartThread))
                 kickStartThread.start()
 
                 // Pause current thread until local development server is fully started
@@ -85,11 +84,6 @@ class RunTask extends AbstractTask implements Explodable {
                 logger.info 'Local development server exiting.'
             }
         }
-    }
-
-    private void startShutdownMonitor(ShutdownCallback shutdownCallback) {
-        Thread shutdownMonitor = new ShutdownMonitor(getStopPort(), getStopKey(), shutdownCallback)
-        shutdownMonitor.start()
     }
 
     private void runKickStart() {
@@ -138,6 +132,12 @@ class RunTask extends AbstractTask implements Explodable {
         }
 
         private class OutStreamHandler implements StreamOutputHandler {
+            final Logger logger;
+
+            OutStreamHandler() {
+              logger = Logging.getLogger("DevAppServer Out");
+            }
+
             @Override
             void handleLine(String line) {
                 logger.info line
@@ -154,7 +154,7 @@ class RunTask extends AbstractTask implements Explodable {
         }
 
         private void checkServerStartupProgress(final String line) {
-            if(line.contains('The server is running')) {
+            if(line.contains('Dev App Server is now running')) {
                 RunTask.this.kickStartSynchronizer.resume()
             }
         }

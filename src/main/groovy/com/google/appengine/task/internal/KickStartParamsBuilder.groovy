@@ -27,6 +27,7 @@ class KickStartParamsBuilder {
     static final String PORT = '--port'
     static final String DISABLE_UPDATE_CHECK = '--disable_update_check'
     static final String JVM_FLAG = '--jvm_flag'
+    static final String REMOTE_SHUTDOWN_FLAG = "--allow_remote_shutdown"
 
     /**
      * Builds command line parameters.
@@ -44,6 +45,8 @@ class KickStartParamsBuilder {
         if(kickStartParams.disableUpdateCheck) {
             params << DISABLE_UPDATE_CHECK
         }
+
+        params << REMOTE_SHUTDOWN_FLAG
 
         if(kickStartParams.jvmFlags) {
             kickStartParams.jvmFlags.each { jvmFlag ->

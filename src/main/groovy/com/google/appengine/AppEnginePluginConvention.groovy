@@ -26,8 +26,10 @@ import com.google.appengine.task.endpoints.EndpointsConvention
 class AppEnginePluginConvention {
     String httpAddress
     Integer httpPort = 8080
-    Integer stopPort = 8079
-    String stopKey
+    @Deprecated
+    Integer stopPort = 8079 // this is no longer used with the new devappserver
+    @Deprecated
+    String stopKey // this is no longer used with the new devappserver
     Boolean daemon = false
     Boolean disableUpdateCheck = false
     List<String> jvmFlags = []

@@ -247,8 +247,10 @@ class AppEnginePlugin implements Plugin<Project> {
         StopTask appengineStopTask = project.tasks.create(APPENGINE_STOP, StopTask)
         appengineStopTask.description = 'Stops local App Engine development server.'
         appengineStopTask.group = APPENGINE_GROUP
-        appengineStopTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { appenginePluginConvention.stopPort }
-        appengineStopTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { appenginePluginConvention.stopKey }
+        appengineStopTask.conventionMapping.map('httpAddress') { appenginePluginConvention.httpAddress }
+        appengineStopTask.conventionMapping.map('httpPort') { appenginePluginConvention.httpPort }
+        //appengineStopTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { appenginePluginConvention.stopPort }
+        //appengineStopTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { appenginePluginConvention.stopKey }
     }
 
     private void configureEnhance(Project project) {

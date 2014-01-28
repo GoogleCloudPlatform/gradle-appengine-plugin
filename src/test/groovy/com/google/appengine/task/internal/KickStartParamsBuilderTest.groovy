@@ -31,10 +31,11 @@ class KickStartParamsBuilderTest extends Specification {
             List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
 
         then: "the basic parameters are set up"
-            params.size() == 3
+            params.size() == 4
             params.get(0) == KickStartParamsBuilder.MAIN_CLASS
             params.get(1) == "$KickStartParamsBuilder.PORT=8080"
-            params.get(2) == '/dev/main/war'
+            params.get(2) == KickStartParamsBuilder.REMOTE_SHUTDOWN_FLAG
+            params.get(3) == '/dev/main/war'
     }
 
     def "Build parameters for minimal arguments plus disable update check"() {
@@ -46,11 +47,12 @@ class KickStartParamsBuilderTest extends Specification {
             List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
 
         then: "the basic parameters are set up"
-            params.size() == 4
+            params.size() == 5
             params.get(0) == KickStartParamsBuilder.MAIN_CLASS
             params.get(1) == "$KickStartParamsBuilder.PORT=8080"
             params.get(2) == KickStartParamsBuilder.DISABLE_UPDATE_CHECK
-            params.get(3) == '/dev/main/war'
+            params.get(3) == KickStartParamsBuilder.REMOTE_SHUTDOWN_FLAG
+            params.get(4) == '/dev/main/war'
     }
 
     def "Build parameters for minimal arguments plus disable update check, httAddress and additional JVM flags"() {
@@ -64,15 +66,16 @@ class KickStartParamsBuilderTest extends Specification {
             List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
 
         then: "the basic parameters are set up"
-            params.size() == 7
+            params.size() == 8
             params.get(0) == KickStartParamsBuilder.MAIN_CLASS
             params.get(1) == "$KickStartParamsBuilder.PORT=8080"
             params.get(2) == "$KickStartParamsBuilder.ADDRESS=0.0.0.0"
 
             params.get(3) == KickStartParamsBuilder.DISABLE_UPDATE_CHECK
-            params.get(4) == "$KickStartParamsBuilder.JVM_FLAG=-Xmx1024"
-            params.get(5) == "$KickStartParamsBuilder.JVM_FLAG=-Dappengine.user.timezone=UTC"
-            params.get(6) == '/dev/main/war'
+            params.get(4) == KickStartParamsBuilder.REMOTE_SHUTDOWN_FLAG
+            params.get(5) == "$KickStartParamsBuilder.JVM_FLAG=-Xmx1024"
+            params.get(6) == "$KickStartParamsBuilder.JVM_FLAG=-Dappengine.user.timezone=UTC"
+            params.get(7) == '/dev/main/war'
     }
 
     private KickStartParams createBasicParams() {
