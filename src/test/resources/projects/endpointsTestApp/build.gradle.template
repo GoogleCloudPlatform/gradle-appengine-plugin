@@ -6,7 +6,7 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.google.appengine:gradle-appengine-plugin:@@version@@-SNAPSHOT"
+    classpath "com.google.appengine:gradle-appengine-plugin:@@pluginversion@@"
   }
 }
 

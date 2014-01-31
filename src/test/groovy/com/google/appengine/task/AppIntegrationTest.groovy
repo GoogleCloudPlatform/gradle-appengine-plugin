@@ -57,7 +57,10 @@ abstract class AppIntegrationTest {
     protected replaceVersions() {
         new File(projectRoot, "build.gradle").withWriter { w ->
             new File(projectRoot, getBuildGradleTemplateName()).eachLine { line ->
-                w << line.replaceAll("@@version@@", System.getProperty("appengine.version")) << "\n"
+                w << line
+                        .replaceAll("@@pluginversion@@", System.getProperty("appengine.pluginversion"))
+                        .replaceAll("@@version@@", System.getProperty("appengine.version"))
+                w << "\n"
             }
         }
     }

@@ -8,7 +8,6 @@ targetCompatibility = compatibilityVersion
 group = 'com.google.appengine'
 version = '1.8.7'
 
-
 buildscript {
     repositories {
         mavenCentral()
@@ -108,21 +107,24 @@ modifyPom {
     }
 }
 
-task installSnapshot(dependsOn: install) {
+task snapshot << {
 }
 
 test {
     systemProperty "appengine.version", "${version}"
-}.dependsOn installSnapshot
+    systemProperty "appengine.pluginversion", "${version}"
+}.dependsOn install
 
 import org.gradle.plugins.signing.Sign
 
 gradle.taskGraph.whenReady { taskGraph ->
-    if (taskGraph.hasTask(installSnapshot)) {
+    if (taskGraph.hasTask(snapshot)) {
         version = "${version}-SNAPSHOT"
+        if (taskGraph.hasTask(test)) {
+          System.setProperty "appengine.pluginversion", "${version}"
+        }
     }
-
-    if (taskGraph.allTasks.any { it instanceof Sign } && !taskGraph.hasTask(installSnapshot)) {
+    else if (taskGraph.allTasks.any { it instanceof Sign }) {
         Console console = System.console()
         console.printf "\n\nPGP credentials required to sign artifacts prior to uploading.\n\n"
 
