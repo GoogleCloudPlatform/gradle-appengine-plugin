@@ -30,8 +30,6 @@ import com.google.appengine.task.internal.*
 class RunTask extends AbstractTask implements Explodable {
     String httpAddress
     Integer httpPort
-    Integer stopPort
-    String stopKey
     File explodedAppDirectory
     Boolean daemon
     Boolean disableUpdateCheck

@@ -80,8 +80,6 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS = "appengineEndpointsGetDiscoveryDocs"
     static final String APPENGINE_ENDPOINTS_GET_CLIENT_LIBS = "appengineEndpointsGetClientLibs"
     static final String GRADLE_USER_PROP_PASSWORD = 'appenginePassword'
-    static final String STOP_PORT_CONVENTION_PARAM = 'stopPort'
-    static final String STOP_KEY_CONVENTION_PARAM = 'stopKey'
     static final String EXPLODED_WAR_DIR_CONVENTION_PARAM = 'explodedAppDirectory'
     static final String EXPLODED_SDK_DIR_CONVENTION_PARAM = 'explodedSdkDirectory'
     static final String ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM = "endpointsClientLibDirectory"
@@ -224,8 +222,6 @@ class AppEnginePlugin implements Plugin<Project> {
         project.tasks.withType(RunTask).whenTaskAdded { RunTask appengineRunTask ->
             appengineRunTask.conventionMapping.map('httpAddress') { appenginePluginConvention.httpAddress }
             appengineRunTask.conventionMapping.map('httpPort') { appenginePluginConvention.httpPort }
-            appengineRunTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { appenginePluginConvention.stopPort }
-            appengineRunTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { appenginePluginConvention.stopKey }
             appengineRunTask.conventionMapping.map('daemon') { appenginePluginConvention.daemon }
             appengineRunTask.conventionMapping.map('disableUpdateCheck') { appenginePluginConvention.disableUpdateCheck }
             appengineRunTask.conventionMapping.map('jvmFlags') { appenginePluginConvention.jvmFlags }
@@ -244,13 +240,14 @@ class AppEnginePlugin implements Plugin<Project> {
     }
 
     private void configureStop(Project project, AppEnginePluginConvention appenginePluginConvention) {
+        project.tasks.withType(StopTask).whenTaskAdded { StopTask appengineStopTask ->
+            appengineStopTask.conventionMapping.map('httpAddress') { appenginePluginConvention.httpAddress }
+            appengineStopTask.conventionMapping.map('httpPort') { appenginePluginConvention.httpPort }
+        }
+
         StopTask appengineStopTask = project.tasks.create(APPENGINE_STOP, StopTask)
         appengineStopTask.description = 'Stops local App Engine development server.'
         appengineStopTask.group = APPENGINE_GROUP
-        appengineStopTask.conventionMapping.map('httpAddress') { appenginePluginConvention.httpAddress }
-        appengineStopTask.conventionMapping.map('httpPort') { appenginePluginConvention.httpPort }
-        //appengineStopTask.conventionMapping.map(STOP_PORT_CONVENTION_PARAM) { appenginePluginConvention.stopPort }
-        //appengineStopTask.conventionMapping.map(STOP_KEY_CONVENTION_PARAM) { appenginePluginConvention.stopKey }
     }
 
     private void configureEnhance(Project project) {

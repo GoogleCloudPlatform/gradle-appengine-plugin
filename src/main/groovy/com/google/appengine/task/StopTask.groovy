@@ -35,7 +35,7 @@ class StopTask extends DefaultTask {
     @TaskAction
     void stop() throws GradleScriptException {
         HttpURLConnection connection = null;
-        URL url = new URL("http", httpAddress, httpPort, SHUTDOWN_PATH);
+        URL url = new URL("http", getHttpAddress(), getHttpPort(), SHUTDOWN_PATH);
         try {
             connection = (HttpURLConnection) url.openConnection();
             connection.setDoOutput(true);

@@ -24,7 +24,7 @@ import com.google.appengine.task.endpoints.EndpointsConvention
  * @author Benjamin Muschko
  */
 class AppEnginePluginConvention {
-    String httpAddress
+    String httpAddress = "localhost"
     Integer httpPort = 8080
     Boolean daemon = false
     Boolean disableUpdateCheck = false
