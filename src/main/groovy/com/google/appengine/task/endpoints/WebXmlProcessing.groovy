@@ -28,6 +28,10 @@ class WebXmlProcessing {
 
     static List<String> getApiServiceClasses(webXmlFile) {
         def root = new XmlSlurper().parse(webXmlFile)
+        getApiServiceClasses(root)
+    }
+
+    static List<String> getApiServiceClasses(GPathResult root) {
         getClassNames(getServicesParam(getSystemServiceServlet(root)))
     }
 
@@ -50,7 +54,9 @@ class WebXmlProcessing {
 
     private static String[] getClassNames(NodeChild servicesParam) {
         assert servicesParam.name() == "init-param"
-        return servicesParam."param-value".text().trim().split(",")
+        return servicesParam."param-value".text().trim().split(",").collect { String service ->
+            service.trim()
+        }
     }
 
     public static NodeChild getSystemServiceServletMapping(GPathResult root, NodeChild servlet) {
