@@ -196,6 +196,7 @@ class AppEnginePlugin implements Plugin<Project> {
             appengineAppConfigTaskTemplate.conventionMapping.map('httpProxy') { appenginePluginConvention.appCfg.httpProxy }
             appengineAppConfigTaskTemplate.conventionMapping.map('httpsProxy') { appenginePluginConvention.appCfg.httpsProxy }
             appengineAppConfigTaskTemplate.conventionMapping.map('oauth2') { appenginePluginConvention.appCfg.oauth2 }
+            appengineAppConfigTaskTemplate.conventionMapping.map('extraOptions') { appenginePluginConvention.appCfg.extraOptions }
         }
     }
 

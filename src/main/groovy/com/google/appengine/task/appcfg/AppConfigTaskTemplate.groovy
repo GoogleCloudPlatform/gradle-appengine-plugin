@@ -33,6 +33,7 @@ abstract class AppConfigTaskTemplate extends WebAppDirTask {
     String httpProxy
     String httpsProxy
     Boolean oauth2
+    List<String> extraOptions
 
     @Override
     void executeTask() {
@@ -58,6 +59,7 @@ abstract class AppConfigTaskTemplate extends WebAppDirTask {
 
             def params = []
             addCommonParams(params)
+            params.addAll getExtraOptions()
             params.addAll getParams()
             logger.info "Using params = $params"
 

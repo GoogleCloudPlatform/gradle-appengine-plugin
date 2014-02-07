@@ -30,6 +30,8 @@ class AppConfigConvention {
     String httpProxy
     String httpsProxy
     Boolean oauth2
+    // an list of other appcfg params to send to the appcfg command
+    List<String> extraOptions = []
     DownloadLogsConvention logs = new DownloadLogsConvention()
     DownloadAppConvention app = new DownloadAppConvention()
     UpdateConvention update = new UpdateConvention()
