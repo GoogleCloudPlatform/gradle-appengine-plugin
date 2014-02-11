@@ -16,6 +16,7 @@
 package com.google.appengine.task.endpoints
 
 import org.gradle.api.Incubating
+import org.gradle.api.tasks.OutputDirectory
 
 /**
  * Endpoints task to download Discovery Document from the Endpoints service
@@ -25,13 +26,16 @@ import org.gradle.api.Incubating
 @Incubating
 class GetDiscoveryDocsTask extends EndpointsTask {
 
+    @OutputDirectory File discoveryDocDirectory
+    List<String> discoveryDocFormat
+
     @Override
     void executeTask() {
-        logger.debug "Generating Discovery Docs in formats : ${discoveryDocFormat}"
-        if (discoveryDocFormat) {
-            discoveryDocFormat.each { format ->
+        logger.info "Generating Discovery Docs in formats : ${getDiscoveryDocFormat()}"
+        if (getDiscoveryDocFormat()) {
+            getDiscoveryDocFormat().each { format ->
                 List<String> extras = []
-                extras << "-o" << new File(getExplodedAppDirectory(), "WEB-INF").canonicalPath
+                extras << "-o" << getDiscoveryDocDirectory().canonicalPath
                 extras << "-f" << format
                 runEndpointsCommand("get-discovery-doc", extras)
             }

@@ -82,7 +82,9 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String GRADLE_USER_PROP_PASSWORD = 'appenginePassword'
     static final String EXPLODED_WAR_DIR_CONVENTION_PARAM = 'explodedAppDirectory'
     static final String EXPLODED_SDK_DIR_CONVENTION_PARAM = 'explodedSdkDirectory'
-    static final String ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM = "endpointsClientLibDirectory"
+    static final String ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM = "clientLibDirectory"
+    static final String ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM = "discoveryDocDirectory"
+    static final String ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM = "discoveryDocFormat"
     static final String BACKEND_PROJECT_PROPERTY = 'backend'
     static final String SETTING_PROJECT_PROPERTY = 'setting'
     static final String FUNCTIONAL_TEST_COMPILE_CONFIGURATION = 'functionalTestCompile'
@@ -100,6 +102,8 @@ class AppEnginePlugin implements Plugin<Project> {
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedAppDirectory = getExplodedAppDirectory(project)
         File downloadedAppDirectory = getDownloadedAppDirectory(project)
+        File discoveryDocDirectory = getDiscoveryDocDirectory(project)
+        File webappDirectory = getWebAppDirectory(project)
         File endpointsClientLibDirectory = getEndpointsClientLibDirectory(project)
         configureDownloadSdk(project, explodedSdkDirectory)
         configureWebAppDir(project)
@@ -130,7 +134,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureDeleteBackend(project)
         configureConfigureBackends(project)
         configureUpdateAll(project)
-        configureEndpoints(project, explodedAppDirectory, endpointsClientLibDirectory, appenginePluginConvention)
+        configureEndpoints(project, webappDirectory, discoveryDocDirectory, endpointsClientLibDirectory, appenginePluginConvention)
         configureFunctionalTest(project, appenginePluginConvention)
     }
 
@@ -146,17 +150,26 @@ class AppEnginePlugin implements Plugin<Project> {
         getBuildSubDirectory(project, 'downloaded-app')
     }
 
+    private File getDiscoveryDocDirectory(Project project) {
+        getBuildSubDirectory(project, 'discovery-docs')
+    }
+
     private File getEndpointsClientLibDirectory(Project project) {
         getBuildSubDirectory(project, 'client-libs');
     }
 
-    private File getBuildSubDirectory(Project project, String subDirectory) {
-        def explodedWarDirName = new StringBuilder()
-        explodedWarDirName <<= project.buildDir
-        explodedWarDirName <<= System.getProperty('file.separator')
-        explodedWarDirName <<= subDirectory
-        new File(explodedWarDirName.toString())
+    private File getWebAppDirectory(Project project) {
+        new File(project.rootDir, '/src/main/webapp');
     }
+
+    private File getBuildSubDirectory(Project project, String subDirectory) {
+        def subDir = new StringBuilder()
+        subDir <<= project.buildDir
+        subDir <<= System.getProperty('file.separator')
+        subDir <<= subDirectory
+        new File(subDir.toString())
+    }
+
 
     private void configureDownloadSdk(Project project, File explodedSdkDirectory) {
         project.tasks.withType(DownloadSdkTask).whenTaskAdded { DownloadSdkTask appengineDownloadSdkTask ->
@@ -209,6 +222,7 @@ class AppEnginePlugin implements Plugin<Project> {
         ExplodeAppTask appengineExplodeAppTask = project.tasks.create(APPENGINE_EXPLODE_WAR, ExplodeAppTask)
         appengineExplodeAppTask.description = 'Explodes WAR archive into directory.'
         appengineExplodeAppTask.group = APPENGINE_GROUP
+        appengineExplodeAppTask.mustRunAfter(project.tasks.withType(EndpointsTask))
 
         project.afterEvaluate {
             if(project.hasProperty('ear')) {
@@ -434,29 +448,38 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineUpdateAllTask.dependsOn project.appengineUpdate, project.appengineUpdateAllBackends
     }
 
-    public void configureEndpoints(Project project, File explodedWarDirectory, File endpointsClientLibDirectory, AppEnginePluginConvention appEnginePluginConvention) {
+    public void configureEndpoints(Project project, File webappDirectory, File discoveryDocDirectory, File endpointsClientLibDirectory, AppEnginePluginConvention appEnginePluginConvention) {
         project.tasks.withType(EndpointsTask).whenTaskAdded { EndpointsTask endpointsTask ->
-            endpointsTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
-            endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
-            endpointsTask.conventionMapping.map("discoveryDocFormat") { appEnginePluginConvention.endpoints.discoveryDocFormat }
+            endpointsTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
+            endpointsTask.conventionMapping.map('webappDirectory') { webappDirectory }
+            if(endpointsTask instanceof GetDiscoveryDocsTask) {
+                endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM) { discoveryDocDirectory }
+                endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM) { appEnginePluginConvention.endpoints.discoveryDocFormat }
+            }
+            else if(endpointsTask instanceof GetClientLibsTask) {
+                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
+            }
         }
+
+        // Adds the discovery doc generated path to the war archiving
+        project.war.webInf { from discoveryDocDirectory.canonicalPath}
 
         GetDiscoveryDocsTask endpointsGetDiscoveryDocs = project.tasks.create(APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS, GetDiscoveryDocsTask)
         endpointsGetDiscoveryDocs.description = 'Generate Endpoints discovery docs for classes defined in web.xml'
         endpointsGetDiscoveryDocs.group = APPENGINE_GROUP
+        endpointsGetDiscoveryDocs.dependsOn(project.tasks.getByName(JavaPlugin.CLASSES_TASK_NAME))
 
         GetClientLibsTask endpointsGetClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_GET_CLIENT_LIBS, GetClientLibsTask)
         endpointsGetClientLibs.description = 'Generate Endpoints java client libraries for classes defined in web.xml'
         endpointsGetClientLibs.group = APPENGINE_GROUP
+        endpointsGetClientLibs.dependsOn(project.tasks.getByName(JavaPlugin.CLASSES_TASK_NAME))
 
         project.gradle.projectsEvaluated {
             if(appEnginePluginConvention.endpoints.getDiscoveryDocsOnBuild) {
-                endpointsGetDiscoveryDocs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
-                project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs);
+                project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs)
             }
             if(appEnginePluginConvention.endpoints.getClientLibsOnBuild) {
-                endpointsGetClientLibs.dependsOn(project.tasks.getByName(APPENGINE_EXPLODE_WAR))
-                project.tasks.getByName(JavaBasePlugin.BUILD_TASK_NAME).dependsOn(endpointsGetClientLibs);
+                project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsGetClientLibs)
             }
         }
     }

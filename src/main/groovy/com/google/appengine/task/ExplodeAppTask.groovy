@@ -17,6 +17,7 @@ package com.google.appengine.task
 
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
 import java.nio.file.Files
@@ -28,7 +29,7 @@ import java.nio.file.Files
  */
 class ExplodeAppTask extends DefaultTask implements Explodable {
     @InputFile File archive
-    File explodedAppDirectory
+    @OutputDirectory File explodedAppDirectory
 
     @TaskAction
     protected void start() {

@@ -38,7 +38,8 @@ class EndpointsTest extends AppIntegrationTest {
         try {
             connection.newBuild().forTasks(
                     "appengineEndpointsGetDiscoveryDoc",
-                    "appengineEndpointsGetClientLibs"
+                    "appengineEndpointsGetClientLibs",
+                    "appengineExplodeApp"
             ).run()
         }
         finally {
@@ -62,10 +63,5 @@ class EndpointsTest extends AppIntegrationTest {
     @Override
     protected String getTestAppName() {
         TEST_APP
-    }
-
-    @Override
-    protected String[] getPreTestTasks() {
-        ["appengineExplodeApp"]
     }
 }

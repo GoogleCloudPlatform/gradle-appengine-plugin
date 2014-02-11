@@ -80,6 +80,6 @@ abstract class AppIntegrationTest {
     }
 
     /** List of tasks to run during setup **/
-    abstract protected String[] getPreTestTasks()
+    protected String[] getPreTestTasks() {[]}
 
 }

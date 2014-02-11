@@ -17,6 +17,7 @@ package com.google.appengine.task.endpoints
 
 import com.google.api.server.spi.tools.EndpointsTool
 import com.google.appengine.task.AbstractTask
+import com.google.appengine.task.internal.ClasspathBuilder
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
@@ -28,9 +29,8 @@ import org.gradle.api.tasks.OutputDirectory
  * @author Appu Goundan
  */
 abstract class EndpointsTask extends AbstractTask {
-    @InputDirectory File explodedAppDirectory;
-    @OutputDirectory File endpointsClientLibDirectory
-    List<String> discoveryDocFormat
+    @InputDirectory File classesDirectory
+    @InputDirectory File webappDirectory
 
     void runEndpointsCommand(String action, List<String> extraParams) {
         try {
@@ -53,18 +53,18 @@ abstract class EndpointsTask extends AbstractTask {
 
     List<String> getCommonParams() {
         List<String> params = []
-        params << "-cp" << getClasspath()
-        params << "-w" << getExplodedAppDirectory().canonicalPath
+        params << "-cp" << ClasspathBuilder.getClasspath(project)
+        params << "-w" << getWebappDirectory().getCanonicalPath()
         return params;
     }
 
     List<String> getServiceClassParams() {
-        return WebXmlProcessing.getApiServiceClasses(new File(getExplodedAppDirectory(), "WEB-INF/web.xml"))
+        return WebXmlProcessing.getApiServiceClasses(new File(getWebappDirectory(), "WEB-INF/web.xml"))
     }
 
     String getClasspath() {
-        File libDir = new File(getExplodedAppDirectory(), "WEB-INF/lib/*")
-        File classesDir = new File(getExplodedAppDirectory(), "WEB-INF/classes")
+        File libDir = new File(getClassesDirectory(), "WEB-INF/lib/*")
+        File classesDir = new File(getClassesDirectory(), "WEB-INF/classes")
         return classesDir.canonicalPath + File.pathSeparator + libDir.canonicalPath
     }
 }
