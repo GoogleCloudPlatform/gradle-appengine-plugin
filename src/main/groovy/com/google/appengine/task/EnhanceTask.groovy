@@ -42,7 +42,7 @@ class EnhanceTask extends WebAppDirTask {
                     pathelement(path: System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY))
                     pathelement(path: getClassesDirectory().canonicalPath)
                     fileset(dir: "${getWebAppSourceDirectory().canonicalPath}/WEB-INF/lib", erroronmissingdir: "false", includes: '*.jar')
-					pathelement(path: project.configurations.compile.asPath)
+                    pathelement(path: project.configurations.compile.asPath)
                 }
                 fileset(dir: getClassesDirectory().canonicalPath, includes: '**/*.class')
             }
