@@ -20,7 +20,9 @@ buildscript {
 
 repositories {
     mavenCentral()
-    mavenRepo url: 'https://oss.sonatype.org/content/repositories/snapshots'
+    maven {
+      url 'https://oss.sonatype.org/content/repositories/snapshots'
+    }
 }
 
 dependencies {
@@ -121,7 +123,7 @@ gradle.taskGraph.whenReady { taskGraph ->
     if (taskGraph.hasTask(snapshot)) {
         version = "${version}-SNAPSHOT"
         if (taskGraph.hasTask(test)) {
-          System.setProperty "appengine.pluginversion", "${version}"
+          project.test.systemProperty "appengine.pluginversion", "${version}"
         }
     }
     else if (taskGraph.allTasks.any { it instanceof Sign }) {
