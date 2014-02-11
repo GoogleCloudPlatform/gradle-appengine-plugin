@@ -13,7 +13,6 @@ class ClasspathBuilder {
     public static String getClasspath(Project project) {
         asClasspathString(project.getConvention().getPlugin(JavaPluginConvention.class).getSourceSets().getByName(
                 SourceSet.MAIN_SOURCE_SET_NAME).getRuntimeClasspath())
-
     }
 
     private static String asClasspathString(FileCollection files) {

@@ -103,7 +103,6 @@ class AppEnginePlugin implements Plugin<Project> {
         File explodedAppDirectory = getExplodedAppDirectory(project)
         File downloadedAppDirectory = getDownloadedAppDirectory(project)
         File discoveryDocDirectory = getDiscoveryDocDirectory(project)
-        File webappDirectory = getWebAppDirectory(project)
         File endpointsClientLibDirectory = getEndpointsClientLibDirectory(project)
         configureDownloadSdk(project, explodedSdkDirectory)
         configureWebAppDir(project)
@@ -134,7 +133,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureDeleteBackend(project)
         configureConfigureBackends(project)
         configureUpdateAll(project)
-        configureEndpoints(project, webappDirectory, discoveryDocDirectory, endpointsClientLibDirectory, appenginePluginConvention)
+        configureEndpoints(project, discoveryDocDirectory, endpointsClientLibDirectory, appenginePluginConvention)
         configureFunctionalTest(project, appenginePluginConvention)
     }
 
@@ -156,10 +155,6 @@ class AppEnginePlugin implements Plugin<Project> {
 
     private File getEndpointsClientLibDirectory(Project project) {
         getBuildSubDirectory(project, 'client-libs');
-    }
-
-    private File getWebAppDirectory(Project project) {
-        new File(project.rootDir, '/src/main/webapp');
     }
 
     private File getBuildSubDirectory(Project project, String subDirectory) {
@@ -222,7 +217,6 @@ class AppEnginePlugin implements Plugin<Project> {
         ExplodeAppTask appengineExplodeAppTask = project.tasks.create(APPENGINE_EXPLODE_WAR, ExplodeAppTask)
         appengineExplodeAppTask.description = 'Explodes WAR archive into directory.'
         appengineExplodeAppTask.group = APPENGINE_GROUP
-        appengineExplodeAppTask.mustRunAfter(project.tasks.withType(EndpointsTask))
 
         project.afterEvaluate {
             if(project.hasProperty('ear')) {
@@ -448,10 +442,10 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineUpdateAllTask.dependsOn project.appengineUpdate, project.appengineUpdateAllBackends
     }
 
-    public void configureEndpoints(Project project, File webappDirectory, File discoveryDocDirectory, File endpointsClientLibDirectory, AppEnginePluginConvention appEnginePluginConvention) {
+    public void configureEndpoints(Project project, File discoveryDocDirectory, File endpointsClientLibDirectory, AppEnginePluginConvention appEnginePluginConvention) {
         project.tasks.withType(EndpointsTask).whenTaskAdded { EndpointsTask endpointsTask ->
             endpointsTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
-            endpointsTask.conventionMapping.map('webappDirectory') { webappDirectory }
+            endpointsTask.conventionMapping.map('webappDirectory') { getAppDir(project) }
             if(endpointsTask instanceof GetDiscoveryDocsTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM) { discoveryDocDirectory }
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM) { appEnginePluginConvention.endpoints.discoveryDocFormat }
@@ -463,6 +457,8 @@ class AppEnginePlugin implements Plugin<Project> {
 
         // Adds the discovery doc generated path to the war archiving
         project.war.webInf { from discoveryDocDirectory.canonicalPath}
+        // Make sure endpoints run before war tasks
+        project.tasks.getByName(WarPlugin.WAR_TASK_NAME).mustRunAfter(project.tasks.withType(EndpointsTask))
 
         GetDiscoveryDocsTask endpointsGetDiscoveryDocs = project.tasks.create(APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS, GetDiscoveryDocsTask)
         endpointsGetDiscoveryDocs.description = 'Generate Endpoints discovery docs for classes defined in web.xml'

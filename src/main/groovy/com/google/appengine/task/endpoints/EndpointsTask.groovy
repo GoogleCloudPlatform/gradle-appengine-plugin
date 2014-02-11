@@ -61,10 +61,4 @@ abstract class EndpointsTask extends AbstractTask {
     List<String> getServiceClassParams() {
         return WebXmlProcessing.getApiServiceClasses(new File(getWebappDirectory(), "WEB-INF/web.xml"))
     }
-
-    String getClasspath() {
-        File libDir = new File(getClassesDirectory(), "WEB-INF/lib/*")
-        File classesDir = new File(getClassesDirectory(), "WEB-INF/classes")
-        return classesDir.canonicalPath + File.pathSeparator + libDir.canonicalPath
-    }
 }
