@@ -24,6 +24,7 @@ import com.google.appengine.task.WebAppDirTask
 import com.google.appengine.task.endpoints.EndpointsTask
 import com.google.appengine.task.endpoints.GetClientLibsTask
 import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
+import com.google.appengine.task.endpoints.InstallClientLibsTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -79,6 +80,7 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String APPENGINE_FUNCTIONAL_TEST = 'appengineFunctionalTest'
     static final String APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS = "appengineEndpointsGetDiscoveryDocs"
     static final String APPENGINE_ENDPOINTS_GET_CLIENT_LIBS = "appengineEndpointsGetClientLibs"
+    static final String APPENGINE_ENDPOINTS_INSTALL_CLIENT_LIBS = "appengineEndpointsInstallClientLibs"
     static final String GRADLE_USER_PROP_PASSWORD = 'appenginePassword'
     static final String EXPLODED_WAR_DIR_CONVENTION_PARAM = 'explodedAppDirectory'
     static final String EXPLODED_SDK_DIR_CONVENTION_PARAM = 'explodedSdkDirectory'
@@ -473,6 +475,11 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsGetClientLibs.description = 'Generate Endpoints java client libraries for classes defined in web.xml'
         endpointsGetClientLibs.group = APPENGINE_GROUP
         endpointsGetClientLibs.dependsOn(project.tasks.getByName(JavaPlugin.CLASSES_TASK_NAME))
+
+        InstallClientLibsTask endpointsInstallClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_INSTALL_CLIENT_LIBS, InstallClientLibsTask)
+        endpointsInstallClientLibs.description = 'Generate Endpoints java client libraries for classes defined in web.xml and install them into the local Maven repository'
+        endpointsInstallClientLibs.group = APPENGINE_GROUP
+        endpointsInstallClientLibs.dependsOn(endpointsGetClientLibs)
 
         project.gradle.projectsEvaluated {
             if(appEnginePluginConvention.endpoints.getDiscoveryDocsOnBuild) {
