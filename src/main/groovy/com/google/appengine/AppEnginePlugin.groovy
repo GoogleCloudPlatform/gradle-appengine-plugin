@@ -446,6 +446,7 @@ class AppEnginePlugin implements Plugin<Project> {
         project.tasks.withType(EndpointsTask).whenTaskAdded { EndpointsTask endpointsTask ->
             endpointsTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
             endpointsTask.conventionMapping.map('webappDirectory') { getAppDir(project) }
+            endpointsTask.conventionMapping.map('serviceClasses') { appEnginePluginConvention.endpoints.serviceClasses }
             if(endpointsTask instanceof GetDiscoveryDocsTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM) { discoveryDocDirectory }
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM) { appEnginePluginConvention.endpoints.discoveryDocFormat }

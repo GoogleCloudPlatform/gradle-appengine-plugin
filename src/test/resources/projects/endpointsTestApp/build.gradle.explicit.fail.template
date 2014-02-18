@@ -1,0 +1,33 @@
+buildscript {
+
+  repositories {
+    mavenLocal()
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath "com.google.appengine:gradle-appengine-plugin:@@pluginversion@@"
+  }
+}
+
+repositories {
+  mavenCentral()
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+dependencies {
+  appengineSdk "com.google.appengine:appengine-java-sdk:@@version@@"
+  compile "com.google.appengine:appengine-endpoints:@@version@@"
+  compile 'javax.servlet:servlet-api:2.5'
+  compile 'javax.inject:javax.inject:1'
+}
+
+appengine {
+  downloadSdk = true
+  endpoints {
+    serviceClasses = ['com.google.appengine.endpoints.NonExistentEndpoint']
+  }
+}

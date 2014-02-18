@@ -20,7 +20,6 @@ import com.google.appengine.task.AbstractTask
 import com.google.appengine.task.internal.ClasspathBuilder
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.InputDirectory
-import org.gradle.api.tasks.OutputDirectory
 
 /**
  * Abstract Endpoints task to run endpoints commands on the EndpointsTool
@@ -31,6 +30,7 @@ import org.gradle.api.tasks.OutputDirectory
 abstract class EndpointsTask extends AbstractTask {
     @InputDirectory File classesDirectory
     @InputDirectory File webappDirectory
+    List<String> serviceClasses
 
     void runEndpointsCommand(String action, List<String> extraParams) {
         try {
@@ -59,6 +59,9 @@ abstract class EndpointsTask extends AbstractTask {
     }
 
     List<String> getServiceClassParams() {
+        if (getServiceClasses() != null) {
+            return getServiceClasses()
+        }
         return WebXmlProcessing.getApiServiceClasses(new File(getWebappDirectory(), "WEB-INF/web.xml"))
     }
 }

@@ -15,14 +15,20 @@
  */
 package com.google.appengine.task.endpoints
 
+import com.google.appengine.task.AppIntegrationTest
+import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.ProjectConnection
+import org.junit.Assert
+import org.junit.Test
+
 /**
- * Defines App Engine Endpoints plugin convention.
+ * Simple test to ensure the plugin is interacting correctly with the Endpoints service
  *
  * @author Appu Goundan
  */
-class EndpointsConvention {
-    List<String> discoveryDocFormat = ["rpc", "rest"]
-    boolean getDiscoveryDocsOnBuild = false
-    boolean getClientLibsOnBuild = false
-    List<String> serviceClasses
+class EndpointsExplicitTest extends EndpointsTest {
+
+    protected String getBuildGradleTemplateName() {
+        return "build.gradle.explicit.template"
+    }
 }
