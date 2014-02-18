@@ -225,6 +225,9 @@ class AppEnginePlugin implements Plugin<Project> {
                 appengineExplodeAppTask.dependsOn project.war
             }
         }
+
+        // Always explode app when assembling
+        project.tasks.getByName(BasePlugin.ASSEMBLE_TASK_NAME).dependsOn(appengineExplodeAppTask)
     }
 
     private void configureRun(Project project, AppEnginePluginConvention appenginePluginConvention, File explodedAppDirectory) {
