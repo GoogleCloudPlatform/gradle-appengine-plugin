@@ -1,9 +1,7 @@
-# Gradle App Engine plugin
-
-![Google App Engine Logo](https://developers.google.com/appengine/images/appengine_lowres.png)
+# Gradle App Engine plugin ![Google App Engine Logo](https://developers.google.com/cloud/images/appengine-icon-54x48.png)
 
 The plugin provides tasks for uploading, downloading, running and managing [Google App Engine](http://code.google.com/appengine/)
-(App Engine) projects in any given Gradle build. It extends the War plugin.
+(App Engine) projects in any given Gradle build.
 
 ## Usage
 
@@ -26,7 +24,7 @@ example on how to retrieve it from Maven Central:
         }
     }
 
-*Note:* The plugin requires you to set the environment variable _APPENGINE_HOME_ or the system property _appengine.sdk.root_
+*Note:* The plugin requires you to set the environment variable APPENGINE_HOME or the system property _appengine.sdk.root_
 pointing to your current Google App Engine SDK installation. In case you have both variables set the system property takes
 precedence over the environment variable. Alternatively, you can choose to automatically download the SDK by setting the
 convention property `downloadSdk` to `true`. This option requires you to specify the SDK version you want to use by setting
@@ -45,8 +43,11 @@ The App Engine plugin defines the following tasks:
 * `appengineDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
 * `appengineDownloadApp`: Retrieves the most current version of your application.
 * `appengineDownloadSdk`: Downloads and sets Google App Engine SDK.
+* `appengineEndpointsGetClientLibraries`: Download Endpoints client libraries.
+* `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo
+* `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp with this to ensure the discovery docs are copied into the project after download.
 * `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
-* `appengineExplodeWar`: Extends the `war` task to generate WAR file and explodes the artifact into `build/exploded-war`.
+* `appengineExplodeApp`: Extends the `war`/`ear` task to generate WAR/EAR file and explodes the artifact into `build/exploded-app`.
 * `appengineFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
 * `appengineListBackends`: Lists all the backends configured for the app specified in `appengine-web.xml`.
 * `appengineLogs`: Retrieves log data for the application running on App Engine.
@@ -80,8 +81,8 @@ The App Engine plugin defines the following convention properties in the `appeng
 
 * `httpAddress`: The IP address for the local development server (if server is to be accessed from network). Default is localhost.
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
-* `stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).
-* `stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).
+* ~~`stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).~~ Deprecated
+* ~~`stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).~~ Deprecated
 * `daemon`: Specifies whether the local development server should run in the background. When true, this task completes as
 soon as the server has started. When false, this task blocks until the local development server is stopped (defaults to false).
 * `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
@@ -109,6 +110,13 @@ convention property was provided also. Alternatively, you can set the password i
 * `httpsProxy`: Use the given HTTPS proxy to contact App Engine, when using HTTPS. If `httpProxy` is given but `httpsProxy`
 is not, both HTTP and HTTPS requests will use the given proxy.
 * `oauth2`: Use OAuth2 authentication instead of password-based authentication.
+* `extraOptions`: A list of extra command line options for the AppCfg tool (defaults to [])
+
+Within `appengine` you can also define a closure named `endpoints`:
+
+* `discoveryDocFormat`: A list of discovery doc formats. (defaults to ['rpc', 'rest'])
+* `getDiscoverDocsOnBuild`: Automatically download discovery docs before the `war` task is called. (defaults to false)
+* `getClientLibsOnBuild`: Automatically download client libraries before the `war` task is called. (defaults to false)
 
 The task `appengineDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
 closure `app`:
@@ -218,3 +226,11 @@ has been fully integrated into the build lifecycle.
 One of the most prominent functional testing libraries in the Groovy ecosystem is [Geb](http://www.gebish.org/), an expressive
 and powerful browser automation solution. Please refer to this short and sweet [tutorial](http://blog.proxerd.pl/article/funcational-testing-of-appengine-lyk-applications-with-geb)
 for a quickstart.
+
+<br>
+**Why is my exploded-war still using old discovery docs even though I ran appengineEndpointsGetDisoveryDocs?**
+
+The task `appengineEndpointsGetDiscoveryDocs` only downloads the Discovery Docs for an endpoint to a cache in build/discovery-docs,
+the `war` task copies this into the WEB-INF folder when packaging. If you want them to be copied in, just run `build` or `appengineExplodeApp` again.
+Why do we do this? The endpoints calls are network calls to a service and some users may not want to do this on every build. The user can update their
+endpoints discovery docs when they know they need to and it will be packaged in on every subsequent build without needing to be regenerated.
