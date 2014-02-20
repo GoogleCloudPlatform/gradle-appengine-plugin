@@ -24,5 +24,6 @@ class EndpointsConvention {
     List<String> discoveryDocFormat = ["rpc", "rest"]
     boolean getDiscoveryDocsOnBuild = false
     boolean getClientLibsOnBuild = false
+    boolean installClientLibsOnBuild = false // will override getClientLibsOnBuild when true
     List<String> serviceClasses
 }

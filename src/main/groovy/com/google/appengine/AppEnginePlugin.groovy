@@ -488,6 +488,9 @@ class AppEnginePlugin implements Plugin<Project> {
             if(appEnginePluginConvention.endpoints.getClientLibsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsGetClientLibs)
             }
+            if(appEnginePluginConvention.endpoints.installClientLibsOnBuild) {
+                project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsInstallClientLibs)
+            }
         }
     }
 
