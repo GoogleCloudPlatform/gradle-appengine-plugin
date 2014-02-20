@@ -30,11 +30,18 @@ class GetClientLibsTask extends EndpointsTask {
 
     @Override
     void executeTask() {
+        cleanOutputDirectory()
         logger.info "Generating Client Libraries"
         List<String> extras = []
         extras << "-o" << getClientLibDirectory().canonicalPath
         extras << "-l" << "java"
         extras << "-bs" << "gradle"
         runEndpointsCommand("get-client-lib", extras)
+    }
+
+    void cleanOutputDirectory() {
+        ant.delete(includeemptydirs: true, failonerror: false) {
+            fileset(dir: getClientLibDirectory(), includes: "**/*")
+        }
     }
 }

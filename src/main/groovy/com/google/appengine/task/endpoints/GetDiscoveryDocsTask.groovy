@@ -31,6 +31,7 @@ class GetDiscoveryDocsTask extends EndpointsTask {
 
     @Override
     void executeTask() {
+        cleanOutputDirectory()
         logger.info "Generating Discovery Docs in formats : ${getDiscoveryDocFormat()}"
         if (getDiscoveryDocFormat()) {
             getDiscoveryDocFormat().each { format ->
@@ -39,6 +40,12 @@ class GetDiscoveryDocsTask extends EndpointsTask {
                 extras << "-f" << format
                 runEndpointsCommand("get-discovery-doc", extras)
             }
+        }
+    }
+
+    void cleanOutputDirectory() {
+        ant.delete(includeemptydirs: true, failonerror: false) {
+            fileset(dir: getDiscoveryDocDirectory(), includes: "**/*")
         }
     }
 }
