@@ -7,7 +7,6 @@ sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 group = 'com.google.appengine'
 version = '1.8.7'
-archivesBaseName = 'gradle-appengine-plugin'
 
 buildscript {
     repositories {

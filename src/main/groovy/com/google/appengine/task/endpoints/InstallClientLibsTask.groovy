@@ -16,6 +16,8 @@
 package com.google.appengine.task.endpoints
 
 import org.gradle.api.Incubating
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
 
@@ -29,7 +31,15 @@ import java.util.zip.ZipFile
  * @author Rajeev Dayal
  */
 @Incubating
-class InstallClientLibsTask extends GetClientLibsTask {
+class InstallClientLibsTask extends EndpointsTask {
+
+    /*
+     This property should never be set directly. It's set based on the value of clientLibDirectory
+     for the GetClientsLib task, and it is set once the task execution graphs is ready. See
+     AppEnginePlugin.configureEndpoints for more information.
+     */
+    @InputDirectory
+    File clientLibDirectory;
 
     @Override
     void executeTask() {
@@ -39,7 +49,7 @@ class InstallClientLibsTask extends GetClientLibsTask {
 
     private installLibsLocally() {
         // First, look for a zip file in the directory where the client library was downloaded to
-        def zips = clientLibDirectory.listFiles()
+        def zips = getClientLibDirectory().listFiles()
         assert zips.length > 0
 
         def clientLibGradleProjRoot = null;

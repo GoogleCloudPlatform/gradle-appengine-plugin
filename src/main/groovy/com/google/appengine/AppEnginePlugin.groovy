@@ -456,7 +456,7 @@ class AppEnginePlugin implements Plugin<Project> {
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM) { discoveryDocDirectory }
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM) { appEnginePluginConvention.endpoints.discoveryDocFormat }
             }
-            else if(endpointsTask instanceof GetClientLibsTask) {
+            else if(endpointsTask instanceof GetClientLibsTask || endpointsTask instanceof InstallClientLibsTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
             }
         }
