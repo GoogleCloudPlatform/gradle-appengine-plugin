@@ -43,9 +43,9 @@ The App Engine plugin defines the following tasks:
 * `appengineDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
 * `appengineDownloadApp`: Retrieves the most current version of your application.
 * `appengineDownloadSdk`: Downloads and sets Google App Engine SDK.
-* `appengineEndpointsGetClientLibraries`: Download Endpoints client libraries.
-* `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo
-* `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp with this to ensure the discovery docs are copied into the project after download.
+* `appengineEndpointsGetClientLibraries`: Download Endpoints client libraries. (this makes network calls)
+* `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp` with this to ensure the discovery docs are copied into the project after download. (this makes network calls)
+* `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo.
 * `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
 * `appengineExplodeApp`: Extends the `war`/`ear` task to generate WAR/EAR file and explodes the artifact into `build/exploded-app`.
 * `appengineFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
@@ -90,7 +90,7 @@ soon as the server has started. When false, this task blocks until the local dev
 * `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `appengineSdk` and explodes the artifact into
 `~/.gradle/appengine-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
-takes precedence over _APPENGINE_HOME_ and the system property _appengine.sdk.root_.
+takes precedence over APPENGINE_HOME and the system property _appengine.sdk.root_.
 * `optimizeWar`: Specifies whether the generated classes and dependencies should be bundled into one single JAR file.
 The [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be applied to your project. Otherwise the flag has no effect.
 
@@ -117,8 +117,9 @@ is not, both HTTP and HTTPS requests will use the given proxy.
 Within `appengine` you can also define a closure named `endpoints`:
 
 * `discoveryDocFormat`: A list of discovery doc formats. (defaults to ['rpc', 'rest'])
-* `getDiscoverDocsOnBuild`: Automatically download discovery docs before the `war` task is called. (defaults to false)
+* `getDiscoveryDocsOnBuild`: Automatically download discovery docs before the `war` task is called. (defaults to false)
 * `getClientLibsOnBuild`: Automatically download client libraries before the `war` task is called. (defaults to false)
+* `installClientLibsOnBuild`: Automatically install client libs. (defaults to false) [this task will never be UP-TO-DATE, careful when making part of your build]
 
 The task `appengineDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
 closure `app`:

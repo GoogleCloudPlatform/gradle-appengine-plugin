@@ -1,3 +1,17 @@
+### Version 1.8.9 (February 26, 2014)
+
+* Added Endpoints tasks (appengineEndpointsGetClientLibs, appengineEndpointsInstallClientLibs, appengineEndpointsGetDiscoveryDocs)
+* Added endpoints conventions (discoveryDocFormat, getDiscoveryDocsOnBuild, getClientLibsOnBuild, installClientLibsOnBuild)
+* Added endpoints tests, and a generic test base class
+* ExplodeApp executed as part of Assemble task
+* Fixed deprecation warning for build file maven repo specification
+* appengineEnhance now picks up gradle dependencies
+* appengineEnhance configuration options to specify version (v1/v2) and api (jpa/jdo)
+* Added extraOptions convention to appCfg closure
+* Changed stopTask to use the built in stop mechanism in devAppServer (deprecated stopPort and stopKey)
+* (Developers) Allow snapshot builds
+* [skipped 1.8.8 release]
+
 ### Version 0.9 (August 18, 2013)
 
 * Fixed deprecation warnings.
