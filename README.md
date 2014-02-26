@@ -111,6 +111,8 @@ convention property was provided also. Alternatively, you can set the password i
 is not, both HTTP and HTTPS requests will use the given proxy.
 * `oauth2`: Use OAuth2 authentication instead of password-based authentication.
 * `extraOptions`: A list of extra command line options for the AppCfg tool (defaults to [])
+* `enhancerVersion`: The version (v1/v2) parameter for App Engine datanucleus enhancer task
+* `enhancerApi`: The api (jdo/jpa) parameter for the App Engine datanucleas enhancer task
 
 Within `appengine` you can also define a closure named `endpoints`:
 

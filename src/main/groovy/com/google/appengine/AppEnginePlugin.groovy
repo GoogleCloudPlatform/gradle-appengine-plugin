@@ -115,7 +115,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureUpdate(project, appenginePluginConvention, explodedAppDirectory)
         configureRollback(project)
         configureSdk(project, appenginePluginConvention)
-        configureEnhance(project)
+        configureEnhance(project, appenginePluginConvention)
         configureUpdateIndexes(project)
         configureVacuumIndexes(project)
         configureUpdateTaskQueues(project)
@@ -264,9 +264,11 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineStopTask.group = APPENGINE_GROUP
     }
 
-    private void configureEnhance(Project project) {
+    private void configureEnhance(Project project, AppEnginePluginConvention appEnginePluginConvention) {
         project.tasks.withType(EnhanceTask).whenTaskAdded { EnhanceTask appengineEnhanceTask ->
             appengineEnhanceTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
+            appengineEnhanceTask.conventionMapping.map('enhancerVersion') { appEnginePluginConvention.enhancerVersion }
+            appengineEnhanceTask.conventionMapping.map('enhancerApi') { appEnginePluginConvention.enhancerApi }
         }
 
         EnhanceTask appengineEnhanceTask = project.tasks.create(APPENGINE_ENHANCE, EnhanceTask)
