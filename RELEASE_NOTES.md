@@ -1,3 +1,6 @@
+### Version 1.9.0 (March 14, 2014)
+* Updated to Version 1.9.0
+
 ### Version 1.8.9 (February 26, 2014)
 
 * Added Endpoints tasks (appengineEndpointsGetClientLibs, appengineEndpointsInstallClientLibs, appengineEndpointsGetDiscoveryDocs)
