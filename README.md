@@ -43,7 +43,7 @@ The App Engine plugin defines the following tasks:
 * `appengineDeleteBackend`: Deletes the indicated backend. The backend is defined by the project property `backend`.
 * `appengineDownloadApp`: Retrieves the most current version of your application.
 * `appengineDownloadSdk`: Downloads and sets Google App Engine SDK.
-* `appengineEndpointsGetClientLibraries`: Download Endpoints client libraries. (this makes network calls)
+* `appengineEndpointsGetClientLibs`: Download Endpoints client libraries. (this makes network calls)
 * `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp` with this to ensure the discovery docs are copied into the project after download. (this makes network calls)
 * `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo.
 * `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
