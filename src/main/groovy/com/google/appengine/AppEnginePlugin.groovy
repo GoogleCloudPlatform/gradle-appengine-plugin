@@ -463,10 +463,13 @@ class AppEnginePlugin implements Plugin<Project> {
             }
         }
 
-        // Adds the discovery doc generated path to the war archiving
-        project.war.webInf { from discoveryDocDirectory.canonicalPath}
-        // Make sure endpoints run before war tasks
-        project.tasks.getByName(WarPlugin.WAR_TASK_NAME).mustRunAfter(project.tasks.withType(EndpointsTask))
+        if(project.hasProperty('war')) {
+            // NOTE: Endpoints REQUIRES the war plugin
+            // Adds the discovery doc generated path to the war archiving
+            project.war.webInf { from discoveryDocDirectory.canonicalPath}
+            // Make sure endpoints run before war tasks
+            project.tasks.getByName(WarPlugin.WAR_TASK_NAME).mustRunAfter(project.tasks.withType(EndpointsTask))
+        }
 
         GetDiscoveryDocsTask endpointsGetDiscoveryDocs = project.tasks.create(APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS, GetDiscoveryDocsTask)
         endpointsGetDiscoveryDocs.description = 'Generate Endpoints discovery docs for classes defined in web.xml'
