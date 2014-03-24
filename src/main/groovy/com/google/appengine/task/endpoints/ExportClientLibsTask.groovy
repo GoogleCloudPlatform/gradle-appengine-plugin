@@ -16,31 +16,32 @@
 package com.google.appengine.task.endpoints
 
 import org.gradle.api.Incubating
-import org.gradle.tooling.GradleConnector
-import org.gradle.tooling.ProjectConnection
-
+import org.gradle.api.tasks.OutputDirectory
 
 /**
- * Endpoints task to install the downloaded client libraries into the local Maven repository.
+ * Endpoints task to expand client library sources for use with another project
  * This task has a dependency (task-level) on GetClientLibsTask.
  *
  * @author Rajeev Dayal
  */
 @Incubating
-class InstallClientLibsTask extends ClientLibProcessingTask {
+class ExportClientLibsTask extends ClientLibProcessingTask {
+
+    @OutputDirectory
+    File clientLibSrcOut;
 
     @Override
     void executeTask() {
-        logger.debug "Installing client libraries into local Maven repository"
-        installLibsLocally()
+        logger.info "Expanding sources to " + getClientLibSrcOut()
+        expandSourceLocally()
     }
 
-    private installLibsLocally() {
-        // First, look for a zip file in the directory where the client library was downloaded to
+    private expandSourceLocally() {
+
         def zips = getClientLibZips()
 
         assert zips.length > 0
-        logger.info "Installing client libraries from zips : ${zips*.toString()}"
+        logger.debug "Copying client libraries sources from zip : ${zips*.toString()}"
 
         zips.each { clientZip ->
 
@@ -49,11 +50,16 @@ class InstallClientLibsTask extends ClientLibProcessingTask {
                 return;
             }
 
-            ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(clientLibProjectRoot).connect()
-            try {
-                connection.newBuild().forTasks('install').run()
-            } finally {
-                connection.close()
+            // look for src/main/java in the client lib project root
+            File srcRoot = new File((File) clientLibProjectRoot, "src/main/java");
+            if (!srcRoot.exists()) {
+                logger.error "Unable to find src/main/java in ${clientZip.name}"
+                return
+            }
+
+            runGradleTask(srcRoot, "assemble")
+            ant.copy(todir: getClientLibSrcOut(), overwrite: true) {
+                fileset(dir: clientLibProjectRoot, includes : "build/libs/*SNAPSHOT*.jar")
             }
         }
     }
