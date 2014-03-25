@@ -43,7 +43,7 @@ class StopTask extends DefaultTask {
             connection.setRequestMethod("POST");
             connection.getOutputStream().write(0);
             ByteStreams.toByteArray(connection.getInputStream());
-            logger.lifecycle("Shutting down devappserver on port : " + port);
+            logger.lifecycle("Shutting down devappserver on port : " + getHttpPort());
             Thread.sleep(2000);
         } catch (MalformedURLException e) {
             throw new GradleScriptException("URL malformed attempting to stop the devappserver : " + e.getMessage());
