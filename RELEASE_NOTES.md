@@ -1,5 +1,5 @@
 ### Version 1.9.1 (March 26, 2014)
-* Fixed stopTask that
+* Fixed stopTask
 * Fixed modules build so that WarPlugin is no longer required on non-war modules
 
 ### Version 1.9.0 (March 14, 2014)
