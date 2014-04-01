@@ -91,8 +91,6 @@ soon as the server has started. When false, this task blocks until the local dev
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `appengineSdk` and explodes the artifact into
 `~/.gradle/appengine-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
 takes precedence over APPENGINE_HOME and the system property _appengine.sdk.root_.
-* `optimizeWar`: Specifies whether the generated classes and dependencies should be bundled into one single JAR file.
-The [Gradle FatJar Plugin](https://github.com/musketyr/gradle-fatjar-plugin/) must be applied to your project. Otherwise the flag has no effect.
 
 Within `appengine` you can define optional properties in a closure named `appcfg`:
 
