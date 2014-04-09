@@ -46,15 +46,10 @@ class InstallClientLibsTask extends ClientLibProcessingTask {
 
             File clientLibProjectRoot = expandClientLib(clientZip)
             if(clientLibProjectRoot == null) {
-                return;
+                return
             }
 
-            ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(clientLibProjectRoot).connect()
-            try {
-                connection.newBuild().forTasks('install').run()
-            } finally {
-                connection.close()
-            }
+            runGradleTasks(clientLibProjectRoot, "install")
         }
     }
 }

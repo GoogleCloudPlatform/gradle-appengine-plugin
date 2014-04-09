@@ -30,7 +30,7 @@ import org.junit.rules.TemporaryFolder
 abstract class AppIntegrationTest {
 
     protected final String APP_BASE_DIR = "projects"
-    protected File projectRoot;
+    protected File projectRoot
 
     @Rule
     public TemporaryFolder tempFolder = new TemporaryFolder()

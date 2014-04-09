@@ -23,7 +23,7 @@ import com.google.appengine.task.StopTask
 import com.google.appengine.task.WebAppDirTask
 import com.google.appengine.task.endpoints.ClientLibProcessingTask
 import com.google.appengine.task.endpoints.EndpointsTask
-import com.google.appengine.task.endpoints.ExpandClientLibsTask
+import com.google.appengine.task.endpoints.ExportClientLibsTask
 import com.google.appengine.task.endpoints.GetClientLibsTask
 import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
 import com.google.appengine.task.endpoints.InstallClientLibsTask
@@ -82,7 +82,7 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String APPENGINE_FUNCTIONAL_TEST = 'appengineFunctionalTest'
     static final String APPENGINE_ENDPOINTS_GET_DISCOVERY_DOCS = "appengineEndpointsGetDiscoveryDocs"
     static final String APPENGINE_ENDPOINTS_GET_CLIENT_LIBS = "appengineEndpointsGetClientLibs"
-    static final String APPENGINE_ENDPOINTS_EXPAND_CLIENT_LIBS = "appengineEndpointsExpandClientLibs"
+    static final String APPENGINE_ENDPOINTS_EXPORT_CLIENT_LIBS = "appengineEndpointsExportClientLibs"
     static final String APPENGINE_ENDPOINTS_INSTALL_CLIENT_LIBS = "appengineEndpointsInstallClientLibs"
     static final String GRADLE_USER_PROP_PASSWORD = 'appenginePassword'
     static final String EXPLODED_WAR_DIR_CONVENTION_PARAM = 'explodedAppDirectory'
@@ -90,7 +90,7 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM = "clientLibDirectory"
     static final String ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM = "discoveryDocDirectory"
     static final String ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM = "discoveryDocFormat"
-    static final String ENDPOINTS_CLIENT_LIB_COPY_SRC_CONVENTION_PARAM = "clientLibSrcOut"
+    static final String ENDPOINTS_CLIENT_LIB_COPY_SRC_CONVENTION_PARAM = "clientLibJarOut"
     static final String BACKEND_PROJECT_PROPERTY = 'backend'
     static final String SETTING_PROJECT_PROPERTY = 'setting'
     static final String FUNCTIONAL_TEST_COMPILE_CONFIGURATION = 'functionalTestCompile'
@@ -160,7 +160,7 @@ class AppEnginePlugin implements Plugin<Project> {
     }
 
     private File getEndpointsClientLibDirectory(Project project) {
-        getBuildSubDirectory(project, 'client-libs');
+        getBuildSubDirectory(project, 'client-libs')
     }
 
     private File getBuildSubDirectory(Project project, String subDirectory) {
@@ -464,7 +464,7 @@ class AppEnginePlugin implements Plugin<Project> {
             } else if (endpointsTask instanceof GetClientLibsTask || endpointsTask instanceof ClientLibProcessingTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
             }
-            if (endpointsTask instanceof ExpandClientLibsTask) {
+            if (endpointsTask instanceof ExportClientLibsTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_SRC_CONVENTION_PARAM) { appEnginePluginConvention.endpoints.clientLibSrcOut }
             }
         }
@@ -492,10 +492,10 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsInstallClientLibs.group = APPENGINE_GROUP
         endpointsInstallClientLibs.dependsOn(endpointsGetClientLibs)
 
-        ExpandClientLibsTask endpointsExpandClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_EXPAND_CLIENT_LIBS, ExpandClientLibsTask)
-        endpointsExpandClientLibs.description = 'Expand the src directory of generated client libraries to a user defined destination'
-        endpointsExpandClientLibs.group = APPENGINE_GROUP
-        endpointsExpandClientLibs.dependsOn(endpointsGetClientLibs)
+        ExportClientLibsTask endpointsExportClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_EXPORT_CLIENT_LIBS, ExportClientLibsTask)
+        endpointsExportClientLibs.description = 'Export the generated client libraries jars to a user defined destination'
+        endpointsExportClientLibs.group = APPENGINE_GROUP
+        endpointsExportClientLibs.dependsOn(endpointsGetClientLibs)
 
         project.gradle.projectsEvaluated {
             if(appEnginePluginConvention.endpoints.getDiscoveryDocsOnBuild) {
@@ -508,7 +508,7 @@ class AppEnginePlugin implements Plugin<Project> {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsInstallClientLibs)
             }
             if(appEnginePluginConvention.endpoints.expandClientLibsOnBuild) {
-                project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsExpandClientLibs)
+                project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsExportClientLibs)
             }
         }
     }

@@ -3,6 +3,8 @@ package com.google.appengine.task.endpoints
 import com.google.appengine.task.AbstractTask
 import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.InputDirectory
+import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.ProjectConnection
 
 /**
  * Base class for client library processing tasks
@@ -17,13 +19,13 @@ abstract class ClientLibProcessingTask extends EndpointsTask {
      AppEnginePlugin.configureEndpoints for more information.
      */
     @InputDirectory
-    File clientLibDirectory;
+    File clientLibDirectory
 
-    public File[] getClientLibZips() {
+    File[] getClientLibZips() {
         getClientLibDirectory().listFiles([accept:{dir, file -> file.endsWith(".zip")}] as FilenameFilter)
     }
 
-    public File expandClientLib(File clientZip) {
+    File expandClientLib(File clientZip) {
 
         File outputDir = getTemporaryDir()
         File subDir = new File(outputDir, clientZip.name + "-unzipped")
@@ -32,12 +34,24 @@ abstract class ClientLibProcessingTask extends EndpointsTask {
         String[] buildFiles = new FileNameFinder().getFileNames(subDir.getAbsolutePath(), "**/build.gradle")
 
         if (buildFiles.length != 1) {
-            logger.error "When looking for project root in ${clientZip.name}, found ${buildFile.length}(required : 1) build.gradle files"
-            return null;
+            logger.error "When looking for project root in ${clientZip.name}, found ${buildFiles.length}(required : 1) build.gradle files"
+            return null
         }
 
-        File buildFile = new File(buildFiles[0]);
+        File buildFile = new File(buildFiles[0])
         assert buildFile.exists()
+        assert buildFile.getParentFile().isDirectory()
         return buildFile.parentFile
     }
+
+    void runGradleTasks(File projectRoot, String... tasks) {
+        ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(projectRoot).connect()
+        try {
+            connection.newBuild().forTasks(tasks).run()
+            // this will throw exceptions that will propagate upwards on failure
+        } finally {
+            connection.close()
+        }
+    }
+
 }

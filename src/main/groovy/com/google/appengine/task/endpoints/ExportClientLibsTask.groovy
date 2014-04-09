@@ -28,11 +28,11 @@ import org.gradle.api.tasks.OutputDirectory
 class ExportClientLibsTask extends ClientLibProcessingTask {
 
     @OutputDirectory
-    File clientLibSrcOut;
+    File clientLibJarOut
 
     @Override
     void executeTask() {
-        logger.info "Expanding sources to " + getClientLibSrcOut()
+        logger.info "Expanding sources to " + getClientLibJarOut()
         expandSourceLocally()
     }
 
@@ -47,19 +47,18 @@ class ExportClientLibsTask extends ClientLibProcessingTask {
 
             File clientLibProjectRoot = expandClientLib(clientZip)
             if(clientLibProjectRoot == null) {
-                return;
-            }
-
-            // look for src/main/java in the client lib project root
-            File srcRoot = new File((File) clientLibProjectRoot, "src/main/java");
-            if (!srcRoot.exists()) {
-                logger.error "Unable to find src/main/java in ${clientZip.name}"
                 return
             }
 
-            runGradleTask(srcRoot, "assemble")
-            ant.copy(todir: getClientLibSrcOut(), overwrite: true) {
-                fileset(dir: clientLibProjectRoot, includes : "build/libs/*SNAPSHOT*.jar")
+            runGradleTasks(clientLibProjectRoot, "assemble")
+            File libDir = new File(clientLibProjectRoot, "build/libs")
+            assert libDir.isDirectory()
+
+            logger.info "Exporting \n" +
+                    "${(libDir.listFiles([accept:{dir, file -> file.endsWith(".jar")}] as FilenameFilter)*.toString()).join("\n")}" +
+                    "\nto ${getClientLibJarOut()}"
+            ant.copy(todir: getClientLibJarOut(), overwrite: true) {
+                fileset(dir: libDir, includes : "*.jar")
             }
         }
     }

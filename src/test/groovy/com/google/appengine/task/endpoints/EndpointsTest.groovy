@@ -28,7 +28,7 @@ import org.junit.Test
  */
 class EndpointsTest extends AppIntegrationTest {
 
-    public static final String TEST_APP = "endpointsTestApp";
+    public static final String TEST_APP = "endpointsTestApp"
 
     /** Generate endpoints docs and libs against a minimal endpoints project */
     @Test
@@ -45,12 +45,12 @@ class EndpointsTest extends AppIntegrationTest {
         finally {
             connection.close()
         }
-        File webInf = new File(projectRoot, "build/exploded-app/WEB-INF");
+        File webInf = new File(projectRoot, "build/exploded-app/WEB-INF")
         ["mysimpleendpoint-v1-rest.discovery",
          "mysimpleendpoint-v1-rpc.discovery"].each {
             assertExists(webInf, it)
         }
-        File clientLib = new File(projectRoot, "build/client-libs");
+        File clientLib = new File(projectRoot, "build/client-libs")
         assertExists(clientLib, "mysimpleendpoint-v1-java.zip")
     }
 

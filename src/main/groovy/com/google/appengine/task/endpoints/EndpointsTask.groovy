@@ -55,7 +55,7 @@ abstract class EndpointsTask extends AbstractTask {
         List<String> params = []
         params << "-cp" << ClasspathBuilder.getClasspath(project)
         params << "-w" << getWebappDirectory().getCanonicalPath()
-        return params;
+        return params
     }
 
     List<String> getServiceClassParams() {
