@@ -6,7 +6,7 @@ def compatibilityVersion = 1.7
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 group = 'com.google.appengine'
-version = '1.9.1'
+version = '1.9.2'
 
 buildscript {
     repositories {
@@ -127,7 +127,7 @@ gradle.taskGraph.whenReady { taskGraph ->
           project.test.systemProperty "appengine.pluginversion", "${version}"
         }
     }
-    else if (taskGraph.allTasks.any { it instanceof Sign }) {
+    else if (taskGraph.allTasks.any { it instanceof Sign } && taskGraph.hasTask(project.nexus.getUploadTaskName())) {
         Console console = System.console()
         console.printf "\n\nPGP credentials required to sign artifacts prior to uploading.\n\n"
 

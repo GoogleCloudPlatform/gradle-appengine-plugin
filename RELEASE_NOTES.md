@@ -1,3 +1,7 @@
+### Version 1.9.2 (April 14, 2014)
+* (Developers) Improved signing flow for non-snapshot build
+* Code cleanup (stopTask)
+
 ### Version 1.9.1 (March 26, 2014)
 * Fixed stopTask
 * Fixed modules build so that WarPlugin is no longer required on non-war modules
