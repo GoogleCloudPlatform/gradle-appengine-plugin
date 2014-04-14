@@ -127,7 +127,7 @@ gradle.taskGraph.whenReady { taskGraph ->
           project.test.systemProperty "appengine.pluginversion", "${version}"
         }
     }
-    else if (taskGraph.allTasks.any { it instanceof Sign } && taskGraph.hasTask(project.nexus.getUploadTaskName())) {
+    else if (taskGraph.allTasks.any { it instanceof Sign } && taskGraph.allTasks.any { it.name.equals(project.nexus.getUploadTaskName()) }) {
         Console console = System.console()
         console.printf "\n\nPGP credentials required to sign artifacts prior to uploading.\n\n"
 
