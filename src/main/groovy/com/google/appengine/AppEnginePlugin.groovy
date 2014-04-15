@@ -90,7 +90,8 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM = "clientLibDirectory"
     static final String ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM = "discoveryDocDirectory"
     static final String ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM = "discoveryDocFormat"
-    static final String ENDPOINTS_CLIENT_LIB_COPY_SRC_CONVENTION_PARAM = "clientLibJarOut"
+    static final String ENDPOINTS_CLIENT_LIB_COPY_JAR_CONVENTION_PARAM = "clientLibJarOut"
+    static final String ENDPOINTS_CLIENT_LIB_COPY_SRC_JAR_CONVENTION_PARAM = "clientLibSrcJarOut"
     static final String BACKEND_PROJECT_PROPERTY = 'backend'
     static final String SETTING_PROJECT_PROPERTY = 'setting'
     static final String FUNCTIONAL_TEST_COMPILE_CONFIGURATION = 'functionalTestCompile'
@@ -465,7 +466,8 @@ class AppEnginePlugin implements Plugin<Project> {
                 endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
             }
             if (endpointsTask instanceof ExportClientLibsTask) {
-                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_SRC_CONVENTION_PARAM) { appEnginePluginConvention.endpoints.clientLibSrcOut }
+                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_JAR_CONVENTION_PARAM) { appEnginePluginConvention.endpoints.clientLibJarOut }
+                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_SRC_JAR_CONVENTION_PARAM) { appEnginePluginConvention.endpoints.clientLibSrcJarOut }
             }
         }
 
@@ -493,7 +495,7 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsInstallClientLibs.dependsOn(endpointsGetClientLibs)
 
         ExportClientLibsTask endpointsExportClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_EXPORT_CLIENT_LIBS, ExportClientLibsTask)
-        endpointsExportClientLibs.description = 'Export the generated client libraries jars to a user defined destination'
+        endpointsExportClientLibs.description = 'Export the generated client libraries jars to a user-defined destination'
         endpointsExportClientLibs.group = APPENGINE_GROUP
         endpointsExportClientLibs.dependsOn(endpointsGetClientLibs)
 
@@ -507,7 +509,7 @@ class AppEnginePlugin implements Plugin<Project> {
             if(appEnginePluginConvention.endpoints.installClientLibsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsInstallClientLibs)
             }
-            if(appEnginePluginConvention.endpoints.expandClientLibsOnBuild) {
+            if(appEnginePluginConvention.endpoints.exportClientLibsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsExportClientLibs)
             }
         }

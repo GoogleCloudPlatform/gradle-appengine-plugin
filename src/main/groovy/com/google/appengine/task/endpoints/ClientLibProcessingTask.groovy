@@ -34,7 +34,7 @@ abstract class ClientLibProcessingTask extends EndpointsTask {
         String[] buildFiles = new FileNameFinder().getFileNames(subDir.getAbsolutePath(), "**/build.gradle")
 
         if (buildFiles.length != 1) {
-            logger.error "When looking for project root in ${clientZip.name}, found ${buildFiles.length}(required : 1) build.gradle files"
+            logger.error "When looking for project root in ${clientZip.name}, found ${buildFiles.length} build.gradle files; was expecting 1"
             return null
         }
 

@@ -16,6 +16,7 @@
 package com.google.appengine.task.endpoints
 
 import org.gradle.api.Incubating
+import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 
 /**
@@ -29,6 +30,8 @@ class ExportClientLibsTask extends ClientLibProcessingTask {
 
     @OutputDirectory
     File clientLibJarOut
+    @Optional @OutputDirectory
+    File clientLibSrcJarOut
 
     @Override
     void executeTask() {
@@ -55,10 +58,20 @@ class ExportClientLibsTask extends ClientLibProcessingTask {
             assert libDir.isDirectory()
 
             logger.info "Exporting \n" +
-                    "${(libDir.listFiles([accept:{dir, file -> file.endsWith(".jar")}] as FilenameFilter)*.toString()).join("\n")}" +
+                    "${(libDir.listFiles([accept:{dir, file -> file.endsWith(".jar") && !file.endsWith("-sources.jar")}] as FilenameFilter)*.toString()).join("\n")}" +
                     "\nto ${getClientLibJarOut()}"
             ant.copy(todir: getClientLibJarOut(), overwrite: true) {
-                fileset(dir: libDir, includes : "*.jar")
+                fileset(dir: libDir, includes : "*.jar", excludes : "*-sources.jar")
+            }
+
+
+            if(getClientLibSrcJarOut()) {
+                logger.info "Exporting \n" +
+                        "${(libDir.listFiles([accept:{dir, file -> file.endsWith("-sources.jar")}] as FilenameFilter)*.toString()).join("\n")}" +
+                        "\nto ${getClientLibSrcJarOut()}"
+                ant.copy(todir: getClientLibSrcJarOut(), overwrite: true) {
+                    fileset(dir: libDir, includes : "*-sources.jar")
+                }
             }
         }
     }

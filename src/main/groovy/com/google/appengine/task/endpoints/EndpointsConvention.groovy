@@ -25,7 +25,8 @@ class EndpointsConvention {
     boolean getDiscoveryDocsOnBuild = false
     boolean getClientLibsOnBuild = false
     boolean installClientLibsOnBuild = false // will override getClientLibsOnBuild when true
-    boolean expandClientLibsOnBuild = false // will override getClientLibsOnBuild when true
-    File clientLibSrcOut
+    boolean exportClientLibsOnBuild = false // will override getClientLibsOnBuild when true
+    File clientLibJarOut
+    File clientLibSrcJarOut
     List<String> serviceClasses
 }
