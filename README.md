@@ -46,6 +46,7 @@ The App Engine plugin defines the following tasks:
 * `appengineEndpointsGetClientLibs`: Download Endpoints client libraries. (this makes network calls)
 * `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp` with this to ensure the discovery docs are copied into the project after download. (this makes network calls)
 * `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo.
+* `appengineEndpointsExportClientLibraries`: Export client libraries to user-defined destination.
 * `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
 * `appengineExplodeApp`: Extends the `war`/`ear` task to generate WAR/EAR file and explodes the artifact into `build/exploded-app`.
 * `appengineFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
@@ -115,9 +116,13 @@ is not, both HTTP and HTTPS requests will use the given proxy.
 Within `appengine` you can also define a closure named `endpoints`:
 
 * `discoveryDocFormat`: A list of discovery doc formats. (defaults to ['rpc', 'rest'])
+* `serviceClasses`: A list of endpoints classes to generate discovery docs or client libs for (overrides values read from web.xml)
 * `getDiscoveryDocsOnBuild`: Automatically download discovery docs before the `war` task is called. (defaults to false)
 * `getClientLibsOnBuild`: Automatically download client libraries before the `war` task is called. (defaults to false)
-* `installClientLibsOnBuild`: Automatically install client libs. (defaults to false) [this task will never be UP-TO-DATE, careful when making part of your build]
+* `installClientLibsOnBuild`: Automatically install client libs, will get client libs if necessary. (defaults to false) [this task will never be UP-TO-DATE, careful when making part of your build]
+* `exportClientLibsOnBuild`: Automatically export client libs, will get client libs if necessary. (defaults to false)
+* `clientLibsJarOut`: Output directory of client library jars when exporting. (Must be of type: File, will be created if doesn't exist)
+* `clientLibsSrcJarOut`: Output directory of client library source jars when exporting, if not specified no source jars will be copied. (Must be of type: File, will be created if doesn't exist)
 
 The task `appengineDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
 closure `app`:
