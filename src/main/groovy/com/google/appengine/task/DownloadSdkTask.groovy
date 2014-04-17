@@ -39,15 +39,15 @@ class DownloadSdkTask extends DefaultTask {
             }
         }
 
-        if(!new File(getDownloadedSdkRoot()).exists()) {
+        if(!new File(getDownloadedSdkRoot(getAppengineSdkZipFile(), getExplodedSdkDirectory())).exists()) {
              ant.unzip(src: getAppengineSdkZipFile(), dest: getExplodedSdkDirectory())
         }
 
-        System.setProperty(AbstractTask.APPENGINE_SDK_ROOT_SYS_PROP_KEY, getDownloadedSdkRoot())
+        System.setProperty(AbstractTask.APPENGINE_SDK_ROOT_SYS_PROP_KEY, getDownloadedSdkRoot(getAppengineSdkZipFile(), getExplodedSdkDirectory()))
     }
 
-    private String getDownloadedSdkRoot() {
-        String filename = getAppengineSdkZipFile().name.substring(0, getAppengineSdkZipFile().name.lastIndexOf('.'))
-        getExplodedSdkDirectory().canonicalPath + System.getProperty('file.separator') + filename
+    static String getDownloadedSdkRoot(File zipFile, File explodedSdkDir) {
+        String filename = zipFile.name.substring(0, zipFile.name.lastIndexOf('.'))
+        explodedSdkDir.canonicalPath + System.getProperty('file.separator') + filename
     }
 }

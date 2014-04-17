@@ -15,6 +15,7 @@
  */
 package com.google.appengine
 
+import com.google.appengine.tooling.AppEngineToolingBuilderModel
 import com.google.appengine.task.DownloadSdkTask
 import com.google.appengine.task.EnhanceTask
 import com.google.appengine.task.ExplodeAppTask
@@ -45,6 +46,9 @@ import org.gradle.api.tasks.testing.Test
 import org.gradle.plugins.ear.EarPluginConvention
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
 import org.gradle.plugins.ide.idea.IdeaPlugin
+import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
+
+import javax.inject.Inject
 
 import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
 
@@ -102,8 +106,15 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String FUNCTIONAL_TEST_RUNTIME_CONFIGURATION = 'functionalTestRuntime'
     static final String FUNCTIONAL_TEST_SOURCE_SET = 'functionalTest'
 
+    private final ToolingModelBuilderRegistry registry;
+    @Inject
+    public AppEnginePlugin(ToolingModelBuilderRegistry registry) {
+        this.registry = registry;
+    }
+
     @Override
     void apply(Project project) {
+        registry.register(new AppEngineToolingBuilderModel());
         project.configurations.create(APPENGINE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                 .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
 
@@ -149,35 +160,35 @@ class AppEnginePlugin implements Plugin<Project> {
         configureFunctionalTest(project, appenginePluginConvention)
     }
 
-    private File getExplodedSdkDirectory(Project project) {
+    static File getExplodedSdkDirectory(Project project) {
         new File(project.gradle.gradleUserHomeDir, 'appengine-sdk')
     }
 
-    private File getExplodedAppDirectory(Project project) {
+    static File getExplodedAppDirectory(Project project) {
         getBuildSubDirectory(project, 'exploded-app')
     }
 
-    private File getDownloadedAppDirectory(Project project) {
+    static File getDownloadedAppDirectory(Project project) {
         getBuildSubDirectory(project, 'downloaded-app')
     }
 
-    private File getDiscoveryDocDirectory(Project project) {
+    static File getDiscoveryDocDirectory(Project project) {
         getBuildSubDirectory(project, 'discovery-docs')
     }
 
-    private File getEndpointsClientLibDirectory(Project project) {
+    static File getEndpointsClientLibDirectory(Project project) {
         getBuildSubDirectory(project, 'client-libs')
     }
 
-    private File getGenDir(Project project) {
+    static File getGenDir(Project project) {
         getBuildSubDirectory(project, 'generated-source')
     }
 
-    private File getEndpointsExpandedSrcDir(Project project) {
+    static File getEndpointsExpandedSrcDir(Project project) {
         new File(getGenDir(project),'endpoints/java')
     }
 
-    private File getBuildSubDirectory(Project project, String subDirectory) {
+    static File getBuildSubDirectory(Project project, String subDirectory) {
         def subDir = new StringBuilder()
         subDir <<= project.buildDir
         subDir <<= System.getProperty('file.separator')
@@ -633,7 +644,7 @@ class AppEnginePlugin implements Plugin<Project> {
         }
     }
 
-    private File getAppDir(Project project) {
+    static File getAppDir(Project project) {
         if(project.hasProperty('ear')) {
             return new File(project.projectDir, project.convention.getPlugin(EarPluginConvention).appDirName)
         } else if(project.hasProperty('war')) {

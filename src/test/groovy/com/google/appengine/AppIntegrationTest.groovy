@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.appengine.task
+package com.google.appengine
 
 import org.apache.commons.io.FileUtils
 import org.gradle.tooling.GradleConnector
@@ -42,7 +42,7 @@ abstract class AppIntegrationTest {
         FileUtils.copyDirectory(new File(getClass().getClassLoader().getResource(getAppResourceBaseDir()).toURI()), projectRoot)
         replaceVersions()
         String[] tasksToRun = getPreTestTasks()
-        if (tasksToRun != null) {
+        if (tasksToRun != null && tasksToRun.length > 0) {
             ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(projectRoot).connect()
             try {
                 connection.newBuild().forTasks(tasksToRun).run()

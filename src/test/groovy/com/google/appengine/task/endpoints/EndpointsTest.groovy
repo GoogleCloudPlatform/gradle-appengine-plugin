@@ -15,7 +15,7 @@
  */
 package com.google.appengine.task.endpoints
 
-import com.google.appengine.task.AppIntegrationTest
+import com.google.appengine.AppIntegrationTest
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
 import org.junit.Assert

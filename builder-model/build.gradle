@@ -1,0 +1,20 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+
+apply from: '../java6-mode.gradle'
+
+archivesBaseName = 'gradle-appengine-builder-model'
+group = 'com.google.appengine'
+version = '0.1.0'
+
+setJava6Mode(compileJava)
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle App Engine Tooling Model',
+                   'Implementation-Version': version,
+                   'Built-By': System.getProperty('user.name'),
+                   'Built-JDK': System.getProperty('java.version'),
+                   'Built-Gradle': gradle.gradleVersion
+    }
+}

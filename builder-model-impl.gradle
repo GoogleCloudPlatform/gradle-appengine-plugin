@@ -1,0 +1,25 @@
+// set up the build for the model implementation because it needs to be compiled
+// separately to use java6 instead of java7 like the main so the builder model can
+// be intergrated with tools that use java6
+
+apply from: 'java6-mode.gradle'
+
+sourceSets {
+    model
+    main {
+        compileClasspath += model.output
+        runtimeClasspath += model.output
+    }
+}
+
+setJava6Mode(compileModelJava)
+
+dependencies {
+    modelCompile project(':builder-model')
+}
+
+jar {
+    from {
+        sourceSets.model.output
+    }
+}

@@ -15,12 +15,6 @@
  */
 package com.google.appengine.task.endpoints
 
-import com.google.appengine.task.AppIntegrationTest
-import org.gradle.tooling.GradleConnector
-import org.gradle.tooling.ProjectConnection
-import org.junit.Assert
-import org.junit.Test
-
 /**
  * Simple test to ensure the plugin is interacting correctly with the Endpoints service
  *

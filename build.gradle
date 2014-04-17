@@ -2,6 +2,8 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'nexus'
 
+apply from: 'builder-model-impl.gradle'
+
 def compatibilityVersion = 1.7
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
@@ -29,6 +31,7 @@ repositories {
 dependencies {
     compile localGroovy()
     compile gradleApi()
+    compile project(':builder-model')
     compile "com.google.appengine:appengine-local-endpoints:${version}"
     compile 'com.google.guava:guava:16.0'
     testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
@@ -46,7 +49,7 @@ jar {
 }
 
 idea.project {
-    jdkName = '1.6'
+    jdkName = '1.7'
 
     ipr.withXml { provider ->
         def node = provider.asNode()
@@ -62,7 +65,7 @@ idea.project {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.10'
+    gradleVersion = '1.11'
 }
 
 modifyPom {
@@ -116,7 +119,7 @@ task snapshot << {
 test {
     systemProperty "appengine.version", "${version}"
     systemProperty "appengine.pluginversion", "${version}"
-}.dependsOn install
+}.dependsOn install, ':builder-model:install'
 
 import org.gradle.plugins.signing.Sign
 
