@@ -36,7 +36,7 @@ class WebXmlProcessing {
     }
 
     private static NodeChild getSystemServiceServlet(GPathResult root) {
-        def servlets = root."servlet".findAll { it."servlet-class".text() == "com.google.api.server.spi.SystemServiceServlet" ? it : null }
+        def servlets = root."servlet".findAll { it."servlet-class".text().trim() == "com.google.api.server.spi.SystemServiceServlet" ? it : null }
         if(servlets.size() != 1) {
             throw new GradleException("web.xml must have 1 (found:${servlets.size()}) SystemServiceServlet servlet")
         }
@@ -45,7 +45,7 @@ class WebXmlProcessing {
 
     private static NodeChild getServicesParam(NodeChild servlet) {
         assert servlet.name() == "servlet"
-        def servicesParam = servlet."init-param".findAll { it."param-name".text() == "services" ? it : null }
+        def servicesParam = servlet."init-param".findAll { it."param-name".text().trim() == "services" ? it : null }
         if(servicesParam.size() != 1) {
             throw new GradleException("web.xml must have 1 (found:${servicesParam.size()}) SystemServiceServlet 'services' init-param")
         }
@@ -61,7 +61,7 @@ class WebXmlProcessing {
 
     public static NodeChild getSystemServiceServletMapping(GPathResult root, NodeChild servlet) {
         def servletName = servlet."servlet-name".getText()
-        def servletMapping = root."servlet-mapping".findAll { it."servlet-name".text() == servletName ? it : null }
+        def servletMapping = root."servlet-mapping".findAll { it."servlet-name".text().trim() == servletName ? it : null }
         if(servletMapping.size() != 1) {
             throw new GradleException("must have one ${servletName} servlet-mapping")
         }

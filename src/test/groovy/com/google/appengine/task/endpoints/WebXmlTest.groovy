@@ -44,7 +44,8 @@ class WebXmlTest extends Specification {
                         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
                         <servlet>
                             <servlet-name>SystemServiceServlet</servlet-name>
-                            <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+                            <servlet-class>com.google.api.server.spi.SystemServiceServlet
+                            </servlet-class>
                                 <init-param>
                                 <param-name>services</param-name>
                                 <param-value>${serviceClassParam}</param-value>
