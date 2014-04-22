@@ -1,3 +1,7 @@
+### Version 1.9.3 (April 23, 2014)
+* Added appengineEndpointsExportClientLibs task
+* Fixed web.xml parsing for whitespaces
+
 ### Version 1.9.2 (April 14, 2014)
 * (Developers) Improved signing flow for non-snapshot build
 * Code cleanup (stopTask)
