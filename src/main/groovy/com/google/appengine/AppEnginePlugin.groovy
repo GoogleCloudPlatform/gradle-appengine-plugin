@@ -499,7 +499,7 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsExportClientLibs.group = APPENGINE_GROUP
         endpointsExportClientLibs.dependsOn(endpointsGetClientLibs)
 
-        project.gradle.projectsEvaluated {
+        project.afterEvaluate {
             if(appEnginePluginConvention.endpoints.getDiscoveryDocsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs)
             }
