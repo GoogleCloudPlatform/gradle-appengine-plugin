@@ -35,16 +35,19 @@ class ExportClientLibsTask extends ClientLibProcessingTask {
 
     @Override
     void executeTask() {
-        logger.info "Expanding sources to " + getClientLibJarOut()
-        expandSourceLocally()
+        logger.info "Exporting jar to " + getClientLibJarOut()
+        if(getClientLibSrcJarOut()) {
+            logger.info "Exporting src-jar to " + getClientLibSrcJarOut()
+        }
+        exportJar()
     }
 
-    private expandSourceLocally() {
+    private exportJar() {
 
         def zips = getClientLibZips()
 
         assert zips.length > 0
-        logger.debug "Copying client libraries sources from zip : ${zips*.toString()}"
+        logger.debug "Archiving client libraries from zip : ${zips*.toString()}"
 
         zips.each { clientZip ->
 
