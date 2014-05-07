@@ -30,6 +30,8 @@ class ExpandClientLibsTask extends ClientLibProcessingTask {
     @OutputDirectory
     File clientLibGenSrcDir
 
+    final static String JAVA_SRC_DIR = "src/main/java"
+
     @Override
     void executeTask() {
         logger.info "Expanding sources to " + getClientLibGenSrcDir()
@@ -52,7 +54,7 @@ class ExpandClientLibsTask extends ClientLibProcessingTask {
                 logger.info("No client lib found") //TODO : Better error message
                 return
             }
-            File srcRoot = new File(clientLibProjectRoot, "src/main/java")
+            File srcRoot = new File(clientLibProjectRoot, JAVA_SRC_DIR)
             if (srcRoot == null) {
                 logger.info("No client lib sources found") //TODO : Better error message
                 return

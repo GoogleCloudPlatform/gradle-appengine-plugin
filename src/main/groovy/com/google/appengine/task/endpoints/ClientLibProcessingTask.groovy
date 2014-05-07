@@ -1,13 +1,8 @@
 package com.google.appengine.task.endpoints
 
-import com.google.appengine.task.AbstractTask
-import org.apache.maven.model.Model
-import org.gradle.api.Project
-import org.gradle.api.logging.Logger
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
-import org.gradle.tooling.model.GradleProject
 
 /**
  * Base class for client library processing tasks

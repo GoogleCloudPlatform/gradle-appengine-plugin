@@ -516,7 +516,7 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsExportClientLibs.dependsOn(endpointsGetClientLibs)
 
         ExpandClientLibsTask endpointsExpandClientLibs = project.tasks.create(APPENGINE_ENDPOINTS_EXPAND_CLIENT_LIBS, ExpandClientLibsTask)
-        endpointsExpandClientLibs.description = 'Expand the generated client libraries sources in to "some location here"' //TODO fix this
+        endpointsExpandClientLibs.description = 'Expand the generated client libraries sources in to build/generated-source'
         endpointsExpandClientLibs.group = APPENGINE_GROUP
         endpointsExpandClientLibs.dependsOn(endpointsGetClientLibs)
 
@@ -541,22 +541,24 @@ class AppEnginePlugin implements Plugin<Project> {
         final String GOOGLE_API_LIB_VERSION = "1.18.0-rc" //TODO MAYBE MAKE THIS CUSTOMIZABLE
         final String GOOGLE_API_LIB = "com.google.api-client:google-api-client:${GOOGLE_API_LIB_VERSION}"
         final String GOOGLE_ANDROID_API_LIB = "com.google.api-client:google-api-client-android:${GOOGLE_API_LIB_VERSION}"
+        final String EXCLUDE_HTTP_GROUP = "org.apache.httpcomponents"
+        final String EXCLUDE_HTTP_MODULE = "httpclient"
         final String ENDPOINTS_SOURCE_SET = "endpointsSrc"
         final String ENDPOINTS_CONFIG = "endpoints"
         final String ANDROID_CONFIG = "android-endpoints"
 
-        // configure the sourceSet
+        // Pull in the expanded source for endpoints as a source set of this project
         SourceSet endpointsSrc = project.sourceSets.create(ENDPOINTS_SOURCE_SET)
         endpointsSrc.getJava().setSrcDirs(Lists.asList(endpointsExpandedSrcDir))
         project.tasks.getByName(endpointsSrc.getCompileJavaTaskName()).dependsOn(
                 project.tasks.getByName(APPENGINE_ENDPOINTS_EXPAND_CLIENT_LIBS))
         project.dependencies.add(endpointsSrc.getCompileConfigurationName(), GOOGLE_API_LIB);
 
-        // configure the configurations
+        // configure the configurations so other modules can depend on endpoints
         project.configurations.create(ENDPOINTS_CONFIG)
         project.configurations.create(ANDROID_CONFIG)
         project.dependencies.add(ANDROID_CONFIG, GOOGLE_ANDROID_API_LIB);
-        project.configurations.findByName(ANDROID_CONFIG).exclude(group: 'org.apache.httpcomponents', module: 'httpclient')
+        project.configurations.findByName(ANDROID_CONFIG).exclude(group: EXCLUDE_HTTP_GROUP, module: EXCLUDE_HTTP_MODULE)
 
         // create the archive tasks
         Jar endpointsJarTask = project.tasks.create("_appengineEndpointsArtifact", Jar)
@@ -569,7 +571,7 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsAndroidJarTask.classifier = "endpoints-android"
         endpointsAndroidJarTask.from(endpointsSrc.output)
 
-        // add the archive task to the configurations
+        // add the archive task to the configurations so the generated jars are usuable dependencies of the configuration
         project.artifacts.add(ENDPOINTS_CONFIG, endpointsJarTask)
         project.artifacts.add(ANDROID_CONFIG, endpointsAndroidJarTask)
     }

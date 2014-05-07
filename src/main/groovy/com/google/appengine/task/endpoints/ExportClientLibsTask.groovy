@@ -20,7 +20,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 
 /**
- * Endpoints task to expand client library sources for use with another project
+ * Endpoints task to export client library jars for use with another project
  * This task has a dependency (task-level) on GetClientLibsTask.
  *
  * @author Rajeev Dayal
