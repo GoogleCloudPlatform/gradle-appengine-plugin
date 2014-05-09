@@ -1,3 +1,9 @@
+### Version 1.9.4 (May 9th, 2014)
+* Added configuration for other projects to depends on endpoints in an AppEngine module (endpoints, endpoints-android)
+* Added appengineEndpointsExpandClientLibs task
+* Added Tooling Model support for App Engine modules
+* Fix for endpoints convention evaluation when using configure-on-demand
+
 ### Version 1.9.3 (April 23, 2014)
 * Added appengineEndpointsExportClientLibs task
 * Fixed web.xml parsing for whitespaces

@@ -20,7 +20,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.3'
+            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.4'
         }
     }
 
@@ -31,7 +31,7 @@ convention property `downloadSdk` to `true`. This option requires you to specify
 the configuration `appengineSdk`.
 
     dependencies {
-        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.3'
+        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.4'
     }
 
 ## Tasks
@@ -240,3 +240,18 @@ The task `appengineEndpointsGetDiscoveryDocs` only downloads the Discovery Docs 
 the `war` task copies this into the WEB-INF folder when packaging. If you want them to be copied in, just run `build` or `appengineExplodeApp` again.
 Why do we do this? The endpoints calls are network calls to a service and some users may not want to do this on every build. The user can update their
 endpoints discovery docs when they know they need to and it will be packaged in on every subsequent build without needing to be regenerated.
+
+<br>
+**How do I use a compile dependency on my endpoints client libraries from another project?**
+
+Using the new configurations in the appengine plugin (endpoints/android-endpoints) you can do
+
+     dependencies {
+         compile project(path: '<appengine-module>', configuration: 'endpoints')
+     }
+
+or in an android project
+
+    dependencies {
+        compile project(path: '<appengine-module>', configuration: 'endpoints-android')
+    }

@@ -8,7 +8,7 @@ def compatibilityVersion = 1.7
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 group = 'com.google.appengine'
-version = '1.9.3'
+version = '1.9.4'
 
 buildscript {
     repositories {
@@ -141,5 +141,13 @@ gradle.taskGraph.whenReady { taskGraph ->
         allprojects { ext."signing.keyId" = id }
         allprojects { ext."signing.secretKeyRingFile" = file }
         allprojects { ext."signing.password" = password }
+
+        console.printf "\n\nOSS Sonatype Credential required to upload.\n\n"
+
+        def nexusUsername = console.readLine("Sonatype Username: ")
+        def nexusPassword = console.readPassword("Sonatype Password: ")
+
+        allprojects { ext."nexusUsername" = nexusUsername }
+        allprojects { ext."nexusPassword" = new String(nexusPassword) }
     }
 }

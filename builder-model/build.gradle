@@ -1,5 +1,6 @@
 apply plugin: 'maven'
 apply plugin: 'java'
+apply plugin: 'nexus'
 
 apply from: '../java6-mode.gradle'
 
@@ -16,5 +17,23 @@ jar {
                    'Built-By': System.getProperty('user.name'),
                    'Built-JDK': System.getProperty('java.version'),
                    'Built-Gradle': gradle.gradleVersion
+    }
+}
+
+
+modifyPom {
+    project {
+        name 'Gradle App Engine tooling model'
+        description 'Tooling model for Gradle App Engine plugin'
+        url 'https://github.com/GoogleCloudPlatform/gradle-appengine-plugin'
+        inceptionYear '2014'
+
+        licenses {
+            license {
+                name 'The Apache Software License, Version 2.0'
+                url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                distribution 'repo'
+            }
+        }
     }
 }
