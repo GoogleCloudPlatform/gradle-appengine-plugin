@@ -253,5 +253,5 @@ Using the new configurations in the appengine plugin (endpoints/android-endpoint
 or in an android project
 
     dependencies {
-        compile project(path: '<appengine-module>', configuration: 'endpoints-android')
+        compile project(path: '<appengine-module>', configuration: 'android-endpoints')
     }
