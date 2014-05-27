@@ -82,8 +82,6 @@ The App Engine plugin defines the following convention properties in the `appeng
 
 * `httpAddress`: The IP address for the local development server (if server is to be accessed from network). Default is localhost.
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
-* ~~`stopPort`: The TCP port which local development server should listen for admin requests on (defaults to 8081).~~ Deprecated
-* ~~`stopKey`: The key to pass to local development server when requesting it to stop (defaults to null).~~ Deprecated
 * `daemon`: Specifies whether the local development server should run in the background. When true, this task completes as
 soon as the server has started. When false, this task blocks until the local development server is stopped (defaults to false).
 * `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
@@ -92,6 +90,8 @@ soon as the server has started. When false, this task blocks until the local dev
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `appengineSdk` and explodes the artifact into
 `~/.gradle/appengine-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
 takes precedence over APPENGINE_HOME and the system property _appengine.sdk.root_.
+* ~~`enhancerVersion`: The version (v1/v2) parameter for App Engine datanucleus enhancer task~~ Deprecated
+* ~~`enhancerApi`: The api (jdo/jpa) parameter for the App Engine datanucleas enhancer task~~ Deprecated
 
 Within `appengine` you can define optional properties in a closure named `appcfg`:
 
@@ -110,8 +110,11 @@ convention property was provided also. Alternatively, you can set the password i
 is not, both HTTP and HTTPS requests will use the given proxy.
 * `oauth2`: Use OAuth2 authentication instead of password-based authentication.
 * `extraOptions`: A list of extra command line options for the AppCfg tool (defaults to [])
-* `enhancerVersion`: The version (v1/v2) parameter for App Engine datanucleus enhancer task
-* `enhancerApi`: The api (jdo/jpa) parameter for the App Engine datanucleas enhancer task
+
+Within `appengine` you can also define a closure named `enhancer`:
+* `version`: The version (v1/v2) parameter for App Engine datanucleus enhancer task
+* `api`: The api (jdo/jpa) parameter for the App Engine datanucleas enhancer task
+* `enhanceOnBuild`: Automatically run the enhancer (defaults to false)
 
 Within `appengine` you can also define a closure named `endpoints`:
 
@@ -255,3 +258,9 @@ or in an android project
     dependencies {
         compile project(path: '<appengine-module>', configuration: 'android-endpoints')
     }
+
+<br>
+**Enhancer failed with "Java returned: 1", how do I know what's wrong?**
+
+Run using the --info flag when building to find the location of the error log file, that log file might have details on what went wrong. On linux machines
+it may appear as "/tmp/enhance(some number).log"

@@ -295,19 +295,27 @@ class AppEnginePlugin implements Plugin<Project> {
     private void configureEnhance(Project project, AppEnginePluginConvention appEnginePluginConvention) {
         project.tasks.withType(EnhanceTask).whenTaskAdded { EnhanceTask appengineEnhanceTask ->
             appengineEnhanceTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
-            appengineEnhanceTask.conventionMapping.map('enhancerVersion') { appEnginePluginConvention.enhancerVersion }
-            appengineEnhanceTask.conventionMapping.map('enhancerApi') { appEnginePluginConvention.enhancerApi }
+            appengineEnhanceTask.conventionMapping.map('enhancerVersion') { appEnginePluginConvention.enhancer.version ?: appEnginePluginConvention.enhancerVersion }
+            appengineEnhanceTask.conventionMapping.map('enhancerApi') { appEnginePluginConvention.enhancer.api ?: appEnginePluginConvention.enhancerApi }
         }
 
         EnhanceTask appengineEnhanceTask = project.tasks.create(APPENGINE_ENHANCE, EnhanceTask)
         appengineEnhanceTask.description = 'Enhances DataNucleus classes.'
         appengineEnhanceTask.group = APPENGINE_GROUP
 
-        if(project.plugins.hasPlugin('groovy')) {
-            project.tasks.getByName(APPENGINE_ENHANCE).dependsOn project.compileGroovy
-        }
-        else {
-            project.tasks.getByName(APPENGINE_ENHANCE).dependsOn project.compileJava
+        project.tasks.getByName(APPENGINE_ENHANCE).dependsOn project.classes
+
+        project.afterEvaluate {
+            if(appEnginePluginConvention.enhancer.enhanceOnBuild) {
+                project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(appengineEnhanceTask)
+            }
+            // Deprecation Warnings for convention use
+            if(appEnginePluginConvention.enhancerApi) {
+                project.logger.warn "**WARNING appengine.enhancerApi is deprecated and will be removed in future versions, use appengine.enhancer.api instead"
+            }
+            if(appEnginePluginConvention.enhancerVersion) {
+                project.logger.warn "**WARNING appengine.enhancerVersion is deprecated and will be removed in future versions, use appengine.enhancer.version instead"
+            }
         }
     }
 

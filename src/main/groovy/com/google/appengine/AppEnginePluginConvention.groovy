@@ -15,6 +15,7 @@
  */
 package com.google.appengine
 
+import com.google.appengine.task.EnhancerConvention
 import com.google.appengine.task.appcfg.AppConfigConvention
 import com.google.appengine.task.endpoints.EndpointsConvention
 
@@ -35,6 +36,7 @@ class AppEnginePluginConvention {
     Boolean downloadSdk = false
     AppConfigConvention appCfg = new AppConfigConvention()
     EndpointsConvention endpoints = new EndpointsConvention()
+    EnhancerConvention enhancer = new EnhancerConvention()
 
     def appengine(Closure closure) {
         closure.delegate = this
@@ -68,6 +70,12 @@ class AppEnginePluginConvention {
     def endpoints(Closure closure) {
         closure.resolveStrategy = Closure.DELEGATE_FIRST
         closure.delegate = endpoints
+        closure()
+    }
+
+    def enhancer(Closure closure) {
+        closure.resolveStrategy = Closure.DELEGATE_FIRST
+        closure.delegate = enhancer
         closure()
     }
 }
