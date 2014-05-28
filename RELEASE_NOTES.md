@@ -1,3 +1,6 @@
+### Version 1.9.5 (May 28th, 2014)
+* Added `enhancer` closure with `api`, `version` and `enhanceOnBuild` configuration options, deprecated old enhancer configs (enhancerApi, enhancerVersion)
+
 ### Version 1.9.4 (May 9th, 2014)
 * Added configuration for other projects to depends on endpoints in an AppEngine module (endpoints, endpoints-android)
 * Added appengineEndpointsExpandClientLibs task
