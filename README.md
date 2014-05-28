@@ -47,7 +47,7 @@ The App Engine plugin defines the following tasks:
 * `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp` with this to ensure the discovery docs are copied into the project after download. (this makes network calls)
 * `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo.
 * `appengineEndpointsExportClientLibraries`: Export client libraries to user-defined destination.
-* `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable".
+* `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable". This requires you to add the necessary enhancer jars as dependencies to your project.
 * `appengineExplodeApp`: Extends the `war`/`ear` task to generate WAR/EAR file and explodes the artifact into `build/exploded-app`.
 * `appengineFunctionalTest`: Runs the tests from `functionalTest` source set against a local development server started in daemon mode.
 * `appengineListBackends`: Lists all the backends configured for the app specified in `appengine-web.xml`.
