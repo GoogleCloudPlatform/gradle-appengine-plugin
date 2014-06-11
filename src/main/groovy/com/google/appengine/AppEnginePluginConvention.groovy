@@ -29,7 +29,9 @@ class AppEnginePluginConvention {
     Integer httpPort = 8080
     Boolean daemon = false
     Boolean disableUpdateCheck = false
+    @Deprecated
     String enhancerVersion
+    @Deprecated
     String enhancerApi
     List<String> jvmFlags = []
     File warDir

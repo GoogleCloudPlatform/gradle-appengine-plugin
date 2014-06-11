@@ -1,3 +1,6 @@
+### Version 1.9.6 (June 11th, 2014)
+* Version number match release
+
 ### Version 1.9.5 (May 28th, 2014)
 * Added `enhancer` closure with `api`, `version` and `enhanceOnBuild` configuration options, deprecated old enhancer configs (enhancerApi, enhancerVersion)
 
