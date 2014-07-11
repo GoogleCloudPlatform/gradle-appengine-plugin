@@ -54,8 +54,9 @@ class WebXmlProcessing {
 
     private static String[] getClassNames(NodeChild servicesParam) {
         assert servicesParam.name() == "init-param"
-        return servicesParam."param-value".text().trim().split(",").collect { String service ->
-            service.trim()
+        return servicesParam."param-value".text().trim().tokenize(",").findResults { String service ->
+            String result = service.trim()
+            return result.isEmpty() ? null : result
         }
     }
 
