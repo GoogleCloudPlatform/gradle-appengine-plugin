@@ -113,56 +113,16 @@ abstract class AppConfigTaskTemplate extends WebAppDirTask {
     private class AppConfigRunnable implements Runnable {
         @Override
         void run() {
-            PrintStream systemOutOriginal = System.out
             InputStream systemInOriginal = System.in
-            PipedInputStream inputStreamReplacement = new PipedInputStream()
-            OutputStream stdin = new PipedOutputStream(inputStreamReplacement)
-
+            String passwordInput = getPassword() + "\n"
+            InputStream inputStreamReplacement = new ByteArrayInputStream(passwordInput.getBytes("UTF-8"))
             try {
                 System.setIn(inputStreamReplacement)
-                BufferedWriter stdinWriter = new BufferedWriter(new OutputStreamWriter(stdin))
-                PrintStream printStream = new PrintStream(new PasswordOutputStream(stdinWriter, systemOutOriginal), true)
-                System.setOut(printStream)
-
                 AppConfigTaskTemplate.this.runAppConfig()
             }
             finally {
-                System.setOut(systemOutOriginal)
                 System.setIn(systemInOriginal)
             }
-        }
-    }
-
-    private class PasswordWriterRunnable implements Runnable {
-        final BufferedWriter stdinWriter
-
-        public PasswordWriterRunnable(BufferedWriter stdinWriter) {
-            this.stdinWriter = stdinWriter
-        }
-
-        @Override
-        void run() {
-            stdinWriter.write(AppConfigTaskTemplate.this.password)
-            stdinWriter.newLine()
-            stdinWriter.flush()
-        }
-    }
-
-    private class PasswordOutputStream extends OutputStream {
-        final BufferedWriter stdinWriter
-        final PrintStream out
-
-        public PasswordOutputStream(BufferedWriter stdinWriter, PrintStream out) {
-            this.stdinWriter = stdinWriter
-            this.out = out
-        }
-
-        @Override
-        void write(int b) throws IOException {
-            Thread passwordWriterThread = new Thread(new PasswordWriterRunnable(stdinWriter))
-            passwordWriterThread.setDaemon(true)
-            passwordWriterThread.start()
-            out.write(b)
         }
     }
 
