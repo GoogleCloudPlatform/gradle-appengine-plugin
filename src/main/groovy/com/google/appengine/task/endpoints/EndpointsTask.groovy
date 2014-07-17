@@ -39,11 +39,16 @@ abstract class EndpointsTask extends AbstractTask {
             params << action
             params += getCommonParams()
             params += extraParams
-            params += getServiceClassParams()
+            List<String> parsedClasses = getServiceClassParams()
+            if (parsedClasses.isEmpty()) {
+                logger.warn("No endpoints classes found, skipping ${action}")
+                return
+            }
+            params += parsedClasses
             logger.debug "Command params " + params.toString()
             new EndpointsTool().execute(params as String[])
         }
-        catch(Exception e) {
+        catch (Exception e) {
             throw new GradleException("There was an error running endpoints command ${action}: ${e.getMessage()}", e)
         }
         finally {
