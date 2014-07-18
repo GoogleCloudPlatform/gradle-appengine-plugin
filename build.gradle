@@ -34,9 +34,7 @@ dependencies {
     compile project(':builder-model')
     compile "com.google.appengine:appengine-local-endpoints:${version}"
     compile 'com.google.guava:guava:16.0'
-    testCompile ('org.spockframework:spock-core:0.7-groovy-2.0') {
-        exclude module: "groovy-all"
-    }
+    testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
 }
 
 jar {
@@ -67,7 +65,7 @@ idea.project {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.0'
+    gradleVersion = '1.11'
 }
 
 modifyPom {
