@@ -1,3 +1,10 @@
+### Version 1.9.7 (July 18th, 2014)
+* Update password passthrough for appcfg [issue 76]
+* Fix WebXml parsing for empty list of service classes [issue 99]
+* Update to Gradle 1.12 (Hold off on 2.0)
+* Remove Guava dependency
+* Remove Idea Gradle plugin
+
 ### Version 1.9.6 (June 11th, 2014)
 * Version number match release
 
