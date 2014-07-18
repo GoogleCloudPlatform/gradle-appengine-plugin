@@ -1,5 +1,4 @@
 apply plugin: 'groovy'
-apply plugin: 'idea'
 apply plugin: 'nexus'
 
 apply from: 'builder-model-impl.gradle'
@@ -33,7 +32,6 @@ dependencies {
     compile gradleApi()
     compile project(':builder-model')
     compile "com.google.appengine:appengine-local-endpoints:${version}"
-    compile 'com.google.guava:guava:16.0'
     testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
 }
 
@@ -48,24 +46,8 @@ jar {
     }
 }
 
-idea.project {
-    jdkName = '1.7'
-
-    ipr.withXml { provider ->
-        def node = provider.asNode()
-
-        // Use GIT
-        def vcsConfig = node.component.find { it.'@name' == 'VcsDirectoryMappings' }
-        vcsConfig.mapping[0].'@vcs' = 'Git'
-
-        // Set Gradle home
-        def gradleSettings = node.appendNode('component', [name: 'GradleSettings'])
-        gradleSettings.appendNode('option', [name: 'SDK_HOME', value: gradle.gradleHomeDir])
-    }
-}
-
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.11'
+    gradleVersion = '1.12'
 }
 
 modifyPom {

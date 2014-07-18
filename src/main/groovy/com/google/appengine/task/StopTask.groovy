@@ -15,9 +15,6 @@
  */
 package com.google.appengine.task
 
-import com.google.common.base.Objects
-import com.google.common.base.Throwables
-import com.google.common.io.ByteStreams
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleScriptException
 import org.gradle.api.tasks.TaskAction
@@ -42,15 +39,16 @@ class StopTask extends DefaultTask {
             connection.setDoInput(true);
             connection.setRequestMethod("POST");
             connection.getOutputStream().write(0);
-            ByteStreams.toByteArray(connection.getInputStream());
+            BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))
+            while(responseReader.readLine() != null);
             logger.lifecycle("Shutting down devappserver on port : " + getHttpPort());
             Thread.sleep(2000);
         } catch (MalformedURLException e) {
-            throw new GradleScriptException("URL malformed attempting to stop the devappserver : " + e.getMessage());
+            throw new GradleScriptException("URL malformed attempting to stop the devappserver : " + e.getMessage(), e);
         } catch (IOException e) {
             logger.info("Could not contact the devappserver at ${url} to shut it down.  It is most likely not running anymore. ", e);
         } catch (InterruptedException e) {
-            Throwables.propagate(e);
+            throw new GradleScriptException("Interrupted when trying to shutdown devappserver", e);
         } finally {
             if(connection != null) {
                 connection.disconnect();

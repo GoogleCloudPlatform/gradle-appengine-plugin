@@ -29,7 +29,6 @@ import com.google.appengine.task.endpoints.ExportClientLibsTask
 import com.google.appengine.task.endpoints.GetClientLibsTask
 import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
 import com.google.appengine.task.endpoints.InstallClientLibsTask
-import com.google.common.collect.Lists
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -568,7 +567,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
         // Pull in the expanded source for endpoints as a source set of this project
         SourceSet endpointsSrc = project.sourceSets.create(ENDPOINTS_SOURCE_SET)
-        endpointsSrc.getJava().setSrcDirs(Lists.asList(endpointsExpandedSrcDir))
+        endpointsSrc.getJava().setSrcDirs([endpointsExpandedSrcDir])
         project.tasks.getByName(endpointsSrc.getCompileJavaTaskName()).dependsOn(
                 project.tasks.getByName(APPENGINE_ENDPOINTS_EXPAND_CLIENT_LIBS))
         project.dependencies.add(endpointsSrc.getCompileConfigurationName(), GOOGLE_API_LIB);
