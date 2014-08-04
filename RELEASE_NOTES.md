@@ -1,3 +1,6 @@
+### Version 1.9.8 (August 4th, 2014)
+* Version number match release
+
 ### Version 1.9.7 (July 18th, 2014)
 * Update password passthrough for appcfg [issue 76]
 * Fix WebXml parsing for empty list of service classes [issue 99]
