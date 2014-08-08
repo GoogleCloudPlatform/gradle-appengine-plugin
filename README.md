@@ -127,6 +127,7 @@ Within `appengine` you can also define a closure named `endpoints`:
 * `exportClientLibsOnBuild`: Automatically export client libs, will get client libs if necessary. (defaults to false)
 * `clientLibsJarOut`: Output directory of client library jars when exporting. (Must be of type: File, will be created if doesn't exist)
 * `clientLibsSrcJarOut`: Output directory of client library source jars when exporting, if not specified no source jars will be copied. (Must be of type: File, will be created if doesn't exist)
+* `googleClientVersion`: Override the version of the Google Api Client Library that builds with endpoints artifacts. (Only works with endpoints and android-endpoints configurations)
 
 The task `appengineDownloadApp` requires you to at least define the application ID and directory to write the files to. Define the tasks' properties in the
 closure `app`:

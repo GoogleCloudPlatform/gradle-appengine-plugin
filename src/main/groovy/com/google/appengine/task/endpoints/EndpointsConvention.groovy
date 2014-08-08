@@ -29,4 +29,5 @@ class EndpointsConvention {
     File clientLibJarOut
     File clientLibSrcJarOut
     List<String> serviceClasses
+    String googleClientVersion = "1.19.0" // update this on schedule with google api client library
 }
