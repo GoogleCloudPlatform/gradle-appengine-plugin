@@ -84,6 +84,7 @@ The App Engine plugin defines the following convention properties in the `appeng
 * `httpPort`: The TCP port which local development server should listen for HTTP requests on (defaults to 8080).
 * `daemon`: Specifies whether the local development server should run in the background. When true, this task completes as
 soon as the server has started. When false, this task blocks until the local development server is stopped (defaults to false).
+ * Running the App Engine local development server in daemon mode requires that [Gradle is also run as a daemon](http://www.gradle.org/docs/current/userguide/gradle_daemon.html). The local development server will always be stopped when Gradle exits.
 * `warDir`: Web application directory used for local development server (defaults to `build/exploded-war`).
 * `disableUpdateCheck`: Disables the Google App Engine update check if set to true.
 * `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
