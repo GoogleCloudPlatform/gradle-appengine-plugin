@@ -7,7 +7,7 @@ def compatibilityVersion = 1.7
 sourceCompatibility = compatibilityVersion
 targetCompatibility = compatibilityVersion
 group = 'com.google.appengine'
-version = '1.9.9'
+version = '1.9.10'
 
 buildscript {
     repositories {

@@ -1,3 +1,6 @@
+### Version 1.9.10 (August 29th, 2014)
+* Version number match release
+
 ### Version 1.9.9 (August 12th, 2014)
 * Allow customization of google api client library version in endpoints configurations (appengine->endpoints->googleClientVersion)
 
