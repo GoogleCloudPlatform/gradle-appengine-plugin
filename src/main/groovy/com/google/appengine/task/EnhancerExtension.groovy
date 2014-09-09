@@ -1,11 +1,11 @@
 package com.google.appengine.task
 
 /**
- * Conventions for App Engine enhancer
+ * Defines App Engine Enhancer configuration extension.
  *
  * @author appu
  */
-class EnhancerConvention {
+class EnhancerExtension {
     String version
     String api
     boolean enhanceOnBuild = false

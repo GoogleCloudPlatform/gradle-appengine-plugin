@@ -15,12 +15,14 @@
  */
 package com.google.appengine.task.endpoints
 
+import org.gradle.api.Project
+
 /**
- * Defines App Engine Endpoints plugin convention.
+ * Defines App Engine Endpoints plugin extensions
  *
  * @author Appu Goundan
  */
-class EndpointsConvention {
+class EndpointsExtension {
     List<String> discoveryDocFormat = ["rpc", "rest"]
     boolean getDiscoveryDocsOnBuild = false
     boolean getClientLibsOnBuild = false

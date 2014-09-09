@@ -16,11 +16,11 @@
 package com.google.appengine.task.appcfg
 
 /**
- * Defines App Engine plugin application configuration convention.
+ * Defines App Engine plugin application configuration extension.
  *
  * @author Benjamin Muschko
  */
-class AppConfigConvention {
+class AppConfigExtension {
     String email
     String server
     String host
@@ -32,7 +32,7 @@ class AppConfigConvention {
     Boolean oauth2
     // an list of other appcfg params to send to the appcfg command
     List<String> extraOptions = []
-    DownloadLogsConvention logs = new DownloadLogsConvention()
-    DownloadAppConvention app = new DownloadAppConvention()
+    DownloadLogsExtension logs = new DownloadLogsExtension()
+    DownloadAppExtension app = new DownloadAppExtension()
     UpdateConvention update = new UpdateConvention()
 }

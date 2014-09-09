@@ -16,10 +16,10 @@
 package com.google.appengine.tooling
 
 import com.google.appengine.AppEnginePlugin
-import com.google.appengine.AppEnginePluginConvention
+import com.google.appengine.AppEnginePluginExtension
 import com.google.appengine.task.AbstractTask
 import com.google.appengine.task.DownloadSdkTask
-import com.google.appengine.task.appcfg.AppConfigConvention;
+import com.google.appengine.task.appcfg.AppConfigExtension;
 import com.google.appengine.gradle.model.AppCfgOptions
 import com.google.appengine.gradle.model.AppEngineModel
 import com.google.appengine.gradle.model.impl.DefaultAppCfgOptions;
@@ -40,8 +40,8 @@ public class AppEngineToolingBuilderModel implements ToolingModelBuilder {
 
     @Override
     public Object buildAll(String modelName, Project project) {
-        AppEnginePluginConvention conf = project.convention.plugins.appengine
-        AppConfigConvention appCfg = conf.getAppCfg()
+        AppEnginePluginExtension conf = project.extensions.appengine
+        AppConfigExtension appCfg = conf.getAppCfg()
 
         AppCfgOptions appCfgOptions = new DefaultAppCfgOptions(appCfg.email,
                                                                appCfg.server,
@@ -70,7 +70,7 @@ public class AppEngineToolingBuilderModel implements ToolingModelBuilder {
      * Determine the App Engine SDK location
      * @return SDK location or null otherwise
      */
-    static String getSdkLocation(AppEnginePluginConvention conf, Project project) {
+    static String getSdkLocation(AppEnginePluginExtension conf, Project project) {
         if(conf.downloadSdk) {
             try {
                 def explodedSdkDir = AppEnginePlugin.getExplodedSdkDirectory(project)

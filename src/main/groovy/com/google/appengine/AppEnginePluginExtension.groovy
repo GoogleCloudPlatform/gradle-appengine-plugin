@@ -15,30 +15,30 @@
  */
 package com.google.appengine
 
-import com.google.appengine.task.EnhancerConvention
-import com.google.appengine.task.appcfg.AppConfigConvention
-import com.google.appengine.task.endpoints.EndpointsConvention
+import com.google.appengine.task.EnhancerExtension
+import com.google.appengine.task.appcfg.AppConfigExtension
+import com.google.appengine.task.endpoints.EndpointsExtension
+import org.gradle.api.Project
 
 /**
- * Defines App Engine plugin convention.
+ * Defines App Engine plugin extension.
  *
  * @author Benjamin Muschko
  */
-class AppEnginePluginConvention {
+class AppEnginePluginExtension {
     String httpAddress = "localhost"
     Integer httpPort = 8080
     Boolean daemon = false
     Boolean disableUpdateCheck = false
-    @Deprecated
-    String enhancerVersion
-    @Deprecated
-    String enhancerApi
     List<String> jvmFlags = []
     File warDir
     Boolean downloadSdk = false
-    AppConfigConvention appCfg = new AppConfigConvention()
-    EndpointsConvention endpoints = new EndpointsConvention()
-    EnhancerConvention enhancer = new EnhancerConvention()
+    AppConfigExtension appCfg = new AppConfigExtension()
+    EndpointsExtension endpoints = new EndpointsExtension()
+    EnhancerExtension enhancer = new EnhancerExtension()
+
+    public AppEnginePluginExtension(Project project) {
+    }
 
     def appengine(Closure closure) {
         closure.delegate = this

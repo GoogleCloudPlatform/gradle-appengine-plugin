@@ -16,11 +16,11 @@
 package com.google.appengine.task.appcfg
 
 /**
- * Defines App Engine plugin download application configuration convention.
+ * Defines App Engine plugin download application configuration extension.
  *
  * @author Benjamin Muschko
  */
-class DownloadAppConvention {
+class DownloadAppExtension {
     String id
     String version
     File outputDirectory

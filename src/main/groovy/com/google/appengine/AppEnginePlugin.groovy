@@ -117,8 +117,7 @@ class AppEnginePlugin implements Plugin<Project> {
         project.configurations.create(APPENGINE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                 .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
 
-        AppEnginePluginConvention appenginePluginConvention = new AppEnginePluginConvention()
-        project.convention.plugins.appengine = appenginePluginConvention
+        AppEnginePluginExtension appEnginePluginExtension = project.extensions.create('appengine', AppEnginePluginExtension, project);
 
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedAppDirectory = getExplodedAppDirectory(project)
@@ -128,23 +127,23 @@ class AppEnginePlugin implements Plugin<Project> {
         File endpointsExpandedSrcDirectory = getEndpointsExpandedSrcDir(project)
         configureDownloadSdk(project, explodedSdkDirectory)
         configureWebAppDir(project)
-        configureAppConfig(project, appenginePluginConvention)
-        configureExplodeWarTask(project, appenginePluginConvention, explodedAppDirectory)
-        configureRun(project, appenginePluginConvention, explodedAppDirectory)
-        configureStop(project, appenginePluginConvention)
-        configureUpdate(project, appenginePluginConvention, explodedAppDirectory)
+        configureAppConfig(project, appEnginePluginExtension)
+        configureExplodeWarTask(project, appEnginePluginExtension, explodedAppDirectory)
+        configureRun(project, appEnginePluginExtension, explodedAppDirectory)
+        configureStop(project, appEnginePluginExtension)
+        configureUpdate(project, appEnginePluginExtension, explodedAppDirectory)
         configureRollback(project)
-        configureSdk(project, appenginePluginConvention)
-        configureEnhance(project, appenginePluginConvention)
+        configureSdk(project, appEnginePluginExtension)
+        configureEnhance(project, appEnginePluginExtension)
         configureUpdateIndexes(project)
         configureVacuumIndexes(project)
         configureUpdateTaskQueues(project)
         configureUpdateDoS(project)
         configureUpdateCron(project)
         configureCronInfo(project)
-        configureDownloadLogs(project, appenginePluginConvention)
+        configureDownloadLogs(project, appEnginePluginExtension)
         configureVersion(project)
-        configureDownloadApplication(project, appenginePluginConvention, downloadedAppDirectory)
+        configureDownloadApplication(project, appEnginePluginExtension, downloadedAppDirectory)
         configureSingleBackendTask(project)
         configureUpdateBackends(project, explodedAppDirectory)
         configureUpdateAllBackends(project, explodedAppDirectory)
@@ -155,8 +154,8 @@ class AppEnginePlugin implements Plugin<Project> {
         configureDeleteBackend(project)
         configureConfigureBackends(project)
         configureUpdateAll(project)
-        configureEndpoints(project, discoveryDocDirectory, endpointsClientLibDirectory, endpointsExpandedSrcDirectory, appenginePluginConvention)
-        configureFunctionalTest(project, appenginePluginConvention)
+        configureEndpoints(project, discoveryDocDirectory, endpointsClientLibDirectory, endpointsExpandedSrcDirectory, appEnginePluginExtension)
+        configureFunctionalTest(project, appEnginePluginExtension)
     }
 
     static File getExplodedSdkDirectory(Project project) {
@@ -219,25 +218,25 @@ class AppEnginePlugin implements Plugin<Project> {
         }
     }
 
-    private void configureAppConfig(Project project, AppEnginePluginConvention appenginePluginConvention) {
+    private void configureAppConfig(Project project, AppEnginePluginExtension appEnginePluginExtension) {
         project.tasks.withType(AppConfigTaskTemplate).whenTaskAdded { AppConfigTaskTemplate appengineAppConfigTaskTemplate ->
-            appengineAppConfigTaskTemplate.conventionMapping.map('email') { appenginePluginConvention.appCfg.email }
-            appengineAppConfigTaskTemplate.conventionMapping.map('server') { appenginePluginConvention.appCfg.server }
-            appengineAppConfigTaskTemplate.conventionMapping.map('host') { appenginePluginConvention.appCfg.host }
-            appengineAppConfigTaskTemplate.conventionMapping.map('noCookies') { appenginePluginConvention.appCfg.noCookies }
-            appengineAppConfigTaskTemplate.conventionMapping.map('passIn') { appenginePluginConvention.appCfg.passIn }
+            appengineAppConfigTaskTemplate.conventionMapping.map('email') { appEnginePluginExtension.appCfg.email }
+            appengineAppConfigTaskTemplate.conventionMapping.map('server') { appEnginePluginExtension.appCfg.server }
+            appengineAppConfigTaskTemplate.conventionMapping.map('host') { appEnginePluginExtension.appCfg.host }
+            appengineAppConfigTaskTemplate.conventionMapping.map('noCookies') { appEnginePluginExtension.appCfg.noCookies }
+            appengineAppConfigTaskTemplate.conventionMapping.map('passIn') { appEnginePluginExtension.appCfg.passIn }
             appengineAppConfigTaskTemplate.conventionMapping.map('password') {
                 // Password from gradle.properties takes precedence
-                project.hasProperty(GRADLE_USER_PROP_PASSWORD) ? project.property(GRADLE_USER_PROP_PASSWORD) : appenginePluginConvention.appCfg.password
+                project.hasProperty(GRADLE_USER_PROP_PASSWORD) ? project.property(GRADLE_USER_PROP_PASSWORD) : appEnginePluginExtension.appCfg.password
             }
-            appengineAppConfigTaskTemplate.conventionMapping.map('httpProxy') { appenginePluginConvention.appCfg.httpProxy }
-            appengineAppConfigTaskTemplate.conventionMapping.map('httpsProxy') { appenginePluginConvention.appCfg.httpsProxy }
-            appengineAppConfigTaskTemplate.conventionMapping.map('oauth2') { appenginePluginConvention.appCfg.oauth2 }
-            appengineAppConfigTaskTemplate.conventionMapping.map('extraOptions') { appenginePluginConvention.appCfg.extraOptions }
+            appengineAppConfigTaskTemplate.conventionMapping.map('httpProxy') { appEnginePluginExtension.appCfg.httpProxy }
+            appengineAppConfigTaskTemplate.conventionMapping.map('httpsProxy') { appEnginePluginExtension.appCfg.httpsProxy }
+            appengineAppConfigTaskTemplate.conventionMapping.map('oauth2') { appEnginePluginExtension.appCfg.oauth2 }
+            appengineAppConfigTaskTemplate.conventionMapping.map('extraOptions') { appEnginePluginExtension.appCfg.extraOptions }
         }
     }
 
-    private void configureExplodeWarTask(Project project, AppEnginePluginConvention appenginePluginConvention, File explodedWarDirectory) {
+    private void configureExplodeWarTask(Project project, AppEnginePluginExtension appEnginePluginExtension, File explodedWarDirectory) {
         project.tasks.withType(ExplodeAppTask).whenTaskAdded { ExplodeAppTask appengineExplodeAppTask ->
             appengineExplodeAppTask.conventionMapping.map('archive') { project.hasProperty('ear') ? project.ear.archivePath : project.war.archivePath }
             appengineExplodeAppTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
@@ -259,14 +258,14 @@ class AppEnginePlugin implements Plugin<Project> {
         project.tasks.getByName(BasePlugin.ASSEMBLE_TASK_NAME).dependsOn(appengineExplodeAppTask)
     }
 
-    private void configureRun(Project project, AppEnginePluginConvention appenginePluginConvention, File explodedAppDirectory) {
+    private void configureRun(Project project, AppEnginePluginExtension appEnginePluginExtension, File explodedAppDirectory) {
         project.tasks.withType(RunTask).whenTaskAdded { RunTask appengineRunTask ->
-            appengineRunTask.conventionMapping.map('httpAddress') { appenginePluginConvention.httpAddress }
-            appengineRunTask.conventionMapping.map('httpPort') { appenginePluginConvention.httpPort }
-            appengineRunTask.conventionMapping.map('daemon') { appenginePluginConvention.daemon }
-            appengineRunTask.conventionMapping.map('disableUpdateCheck') { appenginePluginConvention.disableUpdateCheck }
-            appengineRunTask.conventionMapping.map('jvmFlags') { appenginePluginConvention.jvmFlags }
-            appengineRunTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { appenginePluginConvention.warDir ?: explodedAppDirectory }
+            appengineRunTask.conventionMapping.map('httpAddress') { appEnginePluginExtension.httpAddress }
+            appengineRunTask.conventionMapping.map('httpPort') { appEnginePluginExtension.httpPort }
+            appengineRunTask.conventionMapping.map('daemon') { appEnginePluginExtension.daemon }
+            appengineRunTask.conventionMapping.map('disableUpdateCheck') { appEnginePluginExtension.disableUpdateCheck }
+            appengineRunTask.conventionMapping.map('jvmFlags') { appEnginePluginExtension.jvmFlags }
+            appengineRunTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { appEnginePluginExtension.warDir ?: explodedAppDirectory }
         }
 
         RunTask appengineRunTask = project.tasks.create(APPENGINE_RUN, RunTask)
@@ -277,13 +276,13 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineRunTask.dependsOn appengineExplodeAppTask
 
         // If WAR directory gets set we assume we have a fully functional web application, WAR creation/explosion is skipped
-        appengineExplodeAppTask.onlyIf { !appenginePluginConvention.warDir || !project.gradle.taskGraph.hasTask(appengineRunTask) }
+        appengineExplodeAppTask.onlyIf { !appEnginePluginExtension.warDir || !project.gradle.taskGraph.hasTask(appengineRunTask) }
     }
 
-    private void configureStop(Project project, AppEnginePluginConvention appenginePluginConvention) {
+    private void configureStop(Project project, AppEnginePluginExtension appEnginePluginExtension) {
         project.tasks.withType(StopTask).whenTaskAdded { StopTask appengineStopTask ->
-            appengineStopTask.conventionMapping.map('httpAddress') { appenginePluginConvention.httpAddress }
-            appengineStopTask.conventionMapping.map('httpPort') { appenginePluginConvention.httpPort }
+            appengineStopTask.conventionMapping.map('httpAddress') { appEnginePluginExtension.httpAddress }
+            appengineStopTask.conventionMapping.map('httpPort') { appEnginePluginExtension.httpPort }
         }
 
         StopTask appengineStopTask = project.tasks.create(APPENGINE_STOP, StopTask)
@@ -291,11 +290,11 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineStopTask.group = APPENGINE_GROUP
     }
 
-    private void configureEnhance(Project project, AppEnginePluginConvention appEnginePluginConvention) {
+    private void configureEnhance(Project project, AppEnginePluginExtension appEnginePluginExtension) {
         project.tasks.withType(EnhanceTask).whenTaskAdded { EnhanceTask appengineEnhanceTask ->
             appengineEnhanceTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
-            appengineEnhanceTask.conventionMapping.map('enhancerVersion') { appEnginePluginConvention.enhancer.version ?: appEnginePluginConvention.enhancerVersion }
-            appengineEnhanceTask.conventionMapping.map('enhancerApi') { appEnginePluginConvention.enhancer.api ?: appEnginePluginConvention.enhancerApi }
+            appengineEnhanceTask.conventionMapping.map('enhancerVersion') { appEnginePluginExtension.enhancer.version ?: appEnginePluginExtension.enhancerVersion }
+            appengineEnhanceTask.conventionMapping.map('enhancerApi') { appEnginePluginExtension.enhancer.api ?: appEnginePluginExtension.enhancerApi }
         }
 
         EnhanceTask appengineEnhanceTask = project.tasks.create(APPENGINE_ENHANCE, EnhanceTask)
@@ -305,23 +304,16 @@ class AppEnginePlugin implements Plugin<Project> {
         project.tasks.getByName(APPENGINE_ENHANCE).dependsOn project.classes
 
         project.afterEvaluate {
-            if(appEnginePluginConvention.enhancer.enhanceOnBuild) {
+            if(appEnginePluginExtension.enhancer.enhanceOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(appengineEnhanceTask)
-            }
-            // Deprecation Warnings for convention use
-            if(appEnginePluginConvention.enhancerApi) {
-                project.logger.warn "**WARNING appengine.enhancerApi is deprecated and will be removed in future versions, use appengine.enhancer.api instead"
-            }
-            if(appEnginePluginConvention.enhancerVersion) {
-                project.logger.warn "**WARNING appengine.enhancerVersion is deprecated and will be removed in future versions, use appengine.enhancer.version instead"
             }
         }
     }
 
-    private void configureUpdate(Project project, AppEnginePluginConvention appenginePluginConvention, File explodedWarDirectory) {
+    private void configureUpdate(Project project, AppEnginePluginExtension appEnginePluginExtension, File explodedWarDirectory) {
         project.tasks.withType(UpdateTask).whenTaskAdded { UpdateTask appengineUpdateTask ->
             appengineUpdateTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedWarDirectory }
-            appengineUpdateTask.conventionMapping.map('useJava7') { appenginePluginConvention.appCfg.update.useJava7 }
+            appengineUpdateTask.conventionMapping.map('useJava7') { appEnginePluginExtension.appCfg.update.useJava7 }
         }
 
         UpdateTask appengineUpdateTask = project.tasks.create(APPENGINE_UPDATE, UpdateTask)
@@ -372,14 +364,14 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineCronInfoTask.group = APPENGINE_GROUP
     }
 
-    private void configureDownloadLogs(Project project, AppEnginePluginConvention appenginePluginConvention) {
+    private void configureDownloadLogs(Project project, AppEnginePluginExtension appEnginePluginExtension) {
         DownloadLogsTask appengineDownloadLogsTask = project.tasks.create(APPENGINE_LOGS, DownloadLogsTask)
         appengineDownloadLogsTask.description = 'Download logs from App Engine.'
         appengineDownloadLogsTask.group = APPENGINE_GROUP
-        appengineDownloadLogsTask.conventionMapping.map('numDays') { appenginePluginConvention.appCfg.logs.numDays }
-        appengineDownloadLogsTask.conventionMapping.map('severity') { appenginePluginConvention.appCfg.logs.severity }
-        appengineDownloadLogsTask.conventionMapping.map('append') { appenginePluginConvention.appCfg.logs.append }
-        appengineDownloadLogsTask.conventionMapping.map('outputFile') { appenginePluginConvention.appCfg.logs.outputFile }
+        appengineDownloadLogsTask.conventionMapping.map('numDays') { appEnginePluginExtension.appCfg.logs.numDays }
+        appengineDownloadLogsTask.conventionMapping.map('severity') { appEnginePluginExtension.appCfg.logs.severity }
+        appengineDownloadLogsTask.conventionMapping.map('append') { appEnginePluginExtension.appCfg.logs.append }
+        appengineDownloadLogsTask.conventionMapping.map('outputFile') { appEnginePluginExtension.appCfg.logs.outputFile }
     }
 
     private void configureVersion(Project project) {
@@ -388,13 +380,13 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineVersionTask.group = APPENGINE_GROUP
     }
 
-    private void configureDownloadApplication(Project project, AppEnginePluginConvention appenginePluginConvention, File downloadedAppDirectory) {
+    private void configureDownloadApplication(Project project, AppEnginePluginExtension appEnginePluginExtension, File downloadedAppDirectory) {
         DownloadAppTask appengineDownloadAppTask = project.tasks.create(APPENGINE_DOWNLOAD_APP, DownloadAppTask)
         appengineDownloadAppTask.description = 'Retrieves the most current version of your application.'
         appengineDownloadAppTask.group = APPENGINE_GROUP
-        appengineDownloadAppTask.conventionMapping.map('appId') { appenginePluginConvention.appCfg.app.id }
-        appengineDownloadAppTask.conventionMapping.map('appVersion') { appenginePluginConvention.appCfg.app.version }
-        appengineDownloadAppTask.conventionMapping.map('outputDirectory') { appenginePluginConvention.appCfg.app.outputDirectory ?: downloadedAppDirectory }
+        appengineDownloadAppTask.conventionMapping.map('appId') { appEnginePluginExtension.appCfg.app.id }
+        appengineDownloadAppTask.conventionMapping.map('appVersion') { appEnginePluginExtension.appCfg.app.version }
+        appengineDownloadAppTask.conventionMapping.map('outputDirectory') { appEnginePluginExtension.appCfg.app.outputDirectory ?: downloadedAppDirectory }
     }
 
     /**
@@ -402,13 +394,13 @@ class AppEnginePlugin implements Plugin<Project> {
      * for all tasks of the plugin.
      *
      * @param project Project
-     * @param appenginePluginConvention APPENGINE plugin convention
+     * @param appEnginePluginExtension APPENGINE plugin convention
      */
-    private void configureSdk(Project project, AppEnginePluginConvention appenginePluginConvention) {
+    private void configureSdk(Project project, AppEnginePluginExtension appEnginePluginExtension) {
         project.tasks.all { Task task ->
             if(task.name.startsWith('appengine') && task.name != APPENGINE_DOWNLOAD_SDK) {
                 task.dependsOn {
-                    if(appenginePluginConvention.downloadSdk) {
+                    if(appEnginePluginExtension.downloadSdk) {
                         return task.project.tasks.getByName(APPENGINE_DOWNLOAD_SDK)
                     }
                 }
@@ -484,21 +476,21 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineUpdateAllTask.dependsOn project.appengineUpdate, project.appengineUpdateAllBackends
     }
 
-    public void configureEndpoints(Project project, File discoveryDocDirectory, File endpointsClientLibDirectory, File endpointsExpandedSrcDirectory, AppEnginePluginConvention appEnginePluginConvention) {
+    public void configureEndpoints(Project project, File discoveryDocDirectory, File endpointsClientLibDirectory, File endpointsExpandedSrcDirectory, AppEnginePluginExtension appEnginePluginExtension) {
         project.tasks.withType(EndpointsTask).whenTaskAdded { EndpointsTask endpointsTask ->
             endpointsTask.conventionMapping.map('classesDirectory') { project.tasks.compileJava.destinationDir }
             endpointsTask.conventionMapping.map('webappDirectory') { getAppDir(project) }
-            endpointsTask.conventionMapping.map('serviceClasses') { appEnginePluginConvention.endpoints.serviceClasses }
+            endpointsTask.conventionMapping.map('serviceClasses') { appEnginePluginExtension.endpoints.serviceClasses }
 
             if (endpointsTask instanceof GetDiscoveryDocsTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_CONVENTION_PARAM) { discoveryDocDirectory }
-                endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM) { appEnginePluginConvention.endpoints.discoveryDocFormat }
+                endpointsTask.conventionMapping.map(ENDPOINTS_DISCOVERY_DOC_FORMAT_PARAM) { appEnginePluginExtension.endpoints.discoveryDocFormat }
             } else if (endpointsTask instanceof GetClientLibsTask || endpointsTask instanceof ClientLibProcessingTask) {
                 endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_CONVENTION_PARAM) { endpointsClientLibDirectory }
             }
             if (endpointsTask instanceof ExportClientLibsTask) {
-                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_JAR_CONVENTION_PARAM) { appEnginePluginConvention.endpoints.clientLibJarOut }
-                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_SRC_JAR_CONVENTION_PARAM) { appEnginePluginConvention.endpoints.clientLibSrcJarOut }
+                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_JAR_CONVENTION_PARAM) { appEnginePluginExtension.endpoints.clientLibJarOut }
+                endpointsTask.conventionMapping.map(ENDPOINTS_CLIENT_LIB_COPY_SRC_JAR_CONVENTION_PARAM) { appEnginePluginExtension.endpoints.clientLibSrcJarOut }
             }
             if (endpointsTask instanceof ExpandClientLibsTask) {
                 endpointsTask.conventionMapping.map("clientLibGenSrcDir") { endpointsExpandedSrcDirectory }
@@ -539,23 +531,23 @@ class AppEnginePlugin implements Plugin<Project> {
         endpointsExpandClientLibs.dependsOn(endpointsGetClientLibs)
 
         project.afterEvaluate {
-            if(appEnginePluginConvention.endpoints.getDiscoveryDocsOnBuild) {
+            if(appEnginePluginExtension.endpoints.getDiscoveryDocsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsGetDiscoveryDocs)
             }
-            if(appEnginePluginConvention.endpoints.getClientLibsOnBuild) {
+            if(appEnginePluginExtension.endpoints.getClientLibsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsGetClientLibs)
             }
-            if(appEnginePluginConvention.endpoints.installClientLibsOnBuild) {
+            if(appEnginePluginExtension.endpoints.installClientLibsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsInstallClientLibs)
             }
-            if(appEnginePluginConvention.endpoints.exportClientLibsOnBuild) {
+            if(appEnginePluginExtension.endpoints.exportClientLibsOnBuild) {
                 project.tasks.getByName(WarPlugin.WAR_TASK_NAME).dependsOn(endpointsExportClientLibs)
             }
         }
-        configureEndpointsConfigurations(project, endpointsExpandedSrcDirectory, appEnginePluginConvention)
+        configureEndpointsConfigurations(project, endpointsExpandedSrcDirectory, appEnginePluginExtension)
     }
 
-    private void configureEndpointsConfigurations(Project project, File endpointsExpandedSrcDir, AppEnginePluginConvention appEnginePluginConvention) {
+    private void configureEndpointsConfigurations(Project project, File endpointsExpandedSrcDir, AppEnginePluginExtension appEnginePluginExtension) {
         final String ENDPOINTS_SOURCE_SET = "endpointsSrc"
         final String ENDPOINTS_CONFIG = "endpoints"
         final String ANDROID_CONFIG = "android-endpoints"
@@ -571,7 +563,7 @@ class AppEnginePlugin implements Plugin<Project> {
         project.configurations.create(ANDROID_CONFIG)
 
         project.afterEvaluate {
-            final String GOOGLE_API_LIB_VERSION = appEnginePluginConvention.endpoints.googleClientVersion;
+            final String GOOGLE_API_LIB_VERSION = appEnginePluginExtension.endpoints.googleClientVersion;
             final String GOOGLE_API_LIB = "com.google.api-client:google-api-client:${GOOGLE_API_LIB_VERSION}"
             final String GOOGLE_ANDROID_API_LIB = "com.google.api-client:google-api-client-android:${GOOGLE_API_LIB_VERSION}"
             final String EXCLUDE_HTTP_GROUP = "org.apache.httpcomponents"
@@ -598,7 +590,7 @@ class AppEnginePlugin implements Plugin<Project> {
         project.artifacts.add(ANDROID_CONFIG, endpointsAndroidJarTask)
     }
 
-    private void configureFunctionalTest(Project project, AppEnginePluginConvention convention) {
+    private void configureFunctionalTest(Project project, AppEnginePluginExtension convention) {
         SourceSet functionalSourceSet = addFunctionalTestConfigurationsAndSourceSet(project)
 
         Test appengineFunctionalTest = project.tasks.create(APPENGINE_FUNCTIONAL_TEST, Test)

@@ -16,11 +16,11 @@
 package com.google.appengine.task.appcfg
 
 /**
- * Defines App Engine plugin download logs configuration convention.
+ * Defines App Engine plugin download logs configuration extension.
  *
  * @author Benjamin Muschko
  */
-class DownloadLogsConvention {
+class DownloadLogsExtension {
     Integer numDays
     Integer severity
     Boolean append
