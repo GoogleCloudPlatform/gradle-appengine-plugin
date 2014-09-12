@@ -1,3 +1,8 @@
+### Version 1.9.11 (Sept 12th, 2014)
+* Change configuration from convention to extension
+* Add in gcloud plugin and commands (gcloudAppRun, gcloudAppDeploy, generic gcloudTask)
+* Update build to use gradle 2.1
+
 ### Version 1.9.10 (August 29th, 2014)
 * Version number match release
 
