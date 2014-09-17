@@ -32,7 +32,10 @@ dependencies {
     compile gradleApi()
     compile project(':builder-model')
     compile "com.google.appengine:appengine-local-endpoints:${version}"
-    testCompile 'org.spockframework:spock-core:0.6-groovy-1.8'
+    // TODO : update spock-core to 1.0-groovy-2.3 when it becomes available
+    testCompile ('org.spockframework:spock-core:0.7-groovy-2.0') {
+        exclude module: "groovy-all"
+    }
 }
 
 jar {
@@ -47,7 +50,7 @@ jar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
+    gradleVersion = '2.1'
 }
 
 modifyPom {
