@@ -1,3 +1,6 @@
+### Version 1.9.12 (Sept 26th, 2014)
+* Version number match release
+
 ### Version 1.9.11 (Sept 12th, 2014)
 * Change configuration from convention to extension
 * Add in gcloud plugin and commands (gcloudAppRun, gcloudAppDeploy, generic gcloudTask)

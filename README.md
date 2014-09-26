@@ -20,7 +20,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.11'
+            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.12'
         }
     }
 
