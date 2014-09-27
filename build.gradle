@@ -3,9 +3,9 @@ apply plugin: 'nexus'
 
 apply from: 'builder-model-impl.gradle'
 
-def compatibilityVersion = 1.7
-sourceCompatibility = compatibilityVersion
-targetCompatibility = compatibilityVersion
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
 group = 'com.google.appengine'
 version = '1.9.12'
 
