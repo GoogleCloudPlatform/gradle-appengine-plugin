@@ -44,7 +44,6 @@ import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 import org.gradle.plugins.ear.EarPluginConvention
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
-import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
 import javax.inject.Inject
@@ -625,20 +624,9 @@ class AppEnginePlugin implements Plugin<Project> {
         functionalSourceSet.compileClasspath = mainSourceSet.output + functionalTestCompileConfiguration
         functionalSourceSet.runtimeClasspath = functionalSourceSet.output + functionalTestRuntimeConfiguration
 
-        addIdeaConfigurationForFunctionalTestSourceSet(project, functionalTestCompileConfiguration, functionalTestRuntimeConfiguration, functionalSourceSet)
         addEclipseConfigurationForFunctionalTestRuntimeConfiguration(project, functionalTestRuntimeConfiguration)
 
         functionalSourceSet
-    }
-
-    private void addIdeaConfigurationForFunctionalTestSourceSet(Project project, Configuration compile, Configuration runtime, SourceSet sourceSet) {
-        project.plugins.withType(IdeaPlugin) { IdeaPlugin plugin ->
-            plugin.model.module {
-                testSourceDirs += sourceSet.allSource.srcDirs
-                scopes.TEST.plus += compile
-                scopes.TEST.plus += runtime
-            }
-        }
     }
 
     private void addEclipseConfigurationForFunctionalTestRuntimeConfiguration(Project project, Configuration functionalTestRuntimeConfiguration) {
