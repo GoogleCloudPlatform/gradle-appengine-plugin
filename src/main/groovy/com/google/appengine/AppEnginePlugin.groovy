@@ -29,6 +29,7 @@ import com.google.appengine.task.endpoints.ExportClientLibsTask
 import com.google.appengine.task.endpoints.GetClientLibsTask
 import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
 import com.google.appengine.task.endpoints.InstallClientLibsTask
+import com.google.appengine.tools.info.UpdateCheckResults
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -44,6 +45,7 @@ import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 import org.gradle.plugins.ear.EarPluginConvention
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
+import org.gradle.tooling.BuildException
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
 
 import javax.inject.Inject
@@ -57,6 +59,9 @@ import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
  * @author Matt Stephenson
  */
 class AppEnginePlugin implements Plugin<Project> {
+
+    static final String GRADLE_MIN_VERSION = '2.1'
+
     static final String APPENGINE_SDK_CONFIGURATION_NAME = 'appengineSdk'
     static final String APPENGINE_GROUP = 'Google App Engine'
     static final String APPENGINE_DOWNLOAD_SDK = 'appengineDownloadSdk'
@@ -112,6 +117,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
+        checkGradleVersion(project.gradle.gradleVersion)
         registry.register(new AppEngineToolingBuilderModel());
         project.configurations.create(APPENGINE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                 .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
@@ -155,6 +161,15 @@ class AppEnginePlugin implements Plugin<Project> {
         configureUpdateAll(project)
         configureEndpoints(project, discoveryDocDirectory, endpointsClientLibDirectory, endpointsExpandedSrcDirectory, appEnginePluginExtension)
         configureFunctionalTest(project, appEnginePluginExtension)
+    }
+
+    static void checkGradleVersion(String projectGradleVersion) {
+        // from the appengine sdk
+        if(new UpdateCheckResults.VersionComparator().compare(GRADLE_MIN_VERSION, projectGradleVersion) > 0) {
+            throw new BuildException(String.format(
+                    "Detected Gradle version %s, but the gradle-appengine-plugin requires Gradle version %s or higher.",
+                    projectGradleVersion, GRADLE_MIN_VERSION), null);
+        }
     }
 
     static File getExplodedSdkDirectory(Project project) {
