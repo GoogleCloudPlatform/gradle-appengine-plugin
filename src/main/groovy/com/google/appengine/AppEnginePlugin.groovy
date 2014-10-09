@@ -73,6 +73,7 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String APPENGINE_UPDATE_INDEXES = 'appengineUpdateIndexes'
     static final String APPENGINE_VACUUM_INDEXES = 'appengineVacuumIndexes'
     static final String APPENGINE_UPDATE_TASK_QUEUES = 'appengineUpdateQueues'
+    static final String APPENGINE_UPDATE_DISPATCH = 'appengineUpdateDispatch'
     static final String APPENGINE_UPDATE_DOS = 'appengineUpdateDos'
     static final String APPENGINE_UPDATE_CRON = 'appengineUpdateCron'
     static final String APPENGINE_CRON_INFO = 'appengineCronInfo'
@@ -143,6 +144,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureUpdateIndexes(project)
         configureVacuumIndexes(project)
         configureUpdateTaskQueues(project)
+        configureUpdateDispatch(project)
         configureUpdateDoS(project)
         configureUpdateCron(project)
         configureCronInfo(project)
@@ -358,6 +360,12 @@ class AppEnginePlugin implements Plugin<Project> {
         UpdateQueuesTask appengineUpdateQueuesTask = project.tasks.create(APPENGINE_UPDATE_TASK_QUEUES, UpdateQueuesTask)
         appengineUpdateQueuesTask.description = 'Updates task queues on App Engine.'
         appengineUpdateQueuesTask.group = APPENGINE_GROUP
+    }
+
+    private void configureUpdateDispatch(Project project) {
+        UpdateDispatchTask appengineUpdateDispatchTask = project.tasks.create(APPENGINE_UPDATE_DISPATCH, UpdateDispatchTask)
+        appengineUpdateDispatchTask.description = 'Updates dispatch file on App Engine.'
+        appengineUpdateDispatchTask.group = APPENGINE_GROUP
     }
 
     private void configureUpdateDoS(Project project) {

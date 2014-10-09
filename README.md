@@ -63,6 +63,7 @@ web application directory each time you run this task. This behavior can be chan
 * `appengineUpdateAllBackends`: Creates or updates all backends configured in `backends.xml`.
 * `appengineUpdateBackend`: Creates or updates backend configured in `backends.xml`. The backend is defined by the project property `backend`.
 * `appengineUpdateCron`: Updates the schedule task (cron) configuration for the app, based on the cron.xml file.
+* `appengineUpdateDispatch`: Updates the dispatch configuration for the app, based on the dispatch.xml file.
 * `appengineUpdateDos`: Updates the DoS protection configuration for the app, based on the dos.xml file.
 * `appengineUpdateIndexes`: Updates datastore indexes in App Engine to include newly added indexes.
 * `appengineUpdateQueues`: Updates the task queue configuration (queue.xml) in App Engine.
