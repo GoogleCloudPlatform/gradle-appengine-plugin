@@ -1,3 +1,9 @@
+### Version 1.9.13 (Oct 10th, 2014)
+* Use Gradle constants for java version
+* Remove Idea plugin [issue 124]
+* Add appengineUpdateDispatch task [issue 14]
+* Add gradle version check ( >= 2.1)
+
 ### Version 1.9.12 (Sept 26th, 2014)
 * Version number match release
 
