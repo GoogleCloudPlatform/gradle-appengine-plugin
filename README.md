@@ -31,7 +31,7 @@ convention property `downloadSdk` to `true`. This option requires you to specify
 the configuration `appengineSdk`.
 
     dependencies {
-        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.10'
+        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.13'
     }
 
 ## Tasks
