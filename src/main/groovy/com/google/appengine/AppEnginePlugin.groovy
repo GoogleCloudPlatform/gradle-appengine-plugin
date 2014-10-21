@@ -393,6 +393,7 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineDownloadLogsTask.conventionMapping.map('numDays') { appEnginePluginExtension.appCfg.logs.numDays }
         appengineDownloadLogsTask.conventionMapping.map('severity') { appEnginePluginExtension.appCfg.logs.severity }
         appengineDownloadLogsTask.conventionMapping.map('append') { appEnginePluginExtension.appCfg.logs.append }
+        appengineDownloadLogsTask.conventionMapping.map('includeAll') { appEnginePluginExtension.appCfg.logs.includeAll }
         appengineDownloadLogsTask.conventionMapping.map('outputFile') { appEnginePluginExtension.appCfg.logs.outputFile }
     }
 

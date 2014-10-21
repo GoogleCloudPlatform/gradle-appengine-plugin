@@ -148,6 +148,7 @@ will be retrieved (defaults to 1 (INFO)).
 * `append`: Tells the plugin to append logs to the log output file instead of overwriting the file. This simply appends the
 requested data, it does not guarantee the file won't contain duplicate error messages. If this argument is not specified,
 the plugin will overwrite the log output file.
+* `includeAll`: Include everything in log messages.
 * `outputFile`: The file the logs get written to.
 
 The task `appengineUpdate` allows you to specify upload specific settings. Define the tasks' properties in the closure `update`:

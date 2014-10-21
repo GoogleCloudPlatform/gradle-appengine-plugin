@@ -24,5 +24,6 @@ class DownloadLogsExtension {
     Integer numDays
     Integer severity
     Boolean append
+    Boolean includeAll
     File outputFile
 }

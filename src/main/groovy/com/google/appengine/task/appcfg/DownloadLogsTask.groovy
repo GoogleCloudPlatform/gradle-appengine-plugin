@@ -16,6 +16,8 @@
 package com.google.appengine.task.appcfg
 
 import org.gradle.api.InvalidUserDataException
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
 
 /**
  * Google App Engine task downloading application logs from the server.
@@ -28,7 +30,8 @@ class DownloadLogsTask extends AppConfigTaskTemplate {
     Integer numDays
     Integer severity
     Boolean append
-    File outputFile
+    Boolean includeAll
+    @Input File outputFile
 
     @Override
     void validateConfiguration() {
@@ -71,6 +74,10 @@ class DownloadLogsTask extends AppConfigTaskTemplate {
 
         if(getAppend()) {
             params << '--append'
+        }
+
+        if(getIncludeAll()) {
+            params << '--include_all'
         }
 
         params << COMMAND
