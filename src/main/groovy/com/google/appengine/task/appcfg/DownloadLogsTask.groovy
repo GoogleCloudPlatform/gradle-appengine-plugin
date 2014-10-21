@@ -34,7 +34,7 @@ class DownloadLogsTask extends AppConfigTaskTemplate {
     void validateConfiguration() {
         super.validateConfiguration()
 
-        if(getSeverity() && (getSeverity() < 0 || getSeverity() > 4)) {
+        if(getSeverity() != null && (getSeverity() < 0 || getSeverity() > 4)) {
             throw new InvalidUserDataException("Invalid log level: ${getSeverity()}. Valid values are 4 for CRITICAL, 3 for ERROR, 2 for WARNING, 1 for INFO, 0 for DEBUG.")
         }
         else {
@@ -65,7 +65,7 @@ class DownloadLogsTask extends AppConfigTaskTemplate {
             params << "--num_days=${getNumDays()}"
         }
 
-        if(getSeverity()) {
+        if(getSeverity() != null) {
             params << "--severity=${getSeverity()}"
         }
 
