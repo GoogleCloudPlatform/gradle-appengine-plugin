@@ -1,3 +1,8 @@
+### Version 1.9.14 (October 22nd, 2014)
+* Fix logs severity check [issue 132]
+* Add includeAll option in logs task [issue 133]
+* Update cloud platform logo in doc
+
 ### Version 1.9.13 (Oct 10th, 2014)
 * Use Gradle constants for java version
 * Remove Idea plugin [issue 124]

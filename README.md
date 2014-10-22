@@ -21,7 +21,7 @@ example on how to retrieve it from Maven Central:
         }
 
         dependencies {
-            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.13'
+            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.14'
         }
     }
 
@@ -32,7 +32,7 @@ convention property `downloadSdk` to `true`. This option requires you to specify
 the configuration `appengineSdk`.
 
     dependencies {
-        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.13'
+        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.14'
     }
 
 ## Tasks
