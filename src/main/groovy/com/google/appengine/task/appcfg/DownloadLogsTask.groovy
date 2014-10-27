@@ -64,7 +64,7 @@ class DownloadLogsTask extends AppConfigTaskTemplate {
     List getParams() {
         def params = []
 
-        if(getNumDays()) {
+        if(getNumDays() != null) {
             params << "--num_days=${getNumDays()}"
         }
 
