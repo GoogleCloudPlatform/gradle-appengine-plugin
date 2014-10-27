@@ -1,6 +1,6 @@
 package com.google.gcloud.task
 
-import com.google.appengine.AppEnginePluginExtension
+import com.google.appengine.AppEnginePlugin
 import com.google.gcloud.GCloudPluginExtension
 import com.google.gcloud.wrapper.GCloudCommandBuilder
 import org.gradle.api.Incubating
@@ -13,7 +13,6 @@ class GCloudAppRunTask extends GCloudTask {
     @Override
     protected String[] getCommand() {
         GCloudPluginExtension gcEx = project.extensions.getByName("gcloud");
-        AppEnginePluginExtension aEx = project.extensions.getByName("appengine")
         GCloudCommandBuilder builder = new GCloudCommandBuilder("preview", "app", "run")
         addBaseCommandOptions(builder);
         builder.addOption("api-host", gcEx.run.apiHost)
@@ -22,7 +21,7 @@ class GCloudAppRunTask extends GCloudTask {
                .addOption("log-level", gcEx.run.logLevel)
                .addOption("host", gcEx.run.host)
                .add(gcEx.run.extraParams)
-               .add(aEx.warDir.absolutePath)
+               .add(AppEnginePlugin.getExplodedAppDirectory(project).absolutePath)
         //List<String> modules; //non java module directories
         return builder.buildCommand()
     }

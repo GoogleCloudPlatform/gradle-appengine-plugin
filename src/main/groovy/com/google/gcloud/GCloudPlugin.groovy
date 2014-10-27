@@ -29,10 +29,5 @@ public class GCloudPlugin implements Plugin<Project> {
 
         project.tasks.create(TASK_GCLOUD_APP_RUN, GCloudAppRunTask)
         project.tasks.create(TASK_GCLOUD_APP_DEPLOY, GCloudAppDeployTask)
-
-        // TODO : Move this into app engine plugin when behavior is stabilized
-        // old run task depends on null warDir for certain behavior
-        AppEnginePluginExtension aEx = project.extensions.getByName("appengine")
-        aEx.warDir = AppEnginePlugin.getAppDir(project)
     }
 }
