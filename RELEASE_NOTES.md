@@ -1,3 +1,7 @@
+### Version 1.9.15 (Nov 5th, 2014)
+* Fix logs number of days check [issue 137]
+* Fix gcloud path to app directory
+
 ### Version 1.9.14 (October 22nd, 2014)
 * Fix logs severity check [issue 132]
 * Add includeAll option in logs task [issue 133]

@@ -7,7 +7,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 group = 'com.google.appengine'
-version = '1.9.14'
+version = '1.9.15'
 
 buildscript {
     repositories {
