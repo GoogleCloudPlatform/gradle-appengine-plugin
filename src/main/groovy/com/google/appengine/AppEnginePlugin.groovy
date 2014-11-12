@@ -613,7 +613,7 @@ class AppEnginePlugin implements Plugin<Project> {
         project.artifacts.add(ANDROID_CONFIG, endpointsAndroidJarTask)
     }
 
-    private void configureFunctionalTest(Project project, AppEnginePluginExtension convention) {
+    private void configureFunctionalTest(Project project, AppEnginePluginExtension extension) {
         SourceSet functionalSourceSet = addFunctionalTestConfigurationsAndSourceSet(project)
 
         Test appengineFunctionalTest = project.tasks.create(APPENGINE_FUNCTIONAL_TEST, Test)
@@ -625,7 +625,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
         project.gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
             if(taskGraph.hasTask(appengineFunctionalTest)) {
-                convention.daemon = true
+                extension.daemon = true
             }
         }
 
@@ -646,7 +646,7 @@ class AppEnginePlugin implements Plugin<Project> {
         SourceSet mainSourceSet = sourceSets.getByName(MAIN_SOURCE_SET_NAME)
         SourceSet functionalSourceSet = sourceSets.create(FUNCTIONAL_TEST_SOURCE_SET)
         functionalSourceSet.compileClasspath = mainSourceSet.output + functionalTestCompileConfiguration
-        functionalSourceSet.runtimeClasspath = functionalSourceSet.output + functionalTestRuntimeConfiguration
+        functionalSourceSet.runtimeClasspath = mainSourceSet.output + functionalSourceSet.output + functionalTestRuntimeConfiguration
 
         addEclipseConfigurationForFunctionalTestRuntimeConfiguration(project, functionalTestRuntimeConfiguration)
 
