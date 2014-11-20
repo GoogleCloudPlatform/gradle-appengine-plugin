@@ -1,3 +1,7 @@
+### Version 1.9.17 (Nov 20th, 2014)
+* Skip 1.9.16
+* Fix functional test source set configurations
+
 ### Version 1.9.15 (Nov 5th, 2014)
 * Fix logs number of days check [issue 137]
 * Fix gcloud path to app directory
