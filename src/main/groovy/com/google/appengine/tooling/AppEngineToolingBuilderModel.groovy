@@ -58,7 +58,7 @@ public class AppEngineToolingBuilderModel implements ToolingModelBuilder {
                                          conf.disableUpdateCheck,
                                          conf.enhancer.version,
                                          conf.enhancer.api,
-                                         conf.jvmFlags,
+                                         conf.jvmFlags*.toString(), // convert everything to a java string
                                          conf.warDir ?: AppEnginePlugin.getExplodedAppDirectory(project),
                                          AppEnginePlugin.getAppDir(project),
                                          getSdkLocation(conf, project),
