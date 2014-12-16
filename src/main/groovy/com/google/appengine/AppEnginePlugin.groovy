@@ -30,6 +30,7 @@ import com.google.appengine.task.endpoints.GetClientLibsTask
 import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
 import com.google.appengine.task.endpoints.InstallClientLibsTask
 import com.google.appengine.tools.info.UpdateCheckResults
+import com.google.appengine.util.VersionComparator
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
@@ -119,7 +120,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        checkGradleVersion(project.gradle.gradleVersion)
+        checkGradleVersion(project);
         registry.register(new AppEngineToolingBuilderModel());
         project.configurations.create(APPENGINE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                 .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
@@ -166,9 +167,9 @@ class AppEnginePlugin implements Plugin<Project> {
         configureFunctionalTest(project, appEnginePluginExtension)
     }
 
-    static void checkGradleVersion(String projectGradleVersion) {
-        // from the appengine sdk
-        if(new UpdateCheckResults.VersionComparator().compare(GRADLE_MIN_VERSION, projectGradleVersion) > 0) {
+    static void checkGradleVersion(Project project) {
+        String projectGradleVersion = project.gradle.gradleVersion
+        if(VersionComparator.compare(GRADLE_MIN_VERSION, projectGradleVersion) > 0) {
             throw new BuildException(String.format(
                     "Detected Gradle version %s, but the gradle-appengine-plugin requires Gradle version %s or higher.",
                     projectGradleVersion, GRADLE_MIN_VERSION), null);
