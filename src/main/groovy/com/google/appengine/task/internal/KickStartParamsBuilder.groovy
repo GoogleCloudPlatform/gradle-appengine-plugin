@@ -26,6 +26,7 @@ class KickStartParamsBuilder {
     static final String ADDRESS = '--address'
     static final String PORT = '--port'
     static final String DISABLE_UPDATE_CHECK = '--disable_update_check'
+    static final String DISABLE_DATAGRAM = '--disable_datagram'
     static final String JVM_FLAG = '--jvm_flag'
     static final String REMOTE_SHUTDOWN_FLAG = "--allow_remote_shutdown"
 
@@ -44,6 +45,10 @@ class KickStartParamsBuilder {
 
         if(kickStartParams.disableUpdateCheck) {
             params << DISABLE_UPDATE_CHECK
+        }
+
+        if (kickStartParams.disableDatagram) {
+          params << DISABLE_DATAGRAM
         }
 
         params << REMOTE_SHUTDOWN_FLAG

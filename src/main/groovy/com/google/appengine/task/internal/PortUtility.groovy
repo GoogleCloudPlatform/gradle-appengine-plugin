@@ -40,17 +40,22 @@ final class PortUtility {
      * Checks if port is available.
      *
      * @param port Port
+     * @param disableDatagram {@code true} if UDP socket not needed or wanted.
+     *        Useful when running on Jenkins where its plugin is not able to
+     *        assign a free port available for both TCP and UDP.
      * @return Flag
      */
-    static boolean isAvailable(Integer port) {
+    static boolean isAvailable(Integer port, Boolean disableDatagram) {
         ServerSocket ss
         DatagramSocket ds
 
         try {
             ss = new ServerSocket(port, 0, InetAddress.getByName('127.0.0.1'))
             ss.reuseAddress = true
-            ds = new DatagramSocket(port, InetAddress.getByName('127.0.0.1'))
-            ds.reuseAddress = true
+            if (!disableDatagram) {
+              ds = new DatagramSocket(port, InetAddress.getByName('127.0.0.1'))
+              ds.reuseAddress = true
+            }
             return true
         }
         catch(IOException e) {

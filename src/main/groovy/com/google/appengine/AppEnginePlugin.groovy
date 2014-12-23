@@ -282,6 +282,7 @@ class AppEnginePlugin implements Plugin<Project> {
             appengineRunTask.conventionMapping.map('httpPort') { appEnginePluginExtension.httpPort }
             appengineRunTask.conventionMapping.map('daemon') { appEnginePluginExtension.daemon }
             appengineRunTask.conventionMapping.map('disableUpdateCheck') { appEnginePluginExtension.disableUpdateCheck }
+            appengineRunTask.conventionMapping.map('disableDatagram') { appEnginePluginExtension.disableDatagram }
             appengineRunTask.conventionMapping.map('jvmFlags') { appEnginePluginExtension.jvmFlags }
             appengineRunTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { appEnginePluginExtension.warDir ?: explodedAppDirectory }
         }

@@ -29,6 +29,7 @@ public class DefaultAppEngineModel implements AppEngineModel, Serializable {
     final private String httpAddress;
     final private Integer httpPort;
     final private Boolean disableUpdateCheck;
+    final private Boolean disableDatagram;
     final private String enhancerVersion;
     final private String enhancerApi;
     final private List<String> jvmFlags;
@@ -38,11 +39,13 @@ public class DefaultAppEngineModel implements AppEngineModel, Serializable {
     final private AppCfgOptions appCfgOptions;
 
     public DefaultAppEngineModel(String httpAddress, Integer httpPort, Boolean disableUpdateCheck,
+                                 Boolean disableDatagram,
                                  String enhancerVersion, String enhancerApi, List<String> jvmFlags, File warDir,
                                  File webAppDir, String sdkRoot, AppCfgOptions appCfgOptions) {
         this.httpAddress = httpAddress;
         this.httpPort = httpPort;
         this.disableUpdateCheck = disableUpdateCheck;
+        this.disableDatagram = disableDatagram;
         this.enhancerVersion = enhancerVersion;
         this.enhancerApi = enhancerApi;
         this.jvmFlags = jvmFlags;
@@ -70,6 +73,11 @@ public class DefaultAppEngineModel implements AppEngineModel, Serializable {
     @Override
     public Boolean isDisableUpdateCheck() {
         return disableUpdateCheck;
+    }
+
+    @Override
+    public Boolean isDisableDatagram() {
+        return disableDatagram;
     }
 
     @Override

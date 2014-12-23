@@ -33,6 +33,7 @@ class RunTask extends AbstractTask implements Explodable {
     File explodedAppDirectory
     Boolean daemon
     Boolean disableUpdateCheck
+    Boolean disableDatagram
     List<String> jvmFlags
     final KickStartSynchronizer kickStartSynchronizer = new KickStartSynchronizer()
     private static final String DEV_SERVER_STARTED = 'Dev App Server is now running'
@@ -48,7 +49,7 @@ class RunTask extends AbstractTask implements Explodable {
             throw new InvalidUserDataException("Invalid $type port number: $port")
         }
 
-        if(!PortUtility.isAvailable(port)) {
+        if(!PortUtility.isAvailable(port, disableDatagram)) {
             throw new InvalidUserDataException("$type port number already in use: $port")
         }
 
@@ -90,6 +91,7 @@ class RunTask extends AbstractTask implements Explodable {
         kickStartParams.httpPort = getHttpPort()
         kickStartParams.httpAddress = getHttpAddress()
         kickStartParams.disableUpdateCheck = getDisableUpdateCheck()
+        kickStartParams.disableDatagram = getDisableDatagram()
         kickStartParams.jvmFlags = getJvmFlags()
         kickStartParams.explodedWarDirectory = getExplodedAppDirectory()
 

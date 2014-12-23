@@ -30,6 +30,7 @@ class AppEnginePluginExtension {
     Integer httpPort = 8080
     Boolean daemon = false
     Boolean disableUpdateCheck = false
+    Boolean disableDatagram = false
     List<String> jvmFlags = []
     File warDir
     Boolean downloadSdk = false
