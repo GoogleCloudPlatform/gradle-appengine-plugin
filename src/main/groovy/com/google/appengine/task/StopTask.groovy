@@ -41,7 +41,7 @@ class StopTask extends DefaultTask {
             connection.getOutputStream().write(0);
             BufferedReader responseReader = new BufferedReader(new InputStreamReader(connection.getInputStream()))
             while(responseReader.readLine() != null);
-            logger.lifecycle("Shutting down devappserver on port : " + getHttpPort());
+            logger.info("Shutting down devappserver on port : " + getHttpPort());
             Thread.sleep(2000);
         } catch (MalformedURLException e) {
             throw new GradleScriptException("URL malformed attempting to stop the devappserver : " + e.getMessage(), e);

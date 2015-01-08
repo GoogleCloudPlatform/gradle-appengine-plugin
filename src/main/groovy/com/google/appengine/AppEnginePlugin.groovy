@@ -625,6 +625,7 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineFunctionalTest.testClassesDir = functionalSourceSet.output.classesDir
         appengineFunctionalTest.classpath = functionalSourceSet.runtimeClasspath
         appengineFunctionalTest.dependsOn(project.tasks.getByName(APPENGINE_RUN))
+        appengineFunctionalTest.finalizedBy(project.tasks.getByName(APPENGINE_STOP))
 
         project.gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
             if(taskGraph.hasTask(appengineFunctionalTest)) {
