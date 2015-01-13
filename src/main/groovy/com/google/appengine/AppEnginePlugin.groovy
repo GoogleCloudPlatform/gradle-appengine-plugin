@@ -670,7 +670,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
     private void addEclipseConfigurationForFunctionalTestRuntimeConfiguration(Project project, Configuration functionalTestRuntimeConfiguration) {
         project.plugins.withType(EclipsePlugin) { EclipsePlugin plugin ->
-            plugin.model.classpath.plusConfigurations += functionalTestRuntimeConfiguration
+            plugin.model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
         }
     }
 
