@@ -91,7 +91,6 @@ class RunTask extends AbstractTask implements Explodable {
         kickStartParams.httpPort = getHttpPort()
         kickStartParams.httpAddress = getHttpAddress()
         kickStartParams.disableUpdateCheck = getDisableUpdateCheck()
-        kickStartParams.disableDatagram = getDisableDatagram()
         kickStartParams.jvmFlags = getJvmFlags()
         kickStartParams.explodedWarDirectory = getExplodedAppDirectory()
 

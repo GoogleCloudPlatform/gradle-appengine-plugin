@@ -24,7 +24,6 @@ class KickStartParams {
     String httpAddress
     Integer httpPort
     Boolean disableUpdateCheck
-    Boolean disableDatagram
     List<String> jvmFlags
     File explodedWarDirectory
 }

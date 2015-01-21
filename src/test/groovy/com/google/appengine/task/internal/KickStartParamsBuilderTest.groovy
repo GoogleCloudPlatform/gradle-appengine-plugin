@@ -55,23 +55,6 @@ class KickStartParamsBuilderTest extends Specification {
             params.get(4) == '/dev/main/war'
     }
 
-    def "Build parameters for minimal arguments plus disable datagram"() {
-        given: "no extra arguments are provided"
-            KickStartParams kickStartParams = createBasicParams()
-            kickStartParams.disableDatagram = true
-
-        when: "the params are built"
-            List<String> params = KickStartParamsBuilder.instance.buildCommandLineParams(kickStartParams)
-
-        then: "the basic parameters are set up"
-            params.size() == 5
-            params.get(0) == KickStartParamsBuilder.MAIN_CLASS
-            params.get(1) == "$KickStartParamsBuilder.PORT=8080"
-            params.get(2) == KickStartParamsBuilder.DISABLE_DATAGRAM
-            params.get(3) == KickStartParamsBuilder.REMOTE_SHUTDOWN_FLAG
-            params.get(4) == '/dev/main/war'
-    }
-
     def "Build parameters for minimal arguments plus disable update check, httAddress and additional JVM flags"() {
         given: "no extra arguments are provided"
             KickStartParams kickStartParams = createBasicParams()
