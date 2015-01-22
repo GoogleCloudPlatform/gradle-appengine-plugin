@@ -29,7 +29,6 @@ import com.google.appengine.task.endpoints.ExportClientLibsTask
 import com.google.appengine.task.endpoints.GetClientLibsTask
 import com.google.appengine.task.endpoints.GetDiscoveryDocsTask
 import com.google.appengine.task.endpoints.InstallClientLibsTask
-import com.google.appengine.tools.info.UpdateCheckResults
 import com.google.appengine.util.VersionComparator
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -42,6 +41,7 @@ import com.google.appengine.task.appcfg.*
 import com.google.appengine.task.appcfg.backends.*
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.TaskState
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 import org.gradle.plugins.ear.EarPluginConvention
@@ -112,20 +112,20 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String FUNCTIONAL_TEST_RUNTIME_CONFIGURATION = 'functionalTestRuntime'
     static final String FUNCTIONAL_TEST_SOURCE_SET = 'functionalTest'
 
-    private final ToolingModelBuilderRegistry registry;
+    private final ToolingModelBuilderRegistry registry
     @Inject
     public AppEnginePlugin(ToolingModelBuilderRegistry registry) {
-        this.registry = registry;
+        this.registry = registry
     }
 
     @Override
     void apply(Project project) {
-        checkGradleVersion(project);
-        registry.register(new AppEngineToolingBuilderModel());
+        checkGradleVersion(project)
+        registry.register(new AppEngineToolingBuilderModel())
         project.configurations.create(APPENGINE_SDK_CONFIGURATION_NAME).setVisible(false).setTransitive(true)
                 .setDescription('The Google App Engine SDK to be downloaded and used for this project.')
 
-        AppEnginePluginExtension appEnginePluginExtension = project.extensions.create('appengine', AppEnginePluginExtension, project);
+        AppEnginePluginExtension appEnginePluginExtension = project.extensions.create('appengine', AppEnginePluginExtension, project)
 
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedAppDirectory = getExplodedAppDirectory(project)
@@ -172,7 +172,7 @@ class AppEnginePlugin implements Plugin<Project> {
         if(VersionComparator.compare(GRADLE_MIN_VERSION, projectGradleVersion) > 0) {
             throw new BuildException(String.format(
                     "Detected Gradle version %s, but the gradle-appengine-plugin requires Gradle version %s or higher.",
-                    projectGradleVersion, GRADLE_MIN_VERSION), null);
+                    projectGradleVersion, GRADLE_MIN_VERSION), null)
         }
     }
 
@@ -589,7 +589,7 @@ class AppEnginePlugin implements Plugin<Project> {
         project.configurations.create(ANDROID_CONFIG)
 
         project.afterEvaluate {
-            final String GOOGLE_API_LIB_VERSION = appEnginePluginExtension.endpoints.googleClientVersion;
+            final String GOOGLE_API_LIB_VERSION = appEnginePluginExtension.endpoints.googleClientVersion
             final String GOOGLE_API_LIB = "com.google.api-client:google-api-client:${GOOGLE_API_LIB_VERSION}"
             final String GOOGLE_ANDROID_API_LIB = "com.google.api-client:google-api-client-android:${GOOGLE_API_LIB_VERSION}"
             final String EXCLUDE_HTTP_GROUP = "org.apache.httpcomponents"
@@ -624,12 +624,34 @@ class AppEnginePlugin implements Plugin<Project> {
         appengineFunctionalTest.group = APPENGINE_GROUP
         appengineFunctionalTest.testClassesDir = functionalSourceSet.output.classesDir
         appengineFunctionalTest.classpath = functionalSourceSet.runtimeClasspath
-        appengineFunctionalTest.dependsOn(project.tasks.getByName(APPENGINE_RUN))
+        RunTask runTask = project.tasks.getByName(APPENGINE_RUN)
+        runTask.mustRunAfter(functionalSourceSet.classesTaskName, functionalSourceSet.processResourcesTaskName, functionalSourceSet.compileJavaTaskName)
+        appengineFunctionalTest.dependsOn(runTask)
         appengineFunctionalTest.finalizedBy(project.tasks.getByName(APPENGINE_STOP))
 
+        File serverTrigger = project.file("${project.buildDir}/server.trigger")
         project.gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
             if(taskGraph.hasTask(appengineFunctionalTest)) {
+                if(APPENGINE_RUN in project.gradle.startParameter.taskNames) {
+                    project.logger.warn("WARN: Explicitly called task ${APPENGINE_RUN} will not behave normally when run with ${APPENGINE_FUNCTIONAL_TEST}")
+                }
                 extension.daemon = true
+                runTask.inputs.files(appengineFunctionalTest.inputs.files, serverTrigger)
+                runTask.outputs.files(appengineFunctionalTest.outputs.files)
+            }
+        }
+
+        project.gradle.taskGraph.afterTask { Task task, TaskState state ->
+            if(task.project != project) {
+                return
+            }
+            if(task.name == APPENGINE_FUNCTIONAL_TEST && state.failure) {
+                serverTrigger.withWriter { w ->
+                    w << new Date()
+                }
+            }
+            if(task.name == APPENGINE_RUN && state.skipped) {
+                project.tasks.getByName(APPENGINE_STOP).enabled = false
             }
         }
 
