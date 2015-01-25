@@ -56,7 +56,6 @@ public class AppEngineToolingBuilderModel implements ToolingModelBuilder {
         return new DefaultAppEngineModel(conf.httpAddress,
                                          conf.httpPort,
                                          conf.disableUpdateCheck,
-                                         conf.disableDatagram,
                                          conf.enhancer.version,
                                          conf.enhancer.api,
                                          conf.jvmFlags*.toString(), // convert everything to a java string
