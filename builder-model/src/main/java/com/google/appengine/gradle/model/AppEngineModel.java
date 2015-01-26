@@ -27,7 +27,6 @@ public interface AppEngineModel {
     public String getHttpAddress();
     public Integer getHttpPort();
     public Boolean isDisableUpdateCheck();
-    public Boolean isDisableDatagram();
     public String getEnhancerVersion();
     public String getEnhancerApi();
     public List<String> getJvmFlags();

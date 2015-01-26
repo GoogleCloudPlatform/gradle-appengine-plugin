@@ -49,7 +49,7 @@ class RunTask extends AbstractTask implements Explodable {
             throw new InvalidUserDataException("Invalid $type port number: $port")
         }
 
-        if(!PortUtility.isAvailable(port, disableDatagram)) {
+        if(!PortUtility.isAvailable(port, getDisableDatagram())) {
             throw new InvalidUserDataException("$type port number already in use: $port")
         }
 
