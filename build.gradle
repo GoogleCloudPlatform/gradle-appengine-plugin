@@ -1,13 +1,18 @@
 apply plugin: 'groovy'
 apply plugin: 'nexus'
 
-apply from: 'builder-model-impl.gradle'
+apply from: 'scripts/builder-model-impl.gradle'
+apply from: 'scripts/test-jar-publisher.gradle'
 
 sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 group = 'com.google.appengine'
 version = '1.9.17'
+project.ext.appengineVersion = version
+if ('snapshot' in project.gradle.startParameter.taskNames) {
+    version = "${version}-SNAPSHOT"
+}
 
 buildscript {
     repositories {
@@ -31,7 +36,7 @@ dependencies {
     compile localGroovy()
     compile gradleApi()
     compile project(':builder-model')
-    compile "com.google.appengine:appengine-local-endpoints:${version}"
+    compile "com.google.appengine:appengine-local-endpoints:${appengineVersion}"
     // TODO : update spock-core to 1.0-groovy-2.3 when it becomes available
     testCompile ('org.spockframework:spock-core:0.7-groovy-2.0') {
         exclude module: "groovy-all"
@@ -102,25 +107,20 @@ task snapshot << {
 }
 
 test {
-    systemProperty "appengine.version", "${version}"
-    systemProperty "appengine.pluginversion", "${version}"
-}.dependsOn install, ':builder-model:install'
+    systemProperty "appengine.version", "${appengineVersion}"
+    systemProperty "appengine.pluginversion", "${version}-test"
+    systemProperty "test.maven.repo", publishing.repositories.test.url
+}.dependsOn allprojects.collect { "${it.getPath()}:publishTestPublicationToTestRepository" }
 
 import org.gradle.plugins.signing.Sign
 
 gradle.taskGraph.whenReady { taskGraph ->
-    if (taskGraph.hasTask(snapshot)) {
-        version = "${version}-SNAPSHOT"
-        if (taskGraph.hasTask(test)) {
-          project.test.systemProperty "appengine.pluginversion", "${version}"
-        }
-    }
-    else if (taskGraph.allTasks.any { it instanceof Sign } && taskGraph.allTasks.any { it.name.equals(project.nexus.getUploadTaskName()) }) {
+    if (!taskGraph.hasTask(snapshot) && taskGraph.allTasks.any { it instanceof Sign } && taskGraph.allTasks.any { it.name.equals(project.nexus.getUploadTaskName()) }) {
         Console console = System.console()
         console.printf "\n\nPGP credentials required to sign artifacts prior to uploading.\n\n"
 
-        def id = console.readLine("PGP Key Id: ")
-        def file = console.readLine("PGP Secret Key Ring File (absolute path): ")
+        def id = readPropCmdLine(console, "signing.keyId", "", "PGP Key Id")
+        def file = readPropCmdLine(console, "signing.secretKeyRingFile", "${System.getProperty("user.home")}/.gnupg/secring.gpg", "PGP Secret Key Ring File (absolute path)")
         def password = console.readPassword("PGP Private Key Password: ")
 
         allprojects { ext."signing.keyId" = id }
@@ -129,10 +129,15 @@ gradle.taskGraph.whenReady { taskGraph ->
 
         console.printf "\n\nOSS Sonatype Credential required to upload.\n\n"
 
-        def nexusUsername = console.readLine("Sonatype Username: ")
+        def nexusUsername = readPropCmdLine(console, "nexus.username", "", "Sonatype Username")
         def nexusPassword = console.readPassword("Sonatype Password: ")
 
         allprojects { ext."nexusUsername" = nexusUsername }
         allprojects { ext."nexusPassword" = new String(nexusPassword) }
     }
+}
+
+def readPropCmdLine(console, property, defaultValue, msg) {
+    def value = System.getProperty(property) ?: defaultValue
+    value = console.readLine("$msg [${value}]:") ?: value
 }

@@ -1,8 +1,8 @@
-apply plugin: 'maven'
 apply plugin: 'java'
 apply plugin: 'nexus'
 
-apply from: '../java6-mode.gradle'
+apply from: '../scripts/java6-mode.gradle'
+apply from: '../scripts/test-jar-publisher.gradle'
 
 archivesBaseName = 'gradle-appengine-builder-model'
 group = 'com.google.appengine'

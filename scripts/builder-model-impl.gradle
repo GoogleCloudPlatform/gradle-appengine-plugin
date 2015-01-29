@@ -2,7 +2,7 @@
 // separately to use java6 instead of java7 like the main so the builder model can
 // be intergrated with tools that use java6
 
-apply from: 'java6-mode.gradle'
+apply from: 'scripts/java6-mode.gradle'
 
 sourceSets {
     model

@@ -1,7 +1,9 @@
 buildscript {
 
   repositories {
-    mavenLocal()
+    maven {
+        url "@@testrepo@@"
+    }
     mavenCentral()
   }
 

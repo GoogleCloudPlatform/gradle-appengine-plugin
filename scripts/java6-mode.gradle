@@ -7,7 +7,7 @@ ext.setJava6Mode = { compileJavaTask ->
     compileJavaTask.targetCompatibility = 1.6
     // if jdk6.home is defined use it
     def jdk6Home = System.properties['jdk6.home']
-    if(jdk6Home) {
+    if (jdk6Home) {
         compileJavaTask.options.bootClasspath = (new File(jdk6Home,"/jre/lib/rt.jar")).canonicalPath
     }
 }

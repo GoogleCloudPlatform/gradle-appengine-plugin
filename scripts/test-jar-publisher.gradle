@@ -1,0 +1,18 @@
+apply plugin: 'maven-publish'
+
+publishing {
+    repositories {
+        maven {
+            name = "test"
+            url "${project(':').buildDir}/test-repo"
+        }
+    }
+    publications {
+        test(MavenPublication) {
+            from components.java
+            version = "${version}-test"
+        }
+    }
+}
+
+

@@ -60,6 +60,7 @@ abstract class AppIntegrationTest {
                 w << line
                         .replaceAll("@@pluginversion@@", System.getProperty("appengine.pluginversion"))
                         .replaceAll("@@version@@", System.getProperty("appengine.version"))
+                        .replaceAll("@@testrepo@@", System.getProperty("test.maven.repo"))
                 w << "\n"
             }
         }
