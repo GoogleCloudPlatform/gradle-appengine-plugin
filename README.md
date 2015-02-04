@@ -1,5 +1,6 @@
 ![Google Cloud Platform Logo](https://cloud.google.com/_static/images/gcp-logo.png)
-# Gradle App Engine plugin
+# Gradle App Engine plugin [![Build Status](https://travis-ci.org/GoogleCloudPlatform/gradle-appengine-plugin.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/gradle-appengine-plugin)
+
 
 The plugin provides tasks for uploading, downloading, running and managing [Google App Engine](https://cloud.google.com/appengine/)
 (App Engine) projects in any given Gradle build.
