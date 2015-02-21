@@ -1,3 +1,14 @@
+### Version 1.9.18 (Feb 20th, 2015)
+* Fix version number check (issue #157)
+* Fix function test source set setups for IDEs (issue #147, issue #160)
+* Kill devappserver after function test (issue #145)
+* Improve JVM arg import
+* Add disable-datagram
+* Skip devappserver when no functional test are run
+* Add CI
+* Update build/test mechanisms
+* Add traffic migration (in experimental)
+
 ### Version 1.9.17 (Nov 20th, 2014)
 * Skip 1.9.16
 * Fix functional test source set configurations

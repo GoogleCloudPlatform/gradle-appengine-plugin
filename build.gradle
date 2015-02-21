@@ -8,7 +8,7 @@ sourceCompatibility = JavaVersion.VERSION_1_7
 targetCompatibility = JavaVersion.VERSION_1_7
 
 group = 'com.google.appengine'
-version = '1.9.17'
+version = '1.9.18'
 project.ext.appengineVersion = version
 if ('snapshot' in project.gradle.startParameter.taskNames) {
     version = "${version}-SNAPSHOT"
@@ -67,7 +67,7 @@ modifyPom {
 
         scm {
             url 'https://github.com/GoogleCloudPlatform/gradle-appengine-plugin'
-            connection 'scm:https://mattstep@github.com/GoogleCloudPlatform/gradle-appengine-plugin.git'
+            connection 'scm:https://github.com/GoogleCloudPlatform/gradle-appengine-plugin.git'
             developerConnection 'scm:git://github.com/GoogleCloudPlatform/gradle-appengine-plugin.git'
         }
 
@@ -80,20 +80,6 @@ modifyPom {
         }
 
         developers {
-            developer {
-                id 'mattstep'
-                name 'Matt Stephenson'
-                email 'mattstep@google.com'
-            }
-            developer {
-                id 'bmuschko'
-                name 'Benjamin Muschko'
-                email 'benjamin.muschko@gmail.com'
-            }
-            developer {
-                id 'erdi'
-                name 'Marcin Erdmann'
-            }
             developer {
                 id 'loosebazooka'
                 name 'Appu Goundan'
