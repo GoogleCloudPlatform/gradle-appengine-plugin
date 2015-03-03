@@ -46,6 +46,7 @@ import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 import org.gradle.plugins.ear.EarPluginConvention
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
+import org.gradle.plugins.ide.eclipse.model.EclipseModel
 import org.gradle.plugins.ide.idea.IdeaPlugin
 import org.gradle.tooling.BuildException
 import org.gradle.tooling.provider.model.ToolingModelBuilderRegistry
@@ -62,6 +63,7 @@ import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
  */
 class AppEnginePlugin implements Plugin<Project> {
 
+    // TODO: eclipse plugin integration has special code for v2.3, fix it when ready
     static final String GRADLE_MIN_VERSION = '2.1'
 
     static final String APPENGINE_SDK_CONFIGURATION_NAME = 'appengineSdk'
@@ -691,8 +693,19 @@ class AppEnginePlugin implements Plugin<Project> {
     }
 
     private void addEclipseConfigurationForFunctionalTestRuntimeConfiguration(Project project, Configuration functionalTestRuntimeConfiguration) {
-        project.plugins.withType(EclipsePlugin) { EclipsePlugin plugin ->
-            plugin.model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
+        //TODO : once we up the minimum supported version, remove this conditional
+        if(VersionComparator.compare(project.gradle.gradleVersion, "2.3") < 0) {
+            project.plugins.withType(EclipsePlugin) { EclipsePlugin plugin ->
+                plugin.model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
+            }
+        }
+        else {
+            project.afterEvaluate {
+                if (project.plugins.hasPlugin(EclipsePlugin)) {
+                    EclipseModel model = project.extensions.getByType(EclipseModel)
+                    model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
+                }
+            }
         }
     }
 
