@@ -28,6 +28,7 @@ abstract class AbstractTask extends DefaultTask {
     static final String APPENGINE_HOME_ENV_PROP_KEY = 'APPENGINE_HOME'
     static final String APPENGINE_SDK_ROOT_SYS_PROP_KEY = 'appengine.sdk.root'
     static final String JAVA_CLASSPATH_SYS_PROP_KEY = 'java.class.path'
+    protected static final String APPENGINE_TOOLS_MAIN = 'com.google.appengine.tools.admin.AppCfg'
 
     @TaskAction
     protected void start() {
@@ -77,15 +78,9 @@ abstract class AbstractTask extends DefaultTask {
     }
 
     private void validateAppEngineToolsApiJar() {
-        def fileSeparator = System.getProperty('file.separator')
+        def appEngineToolsApiJar = getToolsJar()
         def pathSeparator = File.pathSeparator
-        def appEngineSdkRoot = System.getProperty(APPENGINE_SDK_ROOT_SYS_PROP_KEY)
         def javaClasspath = System.getProperty(JAVA_CLASSPATH_SYS_PROP_KEY)
-        def appEngineToolsApiJar = "${appEngineSdkRoot}${fileSeparator}lib${fileSeparator}appengine-tools-api.jar"
-
-        if(!new File(appEngineSdkRoot).exists()) {
-            throw new InvalidUserDataException("Required library 'appengine-tools-api.jar' could not be found in specified path: '${appEngineToolsApiJar}'!")
-        }
 
         if(!javaClasspath.contains(appEngineToolsApiJar)) {
             System.setProperty JAVA_CLASSPATH_SYS_PROP_KEY, "${javaClasspath}${pathSeparator}${appEngineToolsApiJar}"
@@ -97,6 +92,18 @@ abstract class AbstractTask extends DefaultTask {
         ClassLoader rootClassLoader = ClassLoader.systemClassLoader.parent
         URLClassLoader appengineClassloader = new URLClassLoader([new File(appEngineToolsApiJar).toURI().toURL()] as URL[], rootClassLoader)
         Thread.currentThread().setContextClassLoader(appengineClassloader)
+    }
+
+    protected String getToolsJar() {
+        def fileSeparator = System.getProperty('file.separator')
+        def appEngineSdkRoot = System.getProperty(APPENGINE_SDK_ROOT_SYS_PROP_KEY)
+        def appEngineToolsApiJar = "${appEngineSdkRoot}${fileSeparator}lib${fileSeparator}appengine-tools-api.jar"
+
+        if(!new File(appEngineToolsApiJar).exists()) {
+            throw new InvalidUserDataException("Required library 'appengine-tools-api.jar' could not be found in specified path: '${appEngineToolsApiJar}'!")
+        }
+
+        return appEngineToolsApiJar
     }
 
     abstract void executeTask()

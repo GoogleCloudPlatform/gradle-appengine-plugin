@@ -63,9 +63,24 @@ abstract class AppConfigTaskTemplate extends WebAppDirTask {
             params.addAll getParams()
             logger.info "Using params = $params"
 
-            ClassLoader classLoader = Thread.currentThread().contextClassLoader
-            def appCfg = classLoader.loadClass('com.google.appengine.tools.admin.AppCfg')
-            appCfg.main(params as String[])
+            if (Boolean.getBoolean("appcfg.in.process")) {
+                // TODO: Remove this eventually
+                // left in if we break someone by changing this, allow them to revert to original mechanics
+                // the problem here is appcfg calls System.exit() and basically kill the build process without
+                // any visual feedback, build process exists with a non-zero though.
+                logger.lifecycle("DEPRECATED: Using appcfg.in.process, may be removed in future versions")
+                ClassLoader classLoader = Thread.currentThread().contextClassLoader
+                def appCfg = classLoader.loadClass(APPENGINE_TOOLS_MAIN)
+                appCfg.main(params as String[])
+            }
+            else {
+                // break out to javaexec, so non zero System.exit() in appcfg will fail the build
+                project.javaexec {
+                    main = APPENGINE_TOOLS_MAIN
+                    classpath getToolsJar()
+                    args params.toArray()
+                }
+            }
         }
         catch(Exception e) {
             throw new GradleException(errorLogMessage(), e)
