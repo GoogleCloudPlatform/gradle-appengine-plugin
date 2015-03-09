@@ -43,14 +43,23 @@ abstract class AppIntegrationTest {
         replaceVersions()
         String[] tasksToRun = getPreTestTasks()
         if (tasksToRun != null && tasksToRun.length > 0) {
-            ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(projectRoot).connect()
-            try {
+            runOnProject { ProjectConnection connection ->
                 connection.newBuild().forTasks(tasksToRun).run()
             }
-            finally {
-                connection.close()
-            }
         }
+    }
+
+    protected void runOnProject(Closure connectionClosure) {
+        GradleConnector connector = GradleConnector.newConnector().forProjectDirectory(projectRoot)
+        configureGradleConnector(connector)
+        ProjectConnection connection = connector.connect()
+        try {
+            connectionClosure(connection)
+        }
+        finally {
+            connection.close()
+        }
+
     }
 
     /** Used to replace version in gradle build files to current App Engine version **/
@@ -82,5 +91,8 @@ abstract class AppIntegrationTest {
 
     /** List of tasks to run during setup **/
     protected String[] getPreTestTasks() {[]}
+
+    /** optional connector configuration **/
+    protected void configureGradleConnector(GradleConnector connector) {}
 
 }

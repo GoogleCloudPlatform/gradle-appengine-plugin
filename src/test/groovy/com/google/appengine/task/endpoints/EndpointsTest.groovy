@@ -34,16 +34,12 @@ class EndpointsTest extends AppIntegrationTest {
     @Test
     void smokeTest() {
 
-        ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(projectRoot).connect()
-        try {
+        runOnProject { ProjectConnection connection ->
             connection.newBuild().forTasks(
                     "appengineEndpointsGetDiscoveryDoc",
                     "appengineEndpointsGetClientLibs",
                     "appengineExplodeApp"
             ).run()
-        }
-        finally {
-            connection.close()
         }
         File webInf = new File(projectRoot, "build/exploded-app/WEB-INF")
         ["mysimpleendpoint-v1-rest.discovery",

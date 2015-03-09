@@ -15,10 +15,11 @@
  */
 package com.google.appengine.task.endpoints
 
-import org.gradle.tooling.GradleConnector
+import org.gradle.tooling.BuildException
 import org.gradle.tooling.ProjectConnection
-import org.junit.Assert
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.ExpectedException
 
 /**
  * Simple test to ensure the plugin is interacting correctly with the Endpoints service
@@ -27,25 +28,20 @@ import org.junit.Test
  */
 class EndpointsExplicitFailTest extends EndpointsTest {
 
-    /** Generate endpoints docs and libs against a minimal endpoints project */
-    @Test
-    void smokeTest() {
+    @Rule
+    public ExpectedException thrown = ExpectedException.none()
 
-        ProjectConnection connection = GradleConnector.newConnector().forProjectDirectory(projectRoot).connect()
-        try {
+    /** Generate endpoints docs and libs against a minimal endpoints project */
+    @Test(expected = BuildException)
+    void smokeTest() {
+        // TODO: presumably the best way to run this test is to actually check
+        // for ClassNotFoundException but it's nested pretty deep
+        runOnProject { ProjectConnection connection ->
             connection.newBuild().forTasks(
                     "appengineEndpointsGetDiscoveryDoc",
                     "appengineEndpointsGetClientLibs",
                     "appengineExplodeApp"
             ).run()
-            Assert.fail("Should have thrown a ClassNotFoundException")
-        }
-        catch (Exception e){
-            // This is what the builder should throw because we have a bad class name defined
-            // in the build file
-        }
-        finally {
-            connection.close()
         }
     }
 
