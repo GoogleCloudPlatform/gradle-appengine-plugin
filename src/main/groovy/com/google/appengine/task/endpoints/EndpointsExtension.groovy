@@ -31,5 +31,5 @@ class EndpointsExtension {
     File clientLibJarOut
     File clientLibSrcJarOut
     List<String> serviceClasses
-    String googleClientVersion = "1.19.0" // update this on schedule with google api client library
+    String googleClientVersion = "1.20.0" // update this on schedule with google api client library
 }
