@@ -230,6 +230,19 @@ your JVM to listen on. The following example show how to set the JVM flags to li
         jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8000']
     }
 
+<br><a name="oauth2"></a>
+**How do I use OAuth2 passwordless login to authenticate?**
+
+You can configure your app to use OAuth2 with the option
+
+    appengine {
+        appcfg {
+            oauth2 = true
+        }
+    }
+
+For more details on the authentication flow see [App Engine OAuth2 docs](https://cloud.google.com/appengine/docs/java/tools/uploadinganapp#Passwordless_Login_with_OAuth2)
+
 <br>
 **How do I run functional tests on the local development server?**
 

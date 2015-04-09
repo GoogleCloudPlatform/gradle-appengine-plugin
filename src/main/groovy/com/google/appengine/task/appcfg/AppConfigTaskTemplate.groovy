@@ -37,8 +37,15 @@ abstract class AppConfigTaskTemplate extends WebAppDirTask {
 
     @Override
     void executeTask() {
+        if (!getOauth2()) {
+            logger.lifecycle("*************************************************************************")
+            logger.lifecycle("DEPRECATED: Using client login (email + password) will NOT be supported")
+            logger.lifecycle("in future versions of appengine, use oauth2 instead")
+            logger.lifecycle("see https://github.com/GoogleCloudPlatform/gradle-appengine-plugin#oauth2")
+            logger.lifecycle("*************************************************************************")
+        }
         // User has to enter credentials
-        if(requiresUserInput()) {
+        if (requiresUserInput()) {
             runAppConfig()
         }
         // All credentials were provided
@@ -63,23 +70,20 @@ abstract class AppConfigTaskTemplate extends WebAppDirTask {
             params.addAll getParams()
             logger.info "Using params = $params"
 
-            if (Boolean.getBoolean("appcfg.in.process")) {
-                // TODO: Remove this eventually
-                // left in if we break someone by changing this, allow them to revert to original mechanics
-                // the problem here is appcfg calls System.exit() and basically kill the build process without
-                // any visual feedback, build process exists with a non-zero though.
-                logger.lifecycle("DEPRECATED: Using appcfg.in.process, may be removed in future versions")
-                ClassLoader classLoader = Thread.currentThread().contextClassLoader
-                def appCfg = classLoader.loadClass(APPENGINE_TOOLS_MAIN)
-                appCfg.main(params as String[])
-            }
-            else {
+            if (Boolean.getBoolean("exec.appcfg")) {
+                // experimental
                 // break out to javaexec, so non zero System.exit() in appcfg will fail the build
                 project.javaexec {
                     main = APPENGINE_TOOLS_MAIN
                     classpath getToolsJar()
                     args params.toArray()
+                    standardInput = System.in
                 }
+            }
+            else {
+                ClassLoader classLoader = Thread.currentThread().contextClassLoader
+                def appCfg = classLoader.loadClass(APPENGINE_TOOLS_MAIN)
+                appCfg.main(params as String[])
             }
         }
         catch(Exception e) {
