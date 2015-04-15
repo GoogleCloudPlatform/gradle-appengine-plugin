@@ -1,7 +1,14 @@
+### Version 1.9.19 (April 15, 2015)
+* Experimental appengineStage task for new gcloud deployments
+* Option to run appcfg out of process (-Dexec.appcfg=true)
+* Fix for eclipse functional classpath in gradle v2.3+ [issue 174]
+* Update client lib version for endpoints configurations
+* Deprecation warning for client login
+
 ### Version 1.9.18 (Feb 20th, 2015)
-* Fix version number check (issue #157)
-* Fix function test source set setups for IDEs (issue #147, issue #160)
-* Kill devappserver after function test (issue #145)
+* Fix version number check [issue 157]
+* Fix function test source set setups for IDEs [issue 147, issue 160]
+* Kill devappserver after function test [issue 145]
 * Improve JVM arg import
 * Add disable-datagram
 * Skip devappserver when no functional test are run
