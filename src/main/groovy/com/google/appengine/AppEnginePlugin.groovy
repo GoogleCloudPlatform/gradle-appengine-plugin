@@ -68,6 +68,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
     static final String APPENGINE_SDK_CONFIGURATION_NAME = 'appengineSdk'
     static final String APPENGINE_GROUP = 'Google App Engine'
+    static final String APPENGINE_EXPERIMENTAL_GROUP = 'Google App Engine Experimental'
     static final String APPENGINE_DOWNLOAD_SDK = 'appengineDownloadSdk'
     static final String APPENGINE_RUN = 'appengineRun'
     static final String APPENGINE_STOP = 'appengineStop'
@@ -131,6 +132,7 @@ class AppEnginePlugin implements Plugin<Project> {
 
         File explodedSdkDirectory = getExplodedSdkDirectory(project)
         File explodedAppDirectory = getExplodedAppDirectory(project)
+        File stagedAppDirectory = getStagedAppDirectory(project)
         File downloadedAppDirectory = getDownloadedAppDirectory(project)
         File discoveryDocDirectory = getDiscoveryDocDirectory(project)
         File endpointsClientLibDirectory = getEndpointsClientLibDirectory(project)
@@ -139,6 +141,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureWebAppDir(project)
         configureAppConfig(project, appEnginePluginExtension)
         configureExplodeWarTask(project, appEnginePluginExtension, explodedAppDirectory)
+        configureStageAppTask(project, explodedAppDirectory, stagedAppDirectory)
         configureRun(project, appEnginePluginExtension, explodedAppDirectory)
         configureStop(project, appEnginePluginExtension)
         configureUpdate(project, appEnginePluginExtension, explodedAppDirectory)
@@ -184,6 +187,10 @@ class AppEnginePlugin implements Plugin<Project> {
 
     static File getExplodedAppDirectory(Project project) {
         getBuildSubDirectory(project, 'exploded-app')
+    }
+
+    static File getStagedAppDirectory(Project project) {
+        getBuildSubDirectory(project, "staged-app")
     }
 
     static File getDownloadedAppDirectory(Project project) {
@@ -276,6 +283,28 @@ class AppEnginePlugin implements Plugin<Project> {
 
         // Always explode app when assembling
         project.tasks.getByName(BasePlugin.ASSEMBLE_TASK_NAME).dependsOn(appengineExplodeAppTask)
+    }
+
+    private void configureStageAppTask(Project project, File explodedAppDirectory, File stagedAppDirectory) {
+        project.tasks.withType(StageTask).whenTaskAdded { StageTask appengineStageTask ->
+            appengineStageTask.conventionMapping.map('stagedAppDirectory') { stagedAppDirectory }
+            appengineStageTask.conventionMapping.map('explodedAppDirectory') { explodedAppDirectory }
+        }
+
+        StageTask appengineStageTask = project.tasks.create("appengineStage", StageTask)
+        appengineStageTask.description = 'Stages an application for deployment.'
+        appengineStageTask.group = APPENGINE_EXPERIMENTAL_GROUP
+
+        ExplodeAppTask appengineExplodeAppTask = project.tasks.getByName(APPENGINE_EXPLODE_WAR)
+        appengineStageTask.dependsOn appengineExplodeAppTask
+
+        project.gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
+            if (taskGraph.hasTask(appengineStageTask)) {
+                if (project.hasProperty('ear')) {
+                    throw new BuildException("Staging does not support ear formatted applications", null);
+                }
+            }
+        }
     }
 
     private void configureRun(Project project, AppEnginePluginExtension appEnginePluginExtension, File explodedAppDirectory) {
