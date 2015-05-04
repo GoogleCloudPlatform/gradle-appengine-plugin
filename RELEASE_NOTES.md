@@ -1,3 +1,6 @@
+### Version 1.9.20 (May 4th, 2015)
+* Update stage task to remove redundant logic
+
 ### Version 1.9.19 (April 15, 2015)
 * Experimental appengineStage task for new gcloud deployments
 * Option to run appcfg out of process (-Dexec.appcfg=true)
