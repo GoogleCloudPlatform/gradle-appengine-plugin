@@ -32,17 +32,6 @@ class StageTask extends AppConfigTaskTemplate {
     void executeTask() {
         ant.delete(dir: getStagedAppDirectory())
         super.executeTask()
-
-        // TODO : This should be part of appcfg, remove when it is
-        // remove application/version from app.yaml, gcloud doesn't like it
-        ant.replaceregexp(file: "${getStagedAppDirectory()}/WEB-INF/appengine-generated/app.yaml", match: '^\\s*(application|version):.*$', replace: "", byline: true);
-
-        // move all yaml files to root
-        project.copy {
-            from "${getStagedAppDirectory()}/WEB-INF/appengine-generated"
-            into "${getStagedAppDirectory()}"
-            includes = ["*.yaml"]
-        }
     }
 
     @Override
