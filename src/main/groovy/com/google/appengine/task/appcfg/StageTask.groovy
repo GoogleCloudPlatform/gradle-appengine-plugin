@@ -32,6 +32,10 @@ class StageTask extends AppConfigTaskTemplate {
     void executeTask() {
         ant.delete(dir: getStagedAppDirectory())
         super.executeTask()
+
+        // TODO: see if we can move this into appcfg
+        // remove datastore-indexes.xml if we need to (fail quietly)
+        ant.delete(file: new File(getStagedAppDirectory(),"WEB-INF/datastore-indexes.xml"), quiet: true)
     }
 
     @Override
