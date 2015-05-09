@@ -1,0 +1,14 @@
+<configuration>
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <!-- http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout -->
+      <pattern>%-5level %msg [%logger{16} %d{HH:mm:ss}]%n</pattern>
+    </encoder>
+  </appender>
+
+  <root level="INFO">
+    <appender-ref ref="STDOUT" />
+  </root>
+  <logger name="org.apache.http.wire" level="WARN" />
+  <logger name="org.apache.http.headers" level="WARN" />
+</configuration>

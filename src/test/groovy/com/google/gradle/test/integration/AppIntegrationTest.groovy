@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.google.appengine
+package com.google.gradle.test.integration
 
 import org.apache.commons.io.FileUtils
 import org.gradle.tooling.GradleConnector
@@ -24,6 +24,8 @@ import org.junit.rules.TemporaryFolder
 
 /**
  * Base class for integration tests involving an test application (pulled from resources)
+ *
+ * TODO : consider turning this into a reusable fixture
  *
  * @author Appu Goundan
  */
@@ -82,7 +84,7 @@ abstract class AppIntegrationTest {
     }
 
     /** Name of the test project directory, subclasses implement this to copy the correct project **/
-    abstract protected getTestAppName()
+    abstract protected String getTestAppName()
 
     /** Location of the App Engine project to test against **/
     protected String getAppResourceBaseDir() {

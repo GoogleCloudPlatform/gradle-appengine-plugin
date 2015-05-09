@@ -14,16 +14,24 @@
  * limitations under the License.
  */
 package com.google.appengine.ide
-
 import com.google.appengine.AppEnginePlugin
-import com.google.appengine.AppProjectTest
+import com.google.gradle.test.fixture.AppProjectBuilder
+import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.SourceSet
 import org.gradle.plugins.ide.idea.IdeaPlugin
+import org.junit.Before
 import org.junit.Test
 
-class IdeaTest extends AppProjectTest {
+class IdeaTest {
+
+    Project project;
+
+    @Before
+    void setUp() {
+        project = AppProjectBuilder.builder().withAppEngine().build();
+    }
 
     @Test
     void functionalConfigTest() {
@@ -33,12 +41,14 @@ class IdeaTest extends AppProjectTest {
         SourceSet testSourceSet = project.convention.getPlugin(JavaPluginConvention).sourceSets.getByName(AppEnginePlugin.FUNCTIONAL_TEST_SOURCE_SET)
 
         assert(project.plugins.hasPlugin(IdeaPlugin))
-        project.afterEvaluate {
-            project.plugins.withType(IdeaPlugin) { IdeaPlugin plugin ->
-                assert (plugin.model.module.testSourceDirs.contains(testSourceSet))
-                assert (plugin.model.module.scopes.TEST.plus.contains(testRuntimeConfig))
-                assert (plugin.model.module.scopes.TEST.plus.contains(testCompileConfig))
+        project.evaluate()
+
+        project.plugins.withType(IdeaPlugin) { IdeaPlugin plugin ->
+            testSourceSet.allSource.srcDirs.each { File dir ->
+                assert (plugin.model.module.testSourceDirs.contains(dir))
             }
+            assert (plugin.model.module.scopes.TEST.plus.contains(testRuntimeConfig))
+            assert (plugin.model.module.scopes.TEST.plus.contains(testCompileConfig))
         }
     }
 }

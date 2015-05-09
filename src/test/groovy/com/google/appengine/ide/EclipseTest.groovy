@@ -14,21 +14,28 @@
  * limitations under the License.
  */
 package com.google.appengine.ide
-
 import com.google.appengine.AppEnginePlugin
-import com.google.appengine.AppProjectTest
 import com.google.appengine.util.VersionComparator
+import com.google.gradle.test.fixture.AppProjectBuilder
+import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.plugins.ide.eclipse.EclipsePlugin
 import org.gradle.plugins.ide.eclipse.model.EclipseModel
+import org.junit.Before
 import org.junit.Test
-
 /**
  * Simple test to ensure the plugin is interacting nicely with the eclipse plugin
  *
  * @author Appu Goundan
  */
-class EclipseTest extends AppProjectTest {
+class EclipseTest {
+
+    Project project;
+
+    @Before
+    void setUp() {
+        project = AppProjectBuilder.builder().withAppEngine().build();
+    }
 
     @Test
     void functionalConfigTest() {
@@ -42,13 +49,9 @@ class EclipseTest extends AppProjectTest {
             }
         }
         else {
-            // TODO this doesn't actually do anything unless the builder uses gradle 2.3 or higher
-            // but it can be tested manually by using gradle 2.3, I can't to find a way using projectbuilder
-            // to set the gradle version. (The Gradle Connector can)
-            project.afterEvaluate {
-                assert(project.plugins.hasPlugin(EclipsePlugin))
-                assert(project.extensions.getByType(EclipseModel).classpath.plusConfigurations.contains(testConfig))
-            }
+            project.evaluate()
+            assert(project.plugins.hasPlugin(EclipsePlugin))
+            assert(project.extensions.getByType(EclipseModel).classpath.plusConfigurations.contains(testConfig))
         }
     }
 }

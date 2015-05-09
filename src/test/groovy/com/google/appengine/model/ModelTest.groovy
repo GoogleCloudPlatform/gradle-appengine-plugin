@@ -15,9 +15,8 @@
  */
 package com.google.appengine.model
 
-import com.google.appengine.AppIntegrationTest
+import com.google.gradle.test.integration.AppIntegrationTest
 import com.google.appengine.gradle.model.AppEngineModel
-import org.gradle.tooling.GradleConnector
 import org.gradle.tooling.ProjectConnection
 import org.junit.Assert
 import org.junit.Test
