@@ -295,3 +295,9 @@ If you're using gcloud to deploy your application, the newest version of `app de
 NOTES: 
 - You must explicitly define all config files your want to upload (cron.yaml, etc) 
 - This does not work with EAR formatted projects.
+
+
+<br>
+**How do I create client libraries for iOS?**
+
+You can generate a discovery document for your Api using the `appengineEndpointsGetDiscoveryDocs` task. Discovery documents can then be found in the `<project>/build/discovery-docs` directory.  Follow the [iOS endpoints instructions](https://cloud.google.com/appengine/docs/java/endpoints/consume_ios) to create client libraries for your iOS application.
