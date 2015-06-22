@@ -16,15 +16,17 @@ The plugin JAR needs to be defined in the classpath of your build script. It is 
 Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet shows an
 example on how to retrieve it from Maven Central:
 
-    buildscript {
-        repositories {
-            mavenCentral()
-        }
+```gradle
+buildscript {
+  repositories {
+    mavenCentral()
+  }
 
-        dependencies {
-            classpath 'com.google.appengine:gradle-appengine-plugin:1.9.22'
-        }
-    }
+  dependencies {
+    classpath 'com.google.appengine:gradle-appengine-plugin:1.9.22'
+  }
+}
+```
 
 *Note:* The plugin requires you to set the environment variable APPENGINE_HOME or the system property _appengine.sdk.root_
 pointing to your current Google App Engine SDK installation. In case you have both variables set the system property takes
@@ -32,9 +34,11 @@ precedence over the environment variable. Alternatively, you can choose to autom
 convention property `downloadSdk` to `true`. This option requires you to specify the SDK version you want to use by setting
 the configuration `appengineSdk`.
 
-    dependencies {
-        appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.22'
-    }
+```gradle
+dependencies {
+  appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.22'
+}
+```
 
 ## Tasks
 
@@ -93,7 +97,7 @@ soon as the server has started. When false, this task blocks until the local dev
 * `jvmFlags`: The JVM flags to pass on to the local development server. The data type is a `List`.
 * `downloadSdk`: Downloads the Google App Engine SDK defined by the configuration name `appengineSdk` and explodes the artifact into
 `~/.gradle/appengine-sdk` (defaults to false). If set to `true` the given SDK is used for running all plugin tasks which
-takes precedence over APPENGINE_HOME and the system property _appengine.sdk.root_.
+takes precedence over _APPENGINE\_HOME_ and the system property _appengine.sdk.root_.
 * ~~`enhancerVersion`: The version (v1/v2) parameter for App Engine datanucleus enhancer task~~ Deprecated
 * ~~`enhancerApi`: The api (jdo/jpa) parameter for the App Engine datanucleas enhancer task~~ Deprecated
 
@@ -159,23 +163,25 @@ The task `appengineUpdate` allows you to specify upload specific settings. Defin
 
 ### Example
 
-    appengine {
-        httpPort = 8085
+```gradle
+appengine {
+  httpPort = 8085
 
-        appcfg {
-            email = 'benjamin.muschko@gmail.com'
-            passIn = true
+  appcfg {
+    email = 'benjamin.muschko@gmail.com'
+      passIn = true
 
-            logs {
-                severity = 1
-                outputFile = file('mylogs.txt')
-            }
+      logs {
+        severity = 1
+          outputFile = file('mylogs.txt')
+      }
 
-            app {
-                id = 'sample-app'
-            }
-        }
+    app {
+      id = 'sample-app'
     }
+  }
+}
+```
 
 ## FAQ
 
@@ -287,15 +293,16 @@ it may appear as "/tmp/enhance(some number).log"
 <br>
 **How do I deploy with gcloud?**
 
+**NOTE**: You can try the [gradle gcloud plugin](GCLOUD.md)
+
 If you're using gcloud to deploy your application, the newest version of `app deploy` doesn't support war directories, you will need to provide it with an `app.yaml` OR you can use the `appengineStage` task to create a directory that is deployable in `<project>/build/staged-app`
 
     $ ./gradlew appengineStage
     $ gcloud preview app deploy build/staged-app/app.yaml --project [app id] --version [some version]
 
-NOTES: 
-- You must explicitly define all config files your want to upload (cron.yaml, etc) 
+NOTES:
+- You must explicitly define all config files your want to upload (cron.yaml, etc)
 - This does not work with EAR formatted projects.
-
 
 <br>
 **How do I create client libraries for iOS?**
