@@ -1,3 +1,9 @@
+### Version 1.9.22 (June 23rd, 2015)
+* Added gcloud-preview plugin with Run and Deploy (com.google.gcloud-preview)
+* Removed old gcloud plugin
+* Update appengineStage task to remove datastore-indexes.xml after staging
+* Added full path for appengine plugin (com.google.appengine)
+
 ### Version 1.9.21 (June 2nd, 2015)
 * Version match release
 
