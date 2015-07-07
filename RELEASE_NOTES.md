@@ -1,3 +1,6 @@
+### Version 1.9.23 (July 6th, 2015)
+* Version match release
+
 ### Version 1.9.22 (June 23rd, 2015)
 * Added gcloud-preview plugin with Run and Deploy (com.google.gcloud-preview)
 * Removed old gcloud plugin
