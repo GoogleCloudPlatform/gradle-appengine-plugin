@@ -1,3 +1,7 @@
+### Version 1.9.26 (September 24th, 2015)
+* Version match release
+* [skipped 1.9.25 release]
+
 ### Version 1.9.24 (August 13th, 2015)
 * Version match release
 

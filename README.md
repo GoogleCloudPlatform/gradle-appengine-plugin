@@ -23,7 +23,7 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.google.appengine:gradle-appengine-plugin:1.9.24'
+    classpath 'com.google.appengine:gradle-appengine-plugin:1.9.26'
   }
 }
 ```
@@ -36,7 +36,7 @@ the configuration `appengineSdk`.
 
 ```gradle
 dependencies {
-  appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.24'
+  appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.26'
 }
 ```
 
