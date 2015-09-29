@@ -22,7 +22,7 @@ package com.google.appengine.task.appcfg
  * @author Benjamin Muschko
  */
 class UpdateDoSTask extends AppConfigTaskTemplate {
-    static final String COMMAND = 'update_cron'
+    static final String COMMAND = 'update_dos'
 
     @Override
     String startLogMessage() {
