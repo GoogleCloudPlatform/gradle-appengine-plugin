@@ -258,7 +258,7 @@ which lets you define your functional test dependencies via the configuration `f
 has been fully integrated into the build lifecycle.
 
 One of the most prominent functional testing libraries in the Groovy ecosystem is [Geb](http://www.gebish.org/), an expressive
-and powerful browser automation solution. Please refer to this short and sweet [tutorial](http://blog.proxerd.pl/article/funcational-testing-of-appengine-lyk-applications-with-geb)
+and powerful browser automation solution. Please refer to this short and sweet [tutorial](http://blog.proxerd.pl/article/funcational-testing-of-gae-lyk-applications-with-geb)
 for a quickstart.
 
 <br>
