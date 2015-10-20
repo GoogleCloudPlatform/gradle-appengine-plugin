@@ -1,3 +1,7 @@
+### Version 1.9.27 (October 20th, 2015)
+* Fix Update Dos task
+* Fix Doc link to gaelyk [issue 210]
+
 ### Version 1.9.26 (September 24th, 2015)
 * Version match release
 * [skipped 1.9.25 release]
