@@ -185,9 +185,9 @@ appengine {
 
 ## FAQ
 
-**Can I use the plugin with a [Gaelyk](http://appenginelyk.appspot.com/) project?**
+**Can I use the plugin with a [Gaelyk](http://gaelyk.appspot.com/) project?**
 
-Gaelyk's [template project](http://appenginelyk.appspot.com/tutorial/template-project) uses this plugin out-of-the-box so no
+Gaelyk's [template project](http://gaelyk.appspot.com/tutorial/template-project) uses this plugin out-of-the-box so no
 additional configuration needs to be done. If you start your project from scratch and decide to use the plugin please refer
 to the following sections to configure it properly.
 
