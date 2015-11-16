@@ -8,7 +8,17 @@ This plugin provides tasks for running and deploying App Engine applications usi
 
 The gcloud-preview plugin is distributed with the Gradle App Engine plugin.
 To use the gcloud-preview plugin, include in your build script:
+    
+    buildscript {
+      repositories {
+        mavenCentral()
+      }
 
+      dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:<version>'
+      }
+    }
+    
     apply plugin: 'com.google.gcloud-preview'
 
 *Note:* The default behavior of this plugin is to have gcloud on the system path. If gcloud is not on the path, you can
@@ -70,10 +80,11 @@ gcloud {
 }
 ```
 
-The plugin will dynamically create run/deploy/stop tasks for each configuration
+The plugin will dynamically create deploy tasks for each configuration <br/>
 `gcloudAppDeployProd`<br/>
 `gcloudAppDeployTest`<br/>
-`cloudAppDeployIndexes` This configuration has no associated Run/Stop because it doesn't specify the app.yaml descriptor<br/>
+`cloudAppDeployIndexes` <br/>
+and create run/stop tasks for each configuration that defined an app.yaml descriptor <br/>
 `gcloudAppRunProd`<br/>
 `gcloudAppRunTest`<br/>
 `gcloudAppStopProd`<br/>
