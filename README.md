@@ -3,7 +3,7 @@
 
 
 The plugin provides tasks for uploading, downloading, running and managing [Google App Engine](https://cloud.google.com/appengine/)
-(App Engine) projects in any given Gradle build.
+(App Engine) projects in a Gradle build.
 
 ## Usage
 
@@ -13,8 +13,7 @@ To use the App Engine plugin, include in your build script:
 
 The plugin JAR needs to be defined in the classpath of your build script. It is directly available on
 [Maven Central](http://search.maven.org/#search%7Cgav%7C1%7Cg%3A%22com.google.appengine%22%20AND%20a%3A%22gradle-appengine-plugin%22).
-Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet shows an
-example on how to retrieve it from Maven Central:
+Alternatively, you can download it from GitHub and deploy it to your local repository. The following code snippet retrieves it from Maven Central:
 
 ```gradle
 buildscript {
@@ -29,8 +28,8 @@ buildscript {
 ```
 
 *Note:* The plugin requires you to set the environment variable APPENGINE_HOME or the system property _appengine.sdk.root_
-pointing to your current Google App Engine SDK installation. In case you have both variables set the system property takes
-precedence over the environment variable. Alternatively, you can choose to automatically download the SDK by setting the
+pointing to your current Google App Engine SDK installation. If both variables are set, the system property takes
+precedence over the environment variable. Alternatively, you can automatically download the SDK by setting the
 convention property `downloadSdk` to `true`. This option requires you to specify the SDK version you want to use by setting
 the configuration `appengineSdk`.
 
@@ -50,7 +49,7 @@ The App Engine plugin defines the following tasks:
 * `appengineDownloadApp`: Retrieves the most current version of your application.
 * `appengineDownloadSdk`: Downloads and sets Google App Engine SDK.
 * `appengineEndpointsGetClientLibs`: Download Endpoints client libraries. (this makes network calls)
-* `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs, you should run `appengineExplodeApp` with this to ensure the discovery docs are copied into the project after download. (this makes network calls)
+* `appengineEndpointsGetDiscoveryDocs`: Download Endpoints discovery docs. Run `appengineExplodeApp` with this to ensure the discovery docs are copied into the project after download. (this makes network calls)
 * `appengineEndpointsInstallClientLibraries`: Install client libraries to the local maven repo.
 * `appengineEndpointsExportClientLibraries`: Export client libraries to user-defined destination.
 * `appengineEnhance`: Enhances DataNucleus classes by using byte-code manipulation to make your normal Java classes "persistable". This requires you to add the necessary enhancer jars as dependencies to your project.
@@ -159,7 +158,7 @@ the plugin will overwrite the log output file.
 
 The task `appengineUpdate` allows you to specify upload specific settings. Define the tasks' properties in the closure `update`:
 
-* `useJava7`: Java 7 compatibility flag (default to `false` if not set). This feature will require a App Engine SDK of >= 1.7.3.
+* `useJava7`: Java 7 compatibility flag (default to `false` if not set). This feature will require an App Engine SDK of >= 1.7.3.
 
 ### Example
 
@@ -188,7 +187,7 @@ appengine {
 **Can I use the plugin with a [Gaelyk](http://gaelyk.appspot.com/) project?**
 
 Gaelyk's [template project](http://gaelyk.appspot.com/tutorial/template-project) uses this plugin out-of-the-box so no
-additional configuration needs to be done. If you start your project from scratch and decide to use the plugin please refer
+additional configuration needs to be done. If you start your project from scratch and decide to use the plugin, please refer
 to the following sections to configure it properly.
 
 *Gaelyk <= 1.1*
@@ -307,4 +306,4 @@ NOTES:
 <br>
 **How do I create client libraries for iOS?**
 
-You can generate a discovery document for your Api using the `appengineEndpointsGetDiscoveryDocs` task. Discovery documents can then be found in the `<project>/build/discovery-docs` directory.  Follow the [iOS endpoints instructions](https://cloud.google.com/appengine/docs/java/endpoints/consume_ios) to create client libraries for your iOS application.
+You can generate a discovery document for your API using the `appengineEndpointsGetDiscoveryDocs` task. Discovery documents can then be found in the `<project>/build/discovery-docs` directory.  Follow the [iOS endpoints instructions](https://cloud.google.com/appengine/docs/java/endpoints/consume_ios) to create client libraries for your iOS application.
