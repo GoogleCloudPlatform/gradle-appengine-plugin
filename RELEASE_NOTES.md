@@ -1,3 +1,10 @@
+### Version 1.9.32 (Feburary 11th, 2016)
+* Add appengineSetDefaultVersionTask to update default version for a module
+* Update to build with gradle 2.10
+* Update min required verison to 2.3
+* Remove old eclipse support test for gradle version < 2.3
+* [skipped 1.9.31 release]
+
 ### Version 1.9.30 (December 9th, 2015)
 * Version match release
 * [skipped 1.9.29 release]
