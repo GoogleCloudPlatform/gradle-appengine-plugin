@@ -5,21 +5,21 @@
 apply from: 'scripts/java6-mode.gradle'
 
 sourceSets {
-    model
+    builderModel
     main {
-        compileClasspath += model.output
-        runtimeClasspath += model.output
+        compileClasspath += builderModel.output
+        runtimeClasspath += builderModel.output
     }
 }
 
-setJava6Mode(compileModelJava)
+setJava6Mode(compileBuilderModelJava)
 
 dependencies {
-    modelCompile project(':builder-model')
+    builderModelCompile project(':builder-model')
 }
 
 jar {
     from {
-        sourceSets.model.output
+        sourceSets.builderModel.output
     }
 }

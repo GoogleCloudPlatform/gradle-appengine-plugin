@@ -63,8 +63,7 @@ import static org.gradle.api.tasks.SourceSet.MAIN_SOURCE_SET_NAME
  */
 class AppEnginePlugin implements Plugin<Project> {
 
-    // TODO: eclipse plugin integration has special code for v2.3, fix it when ready
-    static final String GRADLE_MIN_VERSION = '2.1'
+    static final String GRADLE_MIN_VERSION = '2.3'
 
     static final String APPENGINE_SDK_CONFIGURATION_NAME = 'appengineSdk'
     static final String APPENGINE_GROUP = 'Google App Engine'
@@ -75,6 +74,7 @@ class AppEnginePlugin implements Plugin<Project> {
     static final String APPENGINE_ENHANCE = 'appengineEnhance'
     static final String APPENGINE_UPDATE = 'appengineUpdate'
     static final String APPENGINE_ROLLBACK = 'appengineRollback'
+    static final String APPENGINE_SET_DEFAULT_VERSION = 'appengineSetDefaultVersion'
     static final String APPENGINE_UPDATE_INDEXES = 'appengineUpdateIndexes'
     static final String APPENGINE_VACUUM_INDEXES = 'appengineVacuumIndexes'
     static final String APPENGINE_UPDATE_TASK_QUEUES = 'appengineUpdateQueues'
@@ -141,6 +141,7 @@ class AppEnginePlugin implements Plugin<Project> {
         configureWebAppDir(project)
         configureAppConfig(project, appEnginePluginExtension)
         configureExplodeWarTask(project, appEnginePluginExtension, explodedAppDirectory)
+        configureSetDefaultVersionTask(project, explodedAppDirectory)
         configureStageAppTask(project, explodedAppDirectory, stagedAppDirectory)
         configureRun(project, appEnginePluginExtension, explodedAppDirectory)
         configureStop(project, appEnginePluginExtension)
@@ -376,6 +377,15 @@ class AppEnginePlugin implements Plugin<Project> {
         RollbackTask appengineRollbackTask = project.tasks.create(APPENGINE_ROLLBACK, RollbackTask)
         appengineRollbackTask.description = 'Undoes a partially completed update for the given application.'
         appengineRollbackTask.group = APPENGINE_GROUP
+    }
+
+    private void configureSetDefaultVersionTask(Project project, File explodedAppDirectory) {
+        project.tasks.withType(SetDefaultVersionTask).whenTaskAdded { SetDefaultVersionTask appengineSetDefaultVersionTask ->
+            appengineSetDefaultVersionTask.conventionMapping.map(EXPLODED_WAR_DIR_CONVENTION_PARAM) { explodedAppDirectory }
+        }
+        SetDefaultVersionTask appengineSetDefaultVersionTask = project.tasks.create(APPENGINE_SET_DEFAULT_VERSION, SetDefaultVersionTask)
+        appengineSetDefaultVersionTask.description = 'Sets the given version as the default on App Engine.'
+        appengineSetDefaultVersionTask.group = APPENGINE_GROUP
     }
 
     private void configureUpdateIndexes(Project project) {
@@ -722,18 +732,10 @@ class AppEnginePlugin implements Plugin<Project> {
     }
 
     private void addEclipseConfigurationForFunctionalTestRuntimeConfiguration(Project project, Configuration functionalTestRuntimeConfiguration) {
-        //TODO : once we up the minimum supported version, remove this conditional
-        if(VersionComparator.compare(project.gradle.gradleVersion, "2.3") < 0) {
-            project.plugins.withType(EclipsePlugin) { EclipsePlugin plugin ->
-                plugin.model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
-            }
-        }
-        else {
-            project.afterEvaluate {
-                if (project.plugins.hasPlugin(EclipsePlugin)) {
-                    EclipseModel model = project.extensions.getByType(EclipseModel)
-                    model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
-                }
+        project.afterEvaluate {
+            if (project.plugins.hasPlugin(EclipsePlugin)) {
+                EclipseModel model = project.extensions.getByType(EclipseModel)
+                model.classpath.plusConfigurations += [functionalTestRuntimeConfiguration]
             }
         }
     }

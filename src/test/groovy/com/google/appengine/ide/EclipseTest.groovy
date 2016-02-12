@@ -42,16 +42,8 @@ class EclipseTest {
         project.apply plugin: "eclipse"
         Configuration testConfig = project.configurations.getByName(AppEnginePlugin.FUNCTIONAL_TEST_RUNTIME_CONFIGURATION)
 
-        if (VersionComparator.compare(project.gradle.gradleVersion, "2.3") < 0) {
-            assert(project.plugins.hasPlugin(EclipsePlugin))
-            project.plugins.withType(EclipsePlugin) { EclipsePlugin plugin ->
-                assert(plugin.model.classpath.plusConfigurations.contains(testConfig))
-            }
-        }
-        else {
-            project.evaluate()
-            assert(project.plugins.hasPlugin(EclipsePlugin))
-            assert(project.extensions.getByType(EclipseModel).classpath.plusConfigurations.contains(testConfig))
-        }
+        project.evaluate()
+        assert(project.plugins.hasPlugin(EclipsePlugin))
+        assert(project.extensions.getByType(EclipseModel).classpath.plusConfigurations.contains(testConfig))
     }
 }
