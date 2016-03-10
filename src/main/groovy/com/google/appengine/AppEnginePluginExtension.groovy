@@ -26,7 +26,7 @@ import org.gradle.api.Project
  * @author Benjamin Muschko
  */
 class AppEnginePluginExtension {
-    String httpAddress = "localhost"
+    String httpAddress = System.getenv("DEV_APPSERVER_DEFAULT_ADDRESS") ?: "localhost"
     Integer httpPort = 8080
     Boolean daemon = false
     Boolean disableUpdateCheck = false
