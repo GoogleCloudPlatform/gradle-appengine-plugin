@@ -1,3 +1,7 @@
+### Version 1.9.34 (March 30th, 2016)
+* Add `DEV_APPSERVER_DEFAULT_ADDRESS` env option for cloud shell
+* [platform skipped 1.9.33]
+
 ### Version 1.9.32 (Feburary 11th, 2016)
 * Add appengineSetDefaultVersionTask to update default version for a module
 * Update to build with gradle 2.10
