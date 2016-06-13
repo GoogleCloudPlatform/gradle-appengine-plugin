@@ -1,3 +1,8 @@
+### Version 1.9.38 (June 13th, 2016)
+* Version match release
+* [skipped 1.9.36, 1.9.37]
+* [platform skipped 1.9.35]
+
 ### Version 1.9.34 (March 30th, 2016)
 * Add `DEV_APPSERVER_DEFAULT_ADDRESS` env option for cloud shell
 * [platform skipped 1.9.33]
