@@ -299,7 +299,7 @@ it may appear as "/tmp/enhance(some number).log"
 If you're using gcloud to deploy your application, the newest version of `app deploy` doesn't support war directories, you will need to provide it with an `app.yaml` OR you can use the `appengineStage` task to create a directory that is deployable in `<project>/build/staged-app`
 
     $ ./gradlew appengineStage
-    $ gcloud preview app deploy build/staged-app/app.yaml --project [app id] --version [some version]
+    $ gcloud app deploy build/staged-app/app.yaml --project [app id] --version [some version]
 
 NOTES:
 - You must explicitly define all config files your want to upload (cron.yaml, etc)
