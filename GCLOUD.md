@@ -1,6 +1,8 @@
 ![Google Cloud Platform Logo](https://cloud.google.com/_static/images/gcp-logo.png)
 # Gradle GCloud [preview] Plugin
 
+*This plugin is deprecated and may not work for you, try using gcloud directly*
+
 This plugin provides tasks for running and deploying App Engine applications using the gcloud command line tool.
 *Caution:* This plugin is experimental and may change without notice
 

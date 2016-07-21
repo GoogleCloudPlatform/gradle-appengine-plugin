@@ -25,7 +25,7 @@ class DeployTask extends AppTask {
 
     @Override
     List<String> getCommand() {
-        ['preview','app','deploy']
+        ['app','deploy']
     }
 
     @Override
