@@ -1,3 +1,6 @@
+### Version 1.9.40 (July 25th, 2016)
+* Minor gcloud cleanup and feature deprecation (this is not the the gcloud plugin)
+
 ### Version 1.9.38 (June 13th, 2016)
 * Version match release
 * [skipped 1.9.36, 1.9.37]
