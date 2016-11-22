@@ -1,8 +1,8 @@
+![project status image](https://img.shields.io/badge/notice-deprecation-orange.svg)<BR>
+__NOTE__: All App Engine users (with the exception of those using Android Studio) should transition to the [new gradle plugin] (https://github.com/GoogleCloudPlatform/app-gradle-plugin) for their projects.
+
 ![Google Cloud Platform Logo](https://cloud.google.com/_static/images/gcp-logo.png)
 # Gradle App Engine plugin [![Build Status](https://travis-ci.org/GoogleCloudPlatform/gradle-appengine-plugin.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/gradle-appengine-plugin)
-
-__NOTE__: All App Engine users (with the exception of those using Android Studio) should transition to [new plugin] (https://github.com/GoogleCloudPlatform/app-gradle-plugin) for their projects.
-
 
 The plugin provides tasks for uploading, downloading, running and managing [Google App Engine](https://cloud.google.com/appengine/)
 (App Engine) projects in any given Gradle build.
