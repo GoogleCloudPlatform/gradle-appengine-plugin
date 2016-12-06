@@ -1,3 +1,7 @@
+### Version 1.9.48 (December 6th, 2016)
+* Version match release
+* [platform skipped 1.9.45]
+
 ### Version 1.9.46 (August 2nd, 2016)
 * Version match release
 * [skipped 1.9.44]
