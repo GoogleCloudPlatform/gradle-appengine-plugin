@@ -296,8 +296,6 @@ it may appear as "/tmp/enhance(some number).log"
 <br>
 **How do I deploy with gcloud?**
 
-**NOTE**: You can try the [gradle gcloud plugin](GCLOUD.md)
-
 If you're using gcloud to deploy your application, the newest version of `app deploy` doesn't support war directories, you will need to provide it with an `app.yaml` OR you can use the `appengineStage` task to create a directory that is deployable in `<project>/build/staged-app`
 
     $ ./gradlew appengineStage
