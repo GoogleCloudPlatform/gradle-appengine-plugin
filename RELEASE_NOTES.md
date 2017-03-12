@@ -1,3 +1,6 @@
+### Versions 1.9.50 (March 12th, 2017)
+* Version match release
+
 ### Versions 1.9.49 (January 30th, 2017)
 * Version match release
 
