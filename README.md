@@ -25,12 +25,12 @@ buildscript {
   }
 
   dependencies {
-    classpath 'com.google.appengine:gradle-appengine-plugin:1.9.51'
+    classpath 'com.google.appengine:gradle-appengine-plugin:1.9.52'
   }
 }
 ```
 
-*Note:* The plugin requires you to set the environment variable APPENGINE_HOME or the system property _appengine.sdk.root_
+*Note:* The plugin requires you to set the environment variable `APPENGINE_HOME` or the system property `appengine.sdk.root`
 pointing to your current Google App Engine SDK installation. In case you have both variables set the system property takes
 precedence over the environment variable. Alternatively, you can choose to automatically download the SDK by setting the
 convention property `downloadSdk` to `true`. This option requires you to specify the SDK version you want to use by setting
@@ -38,7 +38,7 @@ the configuration `appengineSdk`.
 
 ```gradle
 dependencies {
-  appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.51'
+  appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.52'
 }
 ```
 
