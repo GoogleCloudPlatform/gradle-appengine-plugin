@@ -1,3 +1,6 @@
+### Versions 1.9.54 (June 21st, 2017)
+* Version match release
+
 ### Versions 1.9.53 (May 10th, 2017)
 * Version match release
 
