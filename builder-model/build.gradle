@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'nexus'
+apply plugin: 'com.bmuschko.nexus'
 
 apply from: '../scripts/java6-mode.gradle'
 apply from: '../scripts/test-jar-publisher.gradle'

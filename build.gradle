@@ -1,5 +1,5 @@
 apply plugin: 'groovy'
-apply plugin: 'nexus'
+apply plugin: 'com.bmuschko.nexus'
 
 apply from: 'scripts/builder-model-impl.gradle'
 apply from: 'scripts/test-jar-publisher.gradle'
@@ -19,9 +19,8 @@ buildscript {
         mavenCentral()
         jcenter()
     }
-
     dependencies {
-        classpath 'org.gradle.api.plugins:gradle-nexus-plugin:0.7'
+        classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
     }
 }
 
@@ -99,32 +98,24 @@ test {
     systemProperty "test.maven.repo", publishing.repositories.test.url
 }.dependsOn allprojects.collect { "${it.getPath()}:publishTestPublicationToTestRepository" }
 
-import org.gradle.plugins.signing.Sign
-
 gradle.taskGraph.whenReady { taskGraph ->
-    if (!taskGraph.hasTask(snapshot) && taskGraph.allTasks.any { it instanceof Sign } && taskGraph.allTasks.any { it.name.equals(project.nexus.getUploadTaskName()) }) {
-        Console console = System.console()
-        console.printf "\n\nPGP credentials required to sign artifacts prior to uploading.\n\n"
+  if (!taskGraph.hasTask(snapshot) && taskGraph.allTasks.any { it.name.equals(project.nexus.getUploadTaskName()) }) {
+    java.io.Console console = System.console()
+    // something about the gradle cmdline output messed with the output ordering
+    // so sleep a little so we appear after [building x%]
+    sleep(200)
 
-        def id = readPropCmdLine(console, "signing.keyId", "", "PGP Key Id")
-        def file = readPropCmdLine(console, "signing.secretKeyRingFile", "${System.getProperty("user.home")}/.gnupg/secring.gpg", "PGP Secret Key Ring File (absolute path)")
-        def password = console.readPassword("PGP Private Key Password: ")
+    def nexusUsername = readPropCmdLine(console, "nexus.username", "", "Sonatype Username")
+    def nexusPassword = console.readPassword("Sonatype Password: ")
 
-        allprojects { ext."signing.keyId" = id }
-        allprojects { ext."signing.secretKeyRingFile" = file }
-        allprojects { ext."signing.password" = password }
-
-        console.printf "\n\nOSS Sonatype Credential required to upload.\n\n"
-
-        def nexusUsername = readPropCmdLine(console, "nexus.username", "", "Sonatype Username")
-        def nexusPassword = console.readPassword("Sonatype Password: ")
-
-        allprojects { ext."nexusUsername" = nexusUsername }
-        allprojects { ext."nexusPassword" = new String(nexusPassword) }
-    }
+    allprojects { ext."nexusUsername" = nexusUsername }
+    allprojects { ext."nexusPassword" = new String(nexusPassword) }
+  }
 }
 
+// if you see a weird error pointing here, make sure you run upload with --no-daemon
+// so stdin is good to go
 def readPropCmdLine(console, property, defaultValue, msg) {
-    def value = System.getProperty(property) ?: defaultValue
-    value = console.readLine("$msg [${value}]:") ?: value
+  def value = System.getProperty(property) ?: defaultValue
+  value = console.readLine("$msg [${value}]:") ?: value
 }
