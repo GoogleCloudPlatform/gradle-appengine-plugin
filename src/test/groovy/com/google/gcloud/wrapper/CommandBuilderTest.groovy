@@ -1,9 +1,6 @@
 package com.google.gcloud.wrapper
 
-import aQute.libg.command.Command
-import com.beust.jcommander.internal.Lists
 import com.google.gcloud.exec.command.CommandBuilder
-import spock.lang.Ignore
 import spock.lang.Specification
 
 /**
