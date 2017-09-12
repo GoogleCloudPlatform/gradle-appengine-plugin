@@ -1,3 +1,6 @@
+### Version 1.9.56 (September 12th, 2017)
+* Version match release
+
 ### Versions 1.9.55 (September 6th, 2017)
 * Version match release
 * Build with Gradle 4.0
