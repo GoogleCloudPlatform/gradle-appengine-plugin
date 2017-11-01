@@ -1,3 +1,6 @@
+### Version 1.9.59 (November 1st, 2017)
+* Version match release
+
 ### Version 1.9.58 (October 30th, 2017)
 * Update endpoints generated lib client lib version to 1.23.0
 * [skipped 1.9.57]
