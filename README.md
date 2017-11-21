@@ -1,5 +1,5 @@
 ![project status image](https://img.shields.io/badge/notice-deprecation-orange.svg)<BR>
-__NOTE__: All App Engine users (except Android Studio users - support is not quite ready) are encouraged to transition to the [new gradle plugin] (https://github.com/GoogleCloudPlatform/app-gradle-plugin) for their projects.
+__NOTE__: All App Engine users are encouraged to transition to the [new gradle plugin](https://github.com/GoogleCloudPlatform/app-gradle-plugin) for their projects. Android Studio users can migrate their projects using [migration guide](https://cloud.google.com/endpoints/docs/frameworks/legacy/v1/java/migrating-android).
 
 ![Google Cloud Platform Logo](https://cloud.google.com/_static/images/gcp-logo.png)
 # Gradle App Engine plugin [![Build Status](https://travis-ci.org/GoogleCloudPlatform/gradle-appengine-plugin.svg?branch=master)](https://travis-ci.org/GoogleCloudPlatform/gradle-appengine-plugin)
